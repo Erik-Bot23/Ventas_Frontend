@@ -1,0 +1,115 @@
+<div class="layout" [class.collapsed]="!menuOpen">
+  <!-- SIDEBAR reutilizado -->
+  <aside class="sidebar">
+    <div class="user-box" (click)="perfil()">
+      <img src="assets/images/avatar.png">
+      <span class="text">Admin</span>
+    </div>
+
+    <div class="menu-title" (click)="toggleMenu()">
+      ☰ <span class="text">Menú</span>
+    </div>
+
+    <nav class="nav">
+      <!--Esta es la página de cobro-->
+      <a (click)="inicio()">
+        <span class="text">Inicio</span>
+      </a>
+      <a (click)="productos()">
+        <span class="text">Productos</span>
+      </a>
+      <a routerLink="/ventas">
+        <span class="text">Ventas</span>
+      </a>
+      <a routerLink="/compras">
+        <span class="text">Compras</span>
+      </a>
+      <a routerLink="/facturas">
+        <span class="text">Facturas</span>
+      </a>
+      <a routerLink="/reportes">
+        <span class="text">Reportes</span>
+      </a>
+      <a routerLink="/caja">
+        <span class="text">Caja</span>
+      </a>
+      <a routerLink="/clientes">
+        <span class="text">Clientes</span>
+      </a>
+      <a (click)="usuarios()">
+        <span class="text">Usuarios</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="content">
+    <h2>Gestión de usuarios</h2>
+
+    <div class="main-grid">
+      <!-- FORMULARIO -->
+    <div class="form-card">
+        <div class="field">
+          <label>Nombre del usuario</label>
+          <input [(ngModel)]="form.name" />
+        </div>
+
+        <div class="field">
+          <label>Correo del usuario</label>
+          <input [(ngModel)]="form.email"/>
+        </div>
+
+        <div class="field">
+          <label>Contraseña</label>
+          <input 
+            [(ngModel)]="form.password" type="password"/>
+        </div>
+
+        <div class="field">
+          <label>Rol</label>
+          <select [(ngModel)]="form.role" class="custom-select">
+            <option value="ADMIN">Administrador</option> 
+            <option value="CAJERO">Cajero</option>
+          </select>
+        </div>
+
+        <button type="button" (click)="save()" [disabled]="isSaving">
+          <!--{{ isSaving ? 'Guardando...' : 'Guardar' }}-->
+           {{ form.id ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+
+      <!-- LISTADO -->
+      <div *ngIf="loading">
+        Cargando usuarios...
+      </div>
+
+      <div *ngIf="!loading" class="table-container">
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let p of users">
+              <td>{{ p.name }}</td>
+              <td>{{ p.email }}</td>
+              <td>{{ p.role }}</td>
+              <td>{{ p.active ? 'Activo' : 'Inactivo' }}</td>
+              <td>
+                <button type="button" (click)="editUser(p)" class="edit">Editar</button>
+                <button type="button" (click)="deleteUser(p.id)" class="delete">Dar de baja</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

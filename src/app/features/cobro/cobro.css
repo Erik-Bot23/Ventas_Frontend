@@ -1,0 +1,269 @@
+/*Layout*/
+.layout {
+  display: flex;
+  height: 100vh;
+  background: #0f172a;
+  color: white;
+}
+
+.layout.collapsed .sidebar{
+  width: 70px;
+}
+
+.layout.collapsed .text{
+  display: none;
+}
+
+.layout.collapsed .nav a{
+  justify-content: center;
+}
+
+.layout.collapsed .user-box {
+  justify-content: center;
+}
+
+.layout.collapsed .menu-title {
+  justify-content: center;
+}
+
+.layout.collapsed .user-box img {
+  margin-right: 0;
+}
+
+/*Nav*/
+.nav a{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 5px 0;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.nav a:hover{
+  color: white;
+  background: #1e293b;
+  border: 6px;
+}
+
+/*Menú, creo que ya no se ocupa de momento*/
+.menu-title {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: #1e293b;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.menu-title:hover{
+  background: #334155;
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.submenu.open {
+  max-height: 200px;
+}
+
+.submenu a {
+  display: block;
+  padding: 8px;
+  color: #94a3b8;
+}
+
+.submenu a:hover {
+  color: white;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: #020617;
+  padding: 15px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+  padding-top: 20px;
+}
+
+.sidebar a {
+  color: #94a3b8;
+  text-decoration: none;
+  display: block;
+  margin: 10px 0;
+}
+
+.sidebar a:hover {
+  color: white;
+}
+
+/*Perfil*/
+.user-box {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.user-box img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid #3b82f6;
+  padding: 2px;
+  background: white;
+}
+
+/* MAIN */
+.content {
+  flex: 1;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+/* BUSCADOR */
+.search-bar{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 60%;
+  max-width: 500px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid #334155;
+  background: #1e293b;
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-bar input:focus{
+  border-color: #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+/* CATEGORIAS */
+.categories {
+  margin-top: 10px;
+}
+
+.categories button {
+  margin-right: 5px;
+  padding: 6px 12px;
+  border: none;
+  background: #334155;
+  color: white;
+  border-radius: 6px;
+}
+
+.categories .active {
+  background: #2563eb;
+}
+
+/* GRID */
+.main-grid {
+  display: flex;
+  margin-top: 15px;
+}
+
+/* PRODUCTOS */
+.products {
+  flex: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.product {
+  background: #1e293b;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border: 1px solid #334155;
+}
+
+.product:hover {
+  transform: scale(1.05);
+}
+
+.product img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+}
+
+.product button {
+  margin-top: 8px;
+  background: #22c55e;
+  border: none;
+  padding: 8px 12px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.product button:hover{
+  background: #16a34a;
+}
+
+/* CARRITO */
+.cart {
+  flex: 1;
+  margin-left: 15px;
+  background: #020617;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.total {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+
+/*Boton de pago*/
+.pay-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 140px;
+  transition: 0.3s;
+}
+
+.pay-btn:hover {
+  background: #16a34a;
+  transform: scale(1.03);
+}

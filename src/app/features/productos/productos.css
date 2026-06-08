@@ -1,0 +1,332 @@
+/*Layout*/
+.layout {
+  display: flex;
+  height: 100vh;
+  background: #0f172a;
+  color: white;
+}
+
+.layout.collapsed .sidebar{
+  width: 70px;
+}
+
+.layout.collapsed .text{
+  display: none;
+}
+
+.layout.collapsed .nav a{
+  justify-content: center;
+}
+
+.layout.collapsed .user-box {
+  justify-content: center;
+}
+
+.layout.collapsed .menu-title {
+  justify-content: center;
+}
+
+.layout.collapsed .user-box img {
+  margin-right: 0;
+}
+
+/*Nav*/
+.nav a{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 5px 0;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.nav a:hover{
+  color: white;
+  background: #1e293b;
+  border: 6px;
+}
+
+/*Menú*/
+.menu-title {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: #1e293b;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.menu-title:hover{
+  background: #334155;
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.submenu.open {
+  max-height: 200px;
+}
+
+.submenu a {
+  display: block;
+  padding: 8px;
+  color: #94a3b8;
+}
+
+.submenu a:hover {
+  color: white;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: #020617;
+  padding: 15px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+  padding-top: 20px;
+}
+
+.sidebar a {
+  color: #94a3b8;
+  text-decoration: none;
+  display: block;
+  margin: 10px 0;
+}
+
+.sidebar a:hover {
+  color: white;
+}
+
+/*Perfil*/
+.user-box {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.user-box img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid #3b82f6;
+  padding: 2px;
+  background: white;
+}
+
+/* MAIN */
+.content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.main-grid{
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
+}
+
+@media (max-width: 900px){
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-card {
+    max-width: 100%;
+  }
+
+  .table-container {
+    height: 50vh;
+  }
+}
+
+/* CATEGORIAS */
+.categories {
+  margin-top: 10px;
+}
+
+.categories button {
+  margin-right: 5px;
+  padding: 6px 12px;
+  border: none;
+  background: #334155;
+  color: white;
+  border-radius: 6px;
+}
+
+.categories .active {
+  background: #2563eb;
+}
+
+/*Seleccionar categorias*/
+.custom-select {
+  cursor: pointer;
+  appearance: none;
+}
+
+.custom-select option {
+  background: #0f172a;
+  color: white;
+}
+
+/*Tarjetas de productos*/
+.form-card {
+  background: #1e293b;
+  align-self: start;
+  padding: 16px;
+  border-radius: 12px;
+  display: grid;
+  gap: 8px;
+  max-width: 340px;
+  width: 100%;
+  margin: 0 auto 15px auto;
+}
+
+.form-card input, .custom-select {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 2px solid #334155;
+  background: #020617;
+  color: white;
+  transition: 0.3s;
+  outline: none;
+}
+
+.form-card input:focus, .custom-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59,130,246,0.4);
+}
+
+.form-card button {
+  margin-top: 10px;
+  background: #2563eb;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form-card button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+/*Botones*/
+.edit, .delete {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s eas
+}
+
+.edit {
+  background: linear-gradient(135deg, #facc15, #eab308);
+  margin-right: 8px;
+}
+
+.edit:hover {
+  background: linear-gradient(135deg, #eab308, #ca8a04);
+  transform: scale(1.05);
+}
+
+.delete {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.delete:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: scale(1.05);
+}
+
+/*La tabla de productos*/
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #020617;
+}
+
+.product-table th, td {
+  padding: 10px;
+  border-bottom: 1px solid #334155;
+  text-align: center;
+}
+
+.product-table th {
+  background: #1e293b;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/*Contenedor de la tabla*/
+.table-container {
+  width: 100%;
+  height: auto;
+  overflow-y: auto;
+  align-self: stretch;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+.img {
+  height: 40px;
+}
+
+/*Formulario*/
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+

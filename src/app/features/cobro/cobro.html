@@ -1,0 +1,99 @@
+<div class="layout" [class.collapsed]="!menuOpen">
+    <!--SIDEBAR-->
+    <aside class="sidebar">
+        <div class="user-box" (click)="perfil()">
+            <img src="assets/images/avatar.png">
+            <span class="text">Usuario</span>
+        </div>
+
+        <!--Menú desplegable-->
+        <div class="menu-title" (click)="toggleMenu()">
+            ☰ <span class="text">Menú</span>
+        </div>
+
+        <nav class="nav">
+            <!--Esta es la página de cobro-->
+            <a (click)="inicio()">
+                <span class="text">Inicio</span>
+            </a>
+            <a (click)="productos()">
+                <span class="text">Productos</span>
+            </a>
+            <a routerLink="/ventas">
+                <span class="text">Ventas</span>
+            </a>
+            <a routerLink="/compras">
+                <span class="text">Compras</span>
+            </a>
+            <a routerLink="/facturas">
+                <span class="text">Facturas</span>
+            </a>
+            <a routerLink="/reportes">
+                <span class="text">Reportes</span>
+            </a>
+            <a routerLink="/caja">
+                <span class="text">Caja</span>
+            </a>
+            <a routerLink="/clientes">
+                <span class="text">Clientes</span>
+            </a>
+            <a (click)="usuarios()">
+                <span class="text">Usuarios</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!--Contenido-->
+    <main class="content">
+        <!--Buscador-->
+        <div class="search-bar">
+            <input 
+                [(ngModel)]="search"
+                (input)="filter()"
+                placeholder="Buscar producto..."
+            />
+        </div>
+
+        <!--Categorias-->
+        <div class="categories">
+            <button 
+                *ngFor="let cat of categories"
+                (click)="selectCategory(cat)"
+                [class.active] = "cat === selectedCategory">
+                {{ cat }}
+            </button>
+        </div>
+
+        <div class="main-grid">
+                <!--Productos-->
+                <div *ngFor="let p of filteredProducts" class="product">
+                    <img [src]="p.img">
+                    <p>{{ p.name }}</p>
+                    <span>${{p.price}}</span>
+                    <button (click)="add(p)">Agregar</button>
+                </div>
+            
+
+            <!--Carrito-->
+            <div class="cart">
+                <h3>Carrito</h3>
+                <div *ngFor="let item of cartItems$ | async" class="cart-item">
+                    <span>{{ item.product.name }}</span>
+                    <span>{{ item.quantity }}</span>
+                    <span>{{ item.subtotal }}</span>
+                    <button (click)="removeItem(item.product.id)">
+                        ❌
+                    </button>
+                </div>
+
+                <div class="total">
+                    Total: ${{ total$ | async}}
+                </div>
+
+                <button class="pay-btn" (click)="cobrar()">
+                    Cobrar
+                </button>
+            </div>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,21 @@
+.perfil-container {
+  padding: 20px;
+  color: white;
+  background: #0f172a;
+  height: 100vh;
+}
+
+.card {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.logout-btn {
+  padding: 10px;
+  background: #ef4444;
+  border: none;
+  border-radius: 6px;
+  color: white;
+}
