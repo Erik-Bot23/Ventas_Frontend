@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from '../../core/user/user';
+import { UserService } from '../../core/user-service/user-service';
 
 @Component({
   selector: 'app-perfil',
@@ -7,17 +9,32 @@ import { Router } from '@angular/router';
   templateUrl: './perfil.html',
   styleUrl: './perfil.css',
 })
-export class Perfil {
-  user = {
-    name: 'erik',
-    role: 'admin',
-    email: 'erik@gmail.com'
+export class Perfil implements OnInit {
+  users: User[] = [];
+
+  form: User = {
+    name: '',
+    email: '',
+    role: ''
+  };
+
+  constructor(
+    private userservice: UserService,
+    private router: Router
+  ){}
+
+  ngOnInit(){
+    this.loadUsers();
   }
 
-  constructor(private router: Router){}
+  loadUsers(){
+    this.userservice.getUsers().subscribe(data => {
+      this.users = data;
+    })
+  }
 
   logout(){
-    localStorage.clear(); //si tienes JWT
+    //localStorage.clear(); //si tienes JWT
     this.router.navigate(['/keypad'])
   }
 }

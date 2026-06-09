@@ -28,4 +28,8 @@ export class UserService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
+  activateUser(id: number){
+    return this.http.patch(`${this.apiUrl}/${id}/activate`, {});
+  }
+
 }
