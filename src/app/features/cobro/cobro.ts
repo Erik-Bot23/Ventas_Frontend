@@ -3,10 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Product } from '../../core/product/product';
 import { Observable } from 'rxjs';
-import { CartItem } from '../../core/cart/cart';
+import { CartItem } from '../../core/cobro/cobro';
 import { ProductService } from '../../core/product-service/product-service';
-import { Router } from '@angular/router';
-import { CartService } from '../../core/cart-service/cart-service';
+import { Router } from '@angular/router';;
+import { CobroService } from '../../core/cobro-service/cobro-service';
 
 @Component({
   selector: 'app-cobro',
@@ -29,16 +29,16 @@ export class Cobro implements OnInit {
 
   constructor(
     private productService: ProductService,
-    public cart: CartService,
+    public cobro: CobroService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     //this.loadProducts();
-    this.cart.loadCart();
+    this.cobro.loadCart();
 
-    this.cartItems$ = this.cart.cart$;
-    this.total$ = this.cart.getTotal();
+    this.cartItems$ = this.cobro.cart$;
+    this.total$ = this.cobro.getTotal();
   }
 
   toggleMenu(){
@@ -57,29 +57,29 @@ export class Cobro implements OnInit {
   }
 
   add(product: Product){
-    this.cart.add(product);
+    this.cobro.add(product);
   }
 
   removeItem(id?: number){
     if(!id) return;
-    this.cart.removeOne(id);
+    this.cobro.removeOne(id);
   }
 
   cobrar(){
-    const items = this.cart.cart$.value;
+    const items = this.cobro.cart$.value;
 
     if(!items.length){
       alert("⚠️ No hay productos en el carrito");
       return;
     }
 
-    this.cart.getTotal().subscribe(total => {
+    this.cobro.getTotal().subscribe(total => {
       if(total <= 0){
         alert("⚠️ Total inválido");
       }
 
       alert("✅ Venta realizada");
-      this.cart.clear();
+      this.cobro.clear();
     });
   }
 
