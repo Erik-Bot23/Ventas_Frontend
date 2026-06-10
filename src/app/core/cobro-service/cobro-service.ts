@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Cart, CartItem } from '../cobro/cobro';
+import { Cobro, CobroItem } from '../cobro/cobro';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../product/product';
 
@@ -11,13 +11,13 @@ export class CobroService {
   private api = 'http://localhost:8081/api/cart'
 
   //estado del carrito en memoria
-  cart$ = new BehaviorSubject<CartItem[]>([]);
+  cart$ = new BehaviorSubject<CobroItem[]>([]);
 
   constructor(private http: HttpClient){}
 
   //Cargar todos los productos
   loadCart(){
-    this.http.get<Cart>(this.api).subscribe(cart => this.cart$.next(cart.items));
+    this.http.get<Cobro>(this.api).subscribe(cart => this.cart$.next(cart.items));
   }
 
   //Función para agregar productos

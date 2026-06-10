@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Product } from '../../core/product/product';
 import { Observable } from 'rxjs';
-import { CartItem } from '../../core/cobro/cobro';
+import { CobroItem } from '../../core/cobro/cobro';
 import { ProductService } from '../../core/product-service/product-service';
 import { Router } from '@angular/router';;
 import { CobroService } from '../../core/cobro-service/cobro-service';
@@ -21,7 +21,7 @@ export class Cobro implements OnInit {
   selectedCategory: number | null = null;
   search = '';
 
-  cartItems$!: Observable<CartItem[]>;
+  cobroItems$!: Observable<CobroItem[]>;
   total$!: Observable<number>;
 
   //Agrega esto aquí
@@ -37,7 +37,7 @@ export class Cobro implements OnInit {
     //this.loadProducts();
     this.cobro.loadCart();
 
-    this.cartItems$ = this.cobro.cart$;
+    this.cobroItems$ = this.cobro.cart$;
     this.total$ = this.cobro.getTotal();
   }
 
