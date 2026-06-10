@@ -25,12 +25,12 @@ export class UserService {
   }
 
   //No se elimina, se desactiva el usuario
-  deleteUser(id: number){
+  deActiveUser(id: number){
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
   activateUser(id: number){
-    return this.http.patch(`${this.apiUrl}/${id}/activate`, {});
+    return this.http.patch(`${this.apiUrl}/${id}/active`, {});
   }
 
 }

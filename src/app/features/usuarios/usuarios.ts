@@ -111,12 +111,11 @@ export class Usuarios implements OnInit {
     };
   }
 
-  //Cambiar nombre a deactivateUser
   deactivateUser(id?: number){
     if(!id) return;
 
     if(confirm('¿Seguro que deseas dar de baja este usuario?')){
-      this.userservice.deleteUser(id).subscribe({
+      this.userservice.deActiveUser(id).subscribe({
         next: () => {
           const user = this.users.find(u => u.id === id);
           if(user){
@@ -128,7 +127,6 @@ export class Usuarios implements OnInit {
     }
   }
 
-  //Aquí iría la funcion activate user
   activateUser(id?: number){
     if (!id) return;
     

@@ -30,61 +30,6 @@
   margin-right: 0;
 }
 
-/*Nav*/
-.nav a{
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  margin: 5px 0;
-  color: #94a3b8;
-  text-decoration: none;
-  transition: 0.2s;
-}
-
-.nav a:hover{
-  color: white;
-  background: #1e293b;
-  border: 6px;
-}
-
-/*Menú*/
-.menu-title {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px;
-  background: #1e293b;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  transition: 0.3s;
-}
-
-.menu-title:hover{
-  background: #334155;
-}
-
-.submenu {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-}
-
-.submenu.open {
-  max-height: 200px;
-}
-
-.submenu a {
-  display: block;
-  padding: 8px;
-  color: #94a3b8;
-}
-
-.submenu a:hover {
-  color: white;
-}
-
 /* SIDEBAR */
 .sidebar {
   width: 220px;
@@ -127,6 +72,61 @@
   background: white;
 }
 
+/*Menú*/
+.menu-title {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: #1e293b;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.menu-title:hover{
+  background: #334155;
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.submenu.open {
+  max-height: 200px;
+}
+
+.submenu a {
+  display: block;
+  padding: 8px;
+  color: #94a3b8;
+}
+
+.submenu a:hover {
+  color: white;
+}
+
+/*Nav*/
+.nav a{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 5px 0;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.nav a:hover{
+  color: white;
+  background: #1e293b;
+  border: 6px;
+}
+
 /* MAIN */
 .content {
   flex: 1;
@@ -141,6 +141,7 @@
   margin-bottom: 20px;
 }
 
+/*main grid*/
 .main-grid{
   display: grid;
   grid-template-columns: 350px 1fr;
@@ -162,35 +163,6 @@
   .table-container {
     height: 50vh;
   }
-}
-
-/* CATEGORIAS */
-.categories {
-  margin-top: 10px;
-}
-
-.categories button {
-  margin-right: 5px;
-  padding: 6px 12px;
-  border: none;
-  background: #334155;
-  color: white;
-  border-radius: 6px;
-}
-
-.categories .active {
-  background: #2563eb;
-}
-
-/*Seleccionar categorias*/
-.custom-select {
-  cursor: pointer;
-  appearance: none;
-}
-
-.custom-select option {
-  background: #0f172a;
-  color: white;
 }
 
 /*Tarjetas de productos*/
@@ -238,8 +210,64 @@
   transform: translateY(-2px);
 }
 
+/*Seleccionar role*/
+.custom-select {
+  cursor: pointer;
+  appearance: none;
+}
+
+.custom-select option {
+  background: #0f172a;
+  color: white;
+}
+
+/*Contenedor de la tabla*/
+.table-container {
+  width: 100%;
+  height: auto;
+  overflow-y: auto;
+  align-self: stretch;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/*La tabla de usuarios*/
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #020617;
+}
+
+.product-table th, td {
+  padding: 10px;
+  border-bottom: 1px solid #334155;
+  text-align: center;
+}
+
+.product-table th {
+  background: #1e293b;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
 /*Botones*/
-.edit, .delete {
+.edit, .delete, .activate {
   border: none;
   padding: 6px 12px;
   border-radius: 8px;
@@ -268,53 +296,13 @@
   transform: scale(1.05);
 }
 
-/*La tabla de productos*/
-.product-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #020617;
+.activate {
+  background: linear-gradient(135deg, #6afd5d, #45ca39);
 }
 
-.product-table th, td {
-  padding: 10px;
-  border-bottom: 1px solid #334155;
-  text-align: center;
-}
-
-.product-table th {
-  background: #1e293b;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-/*Contenedor de la tabla*/
-.table-container {
-  width: 100%;
-  height: auto;
-  overflow-y: auto;
-  align-self: stretch;
-}
-
-.table-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: #0f172a;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 10px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
-
-.img {
-  height: 40px;
+.activate:hover {
+  background: linear-gradient(135deg, #6afd5d, #45ca39);
+  transform: scale(1.05);
 }
 
 /*Formulario*/
