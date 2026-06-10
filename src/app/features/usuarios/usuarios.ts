@@ -111,15 +111,36 @@ export class Usuarios implements OnInit {
     };
   }
 
-  deleteUser(id?: number){
+  //Cambiar nombre a deactivateUser
+  deactivateUser(id?: number){
     if(!id) return;
 
-    if(confirm('¿Seguro que deseas eliminar este producto?')){
+    if(confirm('¿Seguro que deseas dar de baja este usuario?')){
       this.userservice.deleteUser(id).subscribe({
         next: () => {
-          this.users = this.users.filter(p => p.id !== id);
-          console.log('Producto eliminado');
-        }, error: (err) => console.error('Error al eliminar', err)
+          const user = this.users.find(u => u.id === id);
+          if(user){
+            user.active = false;
+          }
+          console.log('Usuario dado de baja');
+        }, error: (err) => console.error('Error al dar de baja', err)
+      });
+    }
+  }
+
+  //Aquí iría la funcion activate user
+  activateUser(id?: number){
+    if (!id) return;
+    
+    if(confirm('¿Seguro que deseas dar de alta a este usuario?')){
+      this.userservice.activateUser(id).subscribe({
+        next: () => {
+          const user = this.users.find(u => u.id === id);
+          if(user){
+            user.active = true;
+          }
+          console.log("Usuario activado")
+        }, error: (err) => console.log('Error al dar de alta', err)
       });
     }
   }

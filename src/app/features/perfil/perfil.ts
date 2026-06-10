@@ -2,39 +2,34 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '../../core/user/user';
 import { UserService } from '../../core/user-service/user-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-perfil',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './perfil.html',
   styleUrl: './perfil.css',
 })
 export class Perfil implements OnInit {
-  users: User[] = [];
-
-  form: User = {
-    name: '',
-    email: '',
-    role: ''
-  };
+  user: any = null;
 
   constructor(
     private userservice: UserService,
     private router: Router
   ){}
 
-  ngOnInit(){
-    this.loadUsers();
-  }
+  ngOnInit(): void {
+    const userData  = localStorage.getItem('user');
 
-  loadUsers(){
-    this.userservice.getUsers().subscribe(data => {
-      this.users = data;
-    })
+    if(userData){
+      this.user = JSON.parse(userData);
+    }
   }
 
   logout(){
     //localStorage.clear(); //si tienes JWT
-    this.router.navigate(['/keypad'])
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
   }
 }

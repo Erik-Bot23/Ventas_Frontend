@@ -104,7 +104,8 @@
               <td>{{ p.active ? 'Activo' : 'Inactivo' }}</td>
               <td>
                 <button type="button" (click)="editUser(p)" class="edit">Editar</button>
-                <button type="button" (click)="deleteUser(p.id)" class="delete">Dar de baja</button>
+                <button *ngIf="p.active" type="button" (click)="deactivateUser(p.id)" class="delete">Dar de baja</button>
+                <button *ngIf="!p.active" type="button" (click)="activateUser(p.id)" class="activate">Dar de alta</button>
               </td>
             </tr>
           </tbody>

@@ -24,6 +24,7 @@ export class UserService {
     return this.http.put<User>(`${this.apiUrl}/${id}`, user);
   }
 
+  //No se elimina, se desactiva el usuario
   deleteUser(id: number){
     return this.http.delete(`${this.apiUrl}/${id}`);
   }

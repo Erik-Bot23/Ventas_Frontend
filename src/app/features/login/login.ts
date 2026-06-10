@@ -44,7 +44,9 @@ export class Login {
           this.snack.open('Bienvenido', '', {duration: 1000});
           // Luego aquí irá JWT
           localStorage.setItem('user', JSON.stringify({
+            id: res.id,
             email: res.email,
+            name: res.name,
             role: res.role
           }));
           this.router.navigate(['/cobro']);
