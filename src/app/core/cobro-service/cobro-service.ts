@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Cobro, CobroItem } from '../cobro/cobro';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../product/product';
@@ -33,6 +33,11 @@ export class CobroService {
   //Traer el total de los productos
   getTotal(){
     return this.http.get<number>(`${this.api}/total`);
+  }
+
+  getTotalLocal(): Observable<number> {
+    return this.cart$.asObservable().pipe(map(items => 
+      items.reduce((sum, item) => sum + item.subtotal, 0)));
   }
 
   //Limpiar tabla de ventas

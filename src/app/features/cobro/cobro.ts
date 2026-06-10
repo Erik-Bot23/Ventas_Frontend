@@ -34,11 +34,21 @@ export class Cobro implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.loadProducts();
+    this.loadProducts();
     this.cobro.loadCart();
 
     this.cobroItems$ = this.cobro.cart$;
-    this.total$ = this.cobro.getTotal();
+    this.total$ = this.cobro.getTotalLocal();
+  }
+
+  loadProducts(){
+    this.productService.getProducts().subscribe(products => {
+      this.products = products;
+      this.filteredProducts = products;
+
+      //Obtener categorías únicas
+      this.categories = [...new Set(products.map(p => p.categoryId))];
+    });
   }
 
   toggleMenu(){
