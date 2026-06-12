@@ -12,7 +12,7 @@ export interface Product{
   barcode?: string;
   img?: string;
   categoryId: number;
-  categoryName?: string;
+  categoryName: string;
   active?: boolean;
   createdAt?: Date;
 }

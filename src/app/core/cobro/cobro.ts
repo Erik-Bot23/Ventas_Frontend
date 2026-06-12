@@ -5,6 +5,7 @@ import { Product } from '../product/product';
 export interface CobroItem {
   product: Product;
   quantity: number;
+  unitPrice: number;
   subtotal: number;
 }
 

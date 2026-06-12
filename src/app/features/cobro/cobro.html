@@ -49,7 +49,7 @@
         <div class="search-bar">
             <input 
                 [(ngModel)]="search"
-                (input)="filter()"
+                (keyup.enter)="searchProduct()"
                 placeholder="Buscar producto..."
             />
         </div>
@@ -67,9 +67,9 @@
         <div class="main-grid">
                 <!--Productos-->
                 <div *ngFor="let p of filteredProducts" class="product">
-                    <img [src]="p.img">
                     <p>{{ p.name }}</p>
                     <span>${{p.price}}</span>
+                    <small>Stock: {{p.stock}}</small>
                     <button (click)="add(p)">Agregar</button>
                 </div>
             
@@ -79,7 +79,9 @@
                 <h3>Carrito</h3>
                 <div *ngFor="let item of cobroItems$ | async" class="cart-item">
                     <span>{{ item.product.name }}</span>
+                    <button (click)="increase(item.product)">➕</button>
                     <span>{{ item.quantity }}</span>
+                    <button (click)="decrease(item.product.id)">➖</button>
                     <span>{{ item.subtotal }}</span>
                     <button (click)="removeItem(item.product.id)">
                         ❌

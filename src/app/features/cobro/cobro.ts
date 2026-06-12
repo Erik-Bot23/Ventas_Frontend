@@ -17,8 +17,8 @@ import { CobroService } from '../../core/cobro-service/cobro-service';
 export class Cobro implements OnInit {
   products: Product[] =[];
   filteredProducts: Product[] = [];
-  categories: number[] = [];
-  selectedCategory: number | null = null;
+  categories: string[] = [];
+  selectedCategory: string | null = null;
   search = '';
 
   cobroItems$!: Observable<CobroItem[]>;
@@ -47,7 +47,7 @@ export class Cobro implements OnInit {
       this.filteredProducts = products;
 
       //Obtener categorías únicas
-      this.categories = [...new Set(products.map(p => p.categoryId))];
+      this.categories = [...new Set(products.map(p => p.categoryName).filter(Boolean))];
     });
   }
 
@@ -55,26 +55,50 @@ export class Cobro implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
+  //Filtrar productos
   filter() {
     this.filteredProducts = this.products.filter(p =>
-      p.name.toLowerCase().includes(this.search.toLowerCase()) && (this.selectedCategory ? p.categoryId === this.selectedCategory : true) 
+      p.name.toLowerCase().includes(this.search.toLowerCase()) && (!this.selectedCategory || p.categoryName === this.selectedCategory) 
     );
   }
 
-  selectCategory(cat: number){
+  //Buscar el producto
+  searchProduct(){
+    this.filter();
+  }
+
+  //Seleccionar categoría
+  selectCategory(cat: string){
     this.selectedCategory = cat;
     this.filter();
   }
 
+  //Agregar producto al carrito
   add(product: Product){
+    if(product.stock <= 0){
+      alert('Producto sin existencia')
+      return;
+    }
     this.cobro.add(product);
   }
 
+  //Remover un solo producto de la lista
   removeItem(id?: number){
     if(!id) return;
     this.cobro.removeOne(id);
   }
 
+  //Botones de incrementar o decrementar el producto
+  increase(product: Product){
+    this.cobro.add(product);
+  }
+
+  decrease(id?: number){
+    if(!id) return;
+    this.cobro.removeOne(id);
+  }
+
+  //Método de cobrar
   cobrar(){
     const items = this.cobro.cart$.value;
 
@@ -85,7 +109,7 @@ export class Cobro implements OnInit {
 
     this.cobro.getTotal().subscribe(total => {
       if(total <= 0){
-        alert("⚠️ Total inválido");
+        alert("⚠️ Total inválido"); //Aquí debe ir un modal con el resumen de la venta y la opción de confirmar la venta
       }
 
       alert("✅ Venta realizada");
