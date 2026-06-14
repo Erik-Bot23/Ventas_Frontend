@@ -14,10 +14,10 @@ import { UserService } from '../../core/user-service/user-service';
 })
 
 export class Usuarios implements OnInit {
+  //Inicializar las variables
   menuOpen = true;
-
-  users: User[] = [];
-  roles: UserRole[] = [];
+  users: User[] = []; //Arreglo de usuarios
+  roles: UserRole[] = []; //Arreglo de roles
   loading = true;
   isSaving = false;
 
@@ -33,6 +33,7 @@ export class Usuarios implements OnInit {
     private router: Router
   ){}
 
+  //Cargar usuarios y roles al entrar a la sección
   ngOnInit() {
     this.loadRoles();
     this.loadUsers();
@@ -42,6 +43,7 @@ export class Usuarios implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
+  //Cargar los roles desde la BD
   loadRoles(){
     this.userservice.getRoles().subscribe(data => {
       this.roles = data;
@@ -52,6 +54,7 @@ export class Usuarios implements OnInit {
     })
   }
 
+  //Cargar los usuarios desde la BD
   loadUsers(){
     this.userservice.getUsers().subscribe(data => {
       this.users = data;
@@ -59,6 +62,7 @@ export class Usuarios implements OnInit {
     });
   }
 
+  //Guardar usuarios en la BD
   save(){
     if(this.isSaving) return;
 
@@ -103,6 +107,7 @@ export class Usuarios implements OnInit {
     }
   }
 
+  //Retear los campos
   resetForm(){
     this.form = {
       name: '',
@@ -113,6 +118,7 @@ export class Usuarios implements OnInit {
     this.isSaving = false;
   }
 
+  //Editar usuarios en la BD
   editUser(user: User){
     this.form = {
       id: user.id,
@@ -123,12 +129,13 @@ export class Usuarios implements OnInit {
     };
   }
 
+  //Se desactiva el usuario en la BD
   deactivateUser(id?: number){
     if(!id) return;
 
     if(confirm('¿Seguro que deseas dar de baja este usuario?')){
       this.userservice.deActiveUser(id).subscribe({
-        next: () => {
+        next: () => { //() =>
           const user = this.users.find(u => u.id === id);
           if(user){
             user.active = false;
@@ -139,6 +146,7 @@ export class Usuarios implements OnInit {
     }
   }
 
+  //Se vuelve a activar el usuario
   activateUser(id?: number){
     if (!id) return;
     
@@ -155,6 +163,7 @@ export class Usuarios implements OnInit {
     }
   }
 
+  //Navegación del menú
   perfil(){
     this.router.navigate(['/perfil']);
   }

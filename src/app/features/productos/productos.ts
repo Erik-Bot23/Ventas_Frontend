@@ -16,16 +16,20 @@ import { error } from 'console';
 })
 
 export class Productos implements OnInit {
+  //Se inicializan las variables
   menuOpen = true;
-
-  products: ProductForm[] = [];
-  categories: Category[] = [];
+  products: ProductForm[] = []; //Un arreglo de productos
+  categories: Category[] = []; //Un arreglo de categorias
   selectedFile: File | null = null;
   loading = true;
-  @ViewChild('fileInput') fileInput: any;
+  //Se carga el gestor de archivos para elegir la img
+  //VierChild:
+  @ViewChild('fileInput') fileInput: any; //fileInput:
   isSaving = false;
   private loaded = false;
 
+  //Se inicializan los atributos de la interface
+  //form:
   form: ProductForm = {
     name: '',
     price: 0,
@@ -48,48 +52,60 @@ export class Productos implements OnInit {
     
   }
 
+  //
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
   }
 
+  //Se cargan los productos desde la BD
   loadProducts(){
     console.log("Cargando productos...");
-    this.productService.getProducts().subscribe(data => {
+    this.productService.getProducts().subscribe(data => { //data:
       this.products = data;
       this.loading = false;
     });
   }
 
+  //Se cargan las categorias desde la BD
   loadCategories(){
     this.categoryService.getCategories().subscribe(data => {
       this.categories = data;
     });
   }
 
-  onFileSelected(event: any){
-    this.selectedFile = event.target.files[0] ?? null;
+  //Se selecciona el archivo
+  onFileSelected(event: any){ //event:
+    //target:
+    //files:
+    this.selectedFile = event.target.files[0] ?? null; //??
   }
 
+  //Guardar el producto en la BD
   save(){
     if(this.isSaving) return;
 
     this.isSaving = true;
 
-    const formData = new FormData();
+    const formData = new FormData();//formData: 
 
+    //
     formData.append('name', this.form.name);
     formData.append('price', this.form.price.toString());
     formData.append('stock', this.form.stock.toString());
     formData.append('categoryId', this.form.categoryId.toString());
 
     if(this.selectedFile){
-      formData.append('image', this.selectedFile)
+      formData.append('image', this.selectedFile)//append:
     }
 
     if(this.form.id){
       //Editar
       this.productService.updateProduct(this.form.id, formData).subscribe({
-        next: (updatedProduct) => {
+        next: (updatedProduct) => {//Variable temporal?
+          //?
+          //:
+          //=>
+          //map:
           this.products = this.products.map(p => p.id === updatedProduct.id ? updatedProduct : p);
           this.resetForm();
         }, error: (err) => {
@@ -113,6 +129,7 @@ export class Productos implements OnInit {
     }
   }
 
+  //Los campos se resetean(se ponen en blanco)
   resetForm(){
     this.form = {
       name: '',
@@ -122,11 +139,12 @@ export class Productos implements OnInit {
     };
 
     this.selectedFile = null
-    this.fileInput.nativeElement.value = '';
+    this.fileInput.nativeElement.value = '';//nativeElement
     this.isSaving = false;
   }
 
-  editProduct(product: ProductForm){
+  //Se edita el producto
+  editProduct(product: ProductForm){ //Variable de la interface(se consumen sus atributos)
     this.form = {
       id: product.id,
       name: product.name,
@@ -136,6 +154,7 @@ export class Productos implements OnInit {
     };
   }
 
+  //Se elimina el producto de la BD
   deleteProduct(id?: number){
     if(!id) return;
 
@@ -149,12 +168,14 @@ export class Productos implements OnInit {
     }
   }
 
-  validateNumber(field: 'price' | 'stock'){
+  //Validar campos numericos
+  validateNumber(field: 'price' | 'stock'){//Field: 
     if(this.form[field] < 1){
       this.form[field] = 1;
     }
   }
 
+  //Navegación del menu desplegable
   perfil(){
     this.router.navigate(['/perfil']);
   }

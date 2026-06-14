@@ -2,6 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
+    //Se definen las rutas de todas las paginas
     { path: '', loadComponent: () => import('./features/login/login').then(m=>m.Login) },
     { path: 'cobro', loadComponent: () => import('./features/cobro/cobro').then(m=>m.Cobro) },
     { path: 'perfil', loadComponent: () => import('./features/perfil/perfil').then(m=>m.Perfil) },

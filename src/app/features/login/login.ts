@@ -13,19 +13,25 @@ import { LoginResponse } from '../../core/login/login';
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
+
 export class Login {
+  //Se inicializan las variables a utilizar
   email='';
   password='';
   error='';
-  loading = false;
+  loading = false; //loading:
 
+  //Se llaman las clases en el constructor
   constructor(
     private auth: AuthService,
     private router: Router,
     private snack: MatSnackBar
   ){}
 
+  //Botón de iniciar sesión
+  //Se valida al usuario desde la BD
   submit(){
+    //Validar si los campos estan vacíos
     if(!this.email || !this.password){
       this.snack.open('Completa los campos', '', {duration:1500})
       return;
@@ -36,20 +42,20 @@ export class Login {
     this.auth.login({
       email: this.email,
       password: this.password
-    }).subscribe({
-      next: (res: LoginResponse) => {
+    }).subscribe({ //subscribe:
+      next: (res: LoginResponse) => { //next:
         this.loading=false;
 
-        if(res.success){
-          this.snack.open('Bienvenido', '', {duration: 1000});
+        if(res.success){ //success:
+          this.snack.open('Bienvenido', '', {duration: 1000});//snack:
           // Luego aquí irá JWT
-          localStorage.setItem('user', JSON.stringify({
-            id: res.id,
+          localStorage.setItem('user', JSON.stringify({//localStorage:
+            id: res.id,                                 //JSON.stringify:
             email: res.email,
             name: res.name,
             role: res.role
           }));
-          this.router.navigate(['/cobro']);
+          this.router.navigate(['/cobro']); //navigate: función para nevegar entre secciones
         } else{
           this.snack.open('Credenciales incorrectas', '', {duration: 1500});
         }

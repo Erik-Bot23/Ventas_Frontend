@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+//Interface para crear el usuario
+//Se usará en features/cobro/cobro.ts
 export interface User {
   id?: number;
   name: string;
@@ -10,12 +12,14 @@ export interface User {
   active?: boolean;
 }
 
+//Interface para ver el role del usuario
+//Se usará en features/cobro/cobro.ts
 export interface UserRole {
   id: number;
   role: string;
 }
 
-//Usuarios completo
+//Interface para crear un usuario
 export interface CreateUserRequest {
   name: string;
   email: string;
@@ -23,6 +27,7 @@ export interface CreateUserRequest {
   roleId: number;
 }
 
+//Interface para actualizar un usuario
 export interface UpdateUserRequest {
   name: string;
   email: string;

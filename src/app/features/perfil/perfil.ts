@@ -11,7 +11,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './perfil.html',
   styleUrl: './perfil.css',
 })
+
 export class Perfil implements OnInit {
+  //Se inicializa la variable
+  //any:
   user: any = null;
 
   constructor(
@@ -19,14 +22,17 @@ export class Perfil implements OnInit {
     private router: Router
   ){}
 
+  //Se traen los datos del usuario
+  //ngOnInit:
   ngOnInit(): void {
     const userData  = localStorage.getItem('user');
 
     if(userData){
-      this.user = JSON.parse(userData);
+      this.user = JSON.parse(userData); //JSON.parse: 
     }
   }
 
+  //Cerrar sesión
   logout(){
     //localStorage.clear(); //si tienes JWT
     localStorage.removeItem('user');

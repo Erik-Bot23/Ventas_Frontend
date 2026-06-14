@@ -7,6 +7,8 @@ import { ProductShow } from '../product/product';
 @Injectable({
   providedIn: 'root',
 })
+
+//Esta clase se utilizará en features/cobro/cobro.ts
 export class CobroService {
 
   //estado del carrito en memoria
@@ -14,9 +16,9 @@ export class CobroService {
 
   constructor(){}
 
-  //Función para agregar productos
+  //Función para agregar productos localmente en el carro de ventas, nunca se envían a la BD
   add(product: ProductShow){
-    const current = [...this.cart$.value];
+    const current = [...this.cart$.value]; //...this:
 
     const existing = current.find(item => item.product.id === product.id);
     
@@ -62,11 +64,12 @@ export class CobroService {
     this.cart$.next(filtered);
   }
 
-  //Traer todos los productos
+  //Traer todos los productos localmente
   getTotalLocal(): Observable<number> {
     return this.cart$.pipe(map(items => items.reduce((sum, item) => sum + item.subtotal, 0)));
   }
 
+  //Limpia la tabla de ventas
   clear(){
     this.cart$.next([]);
   }

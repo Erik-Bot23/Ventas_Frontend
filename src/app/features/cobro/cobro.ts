@@ -16,7 +16,9 @@ import { ProductService } from '../../core/product-service/product-service';
   templateUrl: './cobro.html',
   styleUrl: './cobro.css',
 })
+
 export class Cobro implements OnInit {
+  //Inicializar las variables
   products: ProductShow[] =[];
   filteredProducts: ProductShow[] = [];
   categories: string[] = [];
@@ -42,16 +44,22 @@ export class Cobro implements OnInit {
     this.total$ = this.cobro.getTotalLocal();
   }
 
+  //Se cargan los productos localmente en la tabla de ventas
   loadProducts(){
     this.productService.getProductsVentas().subscribe(products => {
       this.products = products;
       this.filteredProducts = products;
 
       //Obtener categorías únicas
+      //this:
+      //...new:
+      //Set:
+      //filter: 
       this.categories = [...new Set(products.map(p => p.categoryName).filter(Boolean))];
     });
   }
 
+  //Abrir y cerrar el menú
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
   }
@@ -103,6 +111,7 @@ export class Cobro implements OnInit {
   cobrar(){
     const items = this.cobro.cart$.value;
 
+    //Se valida si el carro esta vacío
     if(!items.length){
       alert("⚠️ No hay productos en el carrito");
       return;
@@ -111,7 +120,7 @@ export class Cobro implements OnInit {
     const request: SaleRequest = {
       paymentMethod: 'CASH',
       cashReceived: 1000,
-      items: items.map(item => ({ //aqui me marca error
+      items: items.map(item => ({ 
         productId: item.product.id!,
         quantity: item.quantity
       }))
@@ -130,6 +139,7 @@ export class Cobro implements OnInit {
     });
   }
 
+  //Navegación del menú
   perfil(){
     this.router.navigate(['/perfil']);
   }

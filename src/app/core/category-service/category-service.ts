@@ -6,11 +6,16 @@ import { Category } from '../product/product';
 @Injectable({
   providedIn: 'root',
 })
+
+//Esta clase se utliza en cobre-service
 export class CategoryService {
+  //Ruta a la que tiene que responder ene l backend
   private apiUrl = 'http://localhost:8081/api/categories';
 
   constructor(private http: HttpClient){}
 
+  //Se obtienen las categorias de los productos
+  //Observable:
   getCategories(): Observable<Category[]>{
     return this.http.get<Category[]>(this.apiUrl);
   }

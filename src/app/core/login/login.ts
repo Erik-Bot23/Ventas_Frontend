@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
+//Interfaces que se usarán en auth-service
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
-//Interface con sus atributos que se hará uso en auth
 export interface LoginResponse {
   success: boolean;
   id: number;

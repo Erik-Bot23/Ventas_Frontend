@@ -36,6 +36,7 @@
       <a routerLink="/clientes">
         <span class="text">Clientes</span>
       </a>
+      <!--Solo la puede ver el ADMIN-->
       <a (click)="usuarios()">
         <span class="text">Usuarios</span>
       </a>
@@ -102,8 +103,9 @@
               <td>{{ p.name }}</td>
               <td>{{ p.email }}</td>
               <td>{{ p.roleName }}</td>
-              <td>{{ p.active ? 'Activo' : 'Inactivo' }}</td>
+              <td>{{ p.active ? 'Activo' : 'Inactivo' }}</td> <!--Se muestra si esta activo o inactivo-->
               <td>
+                <!--Se verifica si esta activo el usuario-->
                 <button type="button" (click)="editUser(p)" class="edit">Editar</button>
                 <button *ngIf="p.active" type="button" (click)="deactivateUser(p.id)" class="delete">Dar de baja</button>
                 <button *ngIf="!p.active" type="button" (click)="activateUser(p.id)" class="activate">Dar de alta</button>

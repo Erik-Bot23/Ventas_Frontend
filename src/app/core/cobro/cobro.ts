@@ -9,7 +9,8 @@ export interface CobroItem {
   subtotal: number;
 }
 
-//Interface donde se utilizan los atributos
+//Interface donde se utilizan los atributos de CobroItem
+//Esta interface se utiliza en features/cobro/cobro.ts
 export interface Cobro {
   items: CobroItem[];
 }

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+//Interface para registrar productos
+//Se usará en product-service y features/productos/productos.ts
 export interface ProductForm{
   id?: number;
   name: string;
@@ -12,6 +14,8 @@ export interface ProductForm{
   createdAt?: Date;
 }
 
+//Interface para mostrar la venta
+//Se usará en product-service y features/cobro/cobro.ts
 export interface ProductShow{
   id?: number;
   name: string;
@@ -27,6 +31,8 @@ export interface ProductShow{
   createdAt?: Date;
 }
 
+//Interface para realizar la venta
+//Se usará en product-service y features/cobro/cobro.ts
 export interface ProductSale{
   id: number;
   name: string;
@@ -35,6 +41,8 @@ export interface ProductSale{
   barcode?: string;
 }
 
+//Interface para traer las categorias de la base de datos
+//Se usará en product-service y features/productos/productos.ts
 export interface Category {
   id: number;
   name: string;
