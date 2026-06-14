@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Product } from '../product/product';
+import { ProductShow } from '../product/product';
 
 //Interface con atributos
 export interface CobroItem {
-  product: Product;
+  product: ProductShow;
   quantity: number;
   unitPrice: number;
   subtotal: number;

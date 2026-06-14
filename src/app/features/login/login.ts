@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../core/auth-service/auth-service';
 import { Router } from '@angular/router';
-import { LoginResponse } from '../../core/loginResponse/login-response';
+import { LoginResponse } from '../../core/login/login'; 
 
 @Component({
   selector: 'app-login',

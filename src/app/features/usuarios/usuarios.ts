@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { User } from '../../core/user/user';
+import { User, UserRole } from '../../core/user/user';
 import { UserService } from '../../core/user-service/user-service';
 
 @Component({
@@ -17,6 +17,7 @@ export class Usuarios implements OnInit {
   menuOpen = true;
 
   users: User[] = [];
+  roles: UserRole[] = [];
   loading = true;
   isSaving = false;
 
@@ -24,7 +25,7 @@ export class Usuarios implements OnInit {
     name: '',
     email: '',
     password: '',
-    role: ''
+    roleId: 1
   };
 
   constructor(
@@ -33,11 +34,22 @@ export class Usuarios implements OnInit {
   ){}
 
   ngOnInit() {
+    this.loadRoles();
     this.loadUsers();
   }
 
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
+  }
+
+  loadRoles(){
+    this.userservice.getRoles().subscribe(data => {
+      this.roles = data;
+
+      if(data.length > 0 && this.form.roleId === 0){
+        this.form.roleId = data[0].id;
+      }
+    })
   }
 
   loadUsers(){
@@ -58,7 +70,7 @@ export class Usuarios implements OnInit {
         {
           name: this.form.name,
           email: this.form.email,
-          role: this.form.role
+          roleId: this.form.roleId
         }
           ).subscribe({
             next: () => {
@@ -76,7 +88,7 @@ export class Usuarios implements OnInit {
             name: this.form.name,
             email: this.form.email,
             password: this.form.password ?? '',
-            role: this.form.role
+            roleId: this.form.roleId
           }
             ).subscribe({
               next: () => {
@@ -96,7 +108,7 @@ export class Usuarios implements OnInit {
       name: '',
       email: '',
       password: '',
-      role: 'CAJERO'
+      roleId: 0
     };
     this.isSaving = false;
   }
@@ -106,8 +118,8 @@ export class Usuarios implements OnInit {
       id: user.id,
       name: user.name,
       email: user.email,
-      password: user.password,
-      role: user.role
+      roleId: user.roleId,
+      roleName: user.roleName
     };
   }
 

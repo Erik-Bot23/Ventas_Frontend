@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../user/user';
+import { User, UserRole } from '../user/user';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private apiUrl = 'http://localhost:8081/api/users';
+  private roleUrl = 'http://localhost:8081/api/roles'
 
   constructor(
     private http: HttpClient
@@ -31,6 +33,10 @@ export class UserService {
 
   activateUser(id: number){
     return this.http.patch(`${this.apiUrl}/${id}/active`, {});
+  }
+
+  getRoles(): Observable<UserRole[]>{
+      return this.http.get<UserRole[]>(this.roleUrl);
   }
 
 }

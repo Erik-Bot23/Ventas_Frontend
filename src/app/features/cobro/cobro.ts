@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Product } from '../../core/product/product';
+import { ProductShow } from '../../core/product/product';
 import { Observable } from 'rxjs';
 import { CobroItem } from '../../core/cobro/cobro';
-import { ProductService } from '../../core/product-service/product-service';
 import { Router } from '@angular/router';;
 import { CobroService } from '../../core/cobro-service/cobro-service';
+import { SaleService } from '../../core/sale-service/sale-service';
+import { SaleRequest } from '../../core/sale/sale';
+import { ProductService } from '../../core/product-service/product-service';
 
 @Component({
   selector: 'app-cobro',
@@ -15,8 +17,8 @@ import { CobroService } from '../../core/cobro-service/cobro-service';
   styleUrl: './cobro.css',
 })
 export class Cobro implements OnInit {
-  products: Product[] =[];
-  filteredProducts: Product[] = [];
+  products: ProductShow[] =[];
+  filteredProducts: ProductShow[] = [];
   categories: string[] = [];
   selectedCategory: string | null = null;
   search = '';
@@ -28,21 +30,20 @@ export class Cobro implements OnInit {
   menuOpen = false;
 
   constructor(
-    private productService: ProductService,
     public cobro: CobroService,
+    private productService: ProductService,
+    private saleService: SaleService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
-    this.cobro.loadCart();
-
     this.cobroItems$ = this.cobro.cart$;
     this.total$ = this.cobro.getTotalLocal();
   }
 
   loadProducts(){
-    this.productService.getProducts().subscribe(products => {
+    this.productService.getProductsVentas().subscribe(products => {
       this.products = products;
       this.filteredProducts = products;
 
@@ -74,7 +75,7 @@ export class Cobro implements OnInit {
   }
 
   //Agregar producto al carrito
-  add(product: Product){
+  add(product: ProductShow){
     if(product.stock <= 0){
       alert('Producto sin existencia')
       return;
@@ -85,11 +86,11 @@ export class Cobro implements OnInit {
   //Remover un solo producto de la lista
   removeItem(id?: number){
     if(!id) return;
-    this.cobro.removeOne(id);
+    this.cobro.removeAll(id);
   }
 
   //Botones de incrementar o decrementar el producto
-  increase(product: Product){
+  increase(product: ProductShow){
     this.cobro.add(product);
   }
 
@@ -107,13 +108,25 @@ export class Cobro implements OnInit {
       return;
     }
 
-    this.cobro.getTotal().subscribe(total => {
-      if(total <= 0){
-        alert("⚠️ Total inválido"); //Aquí debe ir un modal con el resumen de la venta y la opción de confirmar la venta
-      }
+    const request: SaleRequest = {
+      paymentMethod: 'CASH',
+      cashReceived: 1000,
+      items: items.map(item => ({ //aqui me marca error
+        productId: item.product.id!,
+        quantity: item.quantity
+      }))
+    };
 
-      alert("✅ Venta realizada");
-      this.cobro.clear();
+    this.saleService.processSale(request).subscribe({
+      next: response => {
+        alert(`Venta #${response.saleId}
+              Total: ${response.total}`);
+        
+          this.cobro.clear();
+          this.loadProducts();
+      }, error: err => {
+        alert(err.error.message);
+      }
     });
   }
 

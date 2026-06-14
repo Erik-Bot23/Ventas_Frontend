@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Product } from '../../core/product/product';
+import { ProductForm, Category } from '../../core/product/product';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/product-service/product-service';
 import { Router } from '@angular/router';
-import { Category } from '../../core/category/category';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoryService } from '../../core/category-service/category-service';
 import { error } from 'console';
@@ -19,7 +18,7 @@ import { error } from 'console';
 export class Productos implements OnInit {
   menuOpen = true;
 
-  products: Product[] = [];
+  products: ProductForm[] = [];
   categories: Category[] = [];
   selectedFile: File | null = null;
   loading = true;
@@ -27,7 +26,7 @@ export class Productos implements OnInit {
   isSaving = false;
   private loaded = false;
 
-  form: Product = {
+  form: ProductForm = {
     name: '',
     price: 0,
     stock: 0,
@@ -127,7 +126,7 @@ export class Productos implements OnInit {
     this.isSaving = false;
   }
 
-  editProduct(product: Product){
+  editProduct(product: ProductForm){
     this.form = {
       id: product.id,
       name: product.name,

@@ -5,6 +5,26 @@ export interface User {
   name: string;
   email: string;
   password?: string;
-  role: string;
+  roleId: number;
+  roleName?: string;
   active?: boolean;
+}
+
+export interface UserRole {
+  id: number;
+  role: string;
+}
+
+//Usuarios completo
+export interface CreateUserRequest {
+  name: string;
+  email: string;
+  password: string;
+  roleId: number;
+}
+
+export interface UpdateUserRequest {
+  name: string;
+  email: string;
+  roleId: number;
 }

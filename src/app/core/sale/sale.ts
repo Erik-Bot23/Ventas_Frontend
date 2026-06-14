@@ -6,7 +6,7 @@ export interface SaleItemRequest {
 }
 
 export interface SaleRequest {
-  paymentMehod: string;
+  paymentMethod: string;
   cashReceived?: number;
   items: SaleItemRequest[];
 }
