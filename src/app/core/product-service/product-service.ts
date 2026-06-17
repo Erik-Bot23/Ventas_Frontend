@@ -44,5 +44,9 @@ export class ProductService {
   findByBarcode(barcode: string){
     return this.http.get<ProductShow>(`${this.apiUrl}/barcode/${barcode}`);
   }
+
+  searchProducts(term: string){
+    return this.http.get<ProductShow[]>(`${this.apiUrl}/search?q=${term}`);
+  }
   
 }

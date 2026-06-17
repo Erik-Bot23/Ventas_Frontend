@@ -54,50 +54,30 @@
                 placeholder="Buscar producto..."
             />
         </div>
-
-        <!--Categorias-->
-        <div class="categories">
-            <button 
-                *ngFor="let cat of categories"
-                (click)="selectCategory(cat)"
-                [class.active] = "cat === selectedCategory">
-                {{ cat }}
-            </button>
-        </div>
-
-        <div class="main-grid">
-                <!--Productos-->
-                <div *ngFor="let p of filteredProducts" class="product">
-                    <p>{{ p.name }}</p>
-                    <span>${{p.price}}</span>
-                    <small>Stock: {{p.stock}}</small> <!--small: -->
-                    <button (click)="add(p)">Agregar</button>
-                </div>
             
 
-            <!--Carrito-->
-            <div class="cart">
-                <h3>Carrito</h3>
-                <!--async: -->
-                <div *ngFor="let item of cobroItems$ | async" class="cart-item">
-                    <span>{{ item.product.name }}</span>
-                    <button (click)="increase(item.product)">➕</button>
-                    <span>{{ item.quantity }}</span>
-                    <button (click)="decrease(item.product.id)">➖</button>
-                    <span>{{ item.subtotal }}</span>
-                    <button (click)="removeItem(item.product.id)">
-                        ❌
-                    </button>
-                </div>
-
-                <div class="total">
-                    Total: ${{ total$ | async}}
-                </div>
-
-                <button class="pay-btn" (click)="cobrar()">
-                    Cobrar
+        <!--Carrito-->
+        <div class="cart">
+            <h3>Carrito</h3>
+            <!--async: -->
+            <div *ngFor="let item of cobroItems$ | async" class="cart-item">
+                <span>{{ item.product.name }}</span>
+                <button (click)="increase(item.product)">➕</button>
+                <span>{{ item.quantity }}</span>
+                <button (click)="decrease(item.product.id)">➖</button>
+                <span>{{ item.subtotal }}</span>
+                <button (click)="removeItem(item.product.id)">
+                    ❌
                 </button>
             </div>
+
+            <div class="total">
+                Total: ${{ total$ | async}}
+            </div>
+
+            <button class="pay-btn" (click)="cobrar()">
+                Cobrar
+            </button>
         </div>
     </main>
 </div>
