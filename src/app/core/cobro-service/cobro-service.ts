@@ -20,9 +20,16 @@ export class CobroService {
   add(product: ProductShow){
     const current = [...this.cart$.value]; //...this:
 
+    //=this.cart$.value.find
     const existing = current.find(item => item.product.id === product.id);
     
+    //if(existing && existing.quantity >= product.stock)
     if(existing){
+      if(existing.quantity >= product.stock){
+        alert('Stock insuficiente');
+        return;
+      }
+
       existing.quantity++;
       existing.subtotal = existing.quantity * existing.unitPrice;
     } else {

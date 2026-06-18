@@ -8,7 +8,6 @@ import { Router } from '@angular/router';;
 import { CobroService } from '../../core/cobro-service/cobro-service';
 import { SaleService } from '../../core/sale-service/sale-service';
 import { SaleRequest } from '../../core/sale/sale';
-import { ProductService } from '../../core/product-service/product-service';
 
 @Component({
   selector: 'app-cobro',
@@ -24,6 +23,7 @@ export class Cobro implements OnInit {
   categories: string[] = [];
   selectedCategory: string | null = null;
   search = '';
+  searchResults: ProductShow[] = [];
 
   cobroItems$!: Observable<CobroItem[]>;
   total$!: Observable<number>;
@@ -33,7 +33,7 @@ export class Cobro implements OnInit {
 
   constructor(
     public cobro: CobroService,
-    private productService: ProductService,
+    private productService: SaleService,
     private saleService: SaleService,
     private router: Router
   ) {}
@@ -64,22 +64,27 @@ export class Cobro implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
-  //Filtrar productos
-  filter() {
-    this.filteredProducts = this.products.filter(p =>
-      p.name.toLowerCase().includes(this.search.toLowerCase()) && (!this.selectedCategory || p.categoryName === this.selectedCategory) 
-    );
+  //Buscar productos
+  onSearch(){
+    if(this.search.length < 2){
+      this.searchResults = [];
+      return;
+    }
+
+    this.productService.searchProducts(this.search).subscribe(res => {
+      this.searchResults = res;
+    });
   }
 
-  //Buscar el producto
-  searchProduct(){
-    this.filter();
-  }
+  selectProduct(product: ProductShow){
+    if(product.stock <= 0){
+      alert('Producto sin existencia');
+      return;
+    }
 
-  //Seleccionar categoría
-  selectCategory(cat: string){
-    this.selectedCategory = cat;
-    this.filter();
+    this.cobro.add(product);
+    this.search = '';
+    this.searchResults = [];
   }
 
   //Agregar producto al carrito

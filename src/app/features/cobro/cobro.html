@@ -48,34 +48,55 @@
         <!--Buscador-->
         <div class="search-bar">
             <!--(keyup.enter): -->
+            <!--(keyup.enter)="searchProduct()"-->
             <input 
                 [(ngModel)]="search"
-                (keyup.enter)="searchProduct()"
-                placeholder="Buscar producto..."
+                (input)="onSearch()"
+                placeholder="Buscar por nombre, SKU o código de barras"
             />
+
+            <div *ngIf="searchResults.length" class="search-dropdown">
+                <div *ngFor="let p of searchResults" class="search-item" (click)="selectProduct(p)">
+                    {{ p.name }}
+                    {{ p.stock }}
+                </div>
+            </div>
         </div>
-            
 
         <!--Carrito-->
         <div class="cart">
-            <h3>Carrito</h3>
-            <!--async: -->
-            <div *ngFor="let item of cobroItems$ | async" class="cart-item">
-                <span>{{ item.product.name }}</span>
-                <button (click)="increase(item.product)">➕</button>
-                <span>{{ item.quantity }}</span>
-                <button (click)="decrease(item.product.id)">➖</button>
-                <span>{{ item.subtotal }}</span>
-                <button (click)="removeItem(item.product.id)">
-                    ❌
-                </button>
-            </div>
+            <h3>Venta actual</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let item of cobroItems$ | async">
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.unitPrice }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.subtotal }}</td>
+                        <td>
+                            <button (click)="increase(item.product)">+</button>
+                            <button (click)="decrease(item.product.id)">-</button>
+                            <button (click)="removeItem(item.product.id)">X</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
             <div class="total">
-                Total: ${{ total$ | async}}
+                Total: ${{ total$ | async }}
             </div>
 
-            <button class="pay-btn" (click)="cobrar()">
+            <button class="pay-btn">
                 Cobrar
             </button>
         </div>

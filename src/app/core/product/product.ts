@@ -10,6 +10,8 @@ export interface ProductForm{
   img?: string;
   categoryId: number;
   categoryName?: string;
+  sku: string; //código del producto
+  barcode: string;
   active?: boolean;
   createdAt?: Date;
 }

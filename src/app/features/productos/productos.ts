@@ -34,6 +34,8 @@ export class Productos implements OnInit {
     name: '',
     price: 0,
     stock: 0,
+    sku: '',
+    barcode: '',
     categoryId: 0
   };
 
@@ -49,7 +51,6 @@ export class Productos implements OnInit {
       this.loadCategories();
       this.loaded = true;
     }
-    
   }
 
   //
@@ -88,11 +89,12 @@ export class Productos implements OnInit {
 
     const formData = new FormData();//formData: 
 
-    //
     formData.append('name', this.form.name);
     formData.append('price', this.form.price.toString());
     formData.append('stock', this.form.stock.toString());
     formData.append('categoryId', this.form.categoryId.toString());
+    formData.append('sku', this.form.sku);
+    formData.append('barcode', this.form.barcode);
 
     if(this.selectedFile){
       formData.append('image', this.selectedFile)//append:
@@ -135,6 +137,8 @@ export class Productos implements OnInit {
       name: '',
       price: 0,
       stock: 0,
+      sku: '',
+      barcode: '',
       categoryId: 0
     };
 
@@ -150,6 +154,8 @@ export class Productos implements OnInit {
       name: product.name,
       price: product.price,
       stock: product.stock,
+      sku: product.sku,
+      barcode: product.barcode,
       categoryId: product.categoryId
     };
   }

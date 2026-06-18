@@ -86,6 +86,16 @@
         </div>
 
         <div class="field">
+          <label>SKU</label>
+          <input [(ngModel)]="form.sku" />
+        </div>
+
+        <div class="field">
+          <label>Barcode</label>
+          <input [(ngModel)]="form.barcode" />
+        </div>
+
+        <div class="field">
           <label>Imagen del producto</label>
           <!--#fileInput: -->
           <!--(change): -->
@@ -123,6 +133,8 @@
               <th>Precio</th>
               <th>Stock</th>
               <th>Categoría</th>
+              <th>Stock</th>
+              <th>Stock</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -134,6 +146,8 @@
               <td>${{ p.price }}</td>
               <td>{{ p.stock }}</td>
               <td>{{ p.categoryName }}</td>
+              <td>{{ p.sku }}</td>
+              <td>{{ p.barcode }}</td>
               <td>
                 <button type="button" (click)="editProduct(p)" class="edit">Editar</button>
                 <button type="button" (click)="deleteProduct(p.id)" class="delete">Eliminar</button>

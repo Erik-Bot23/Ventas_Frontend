@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ProductForm, ProductShow } from '../product/product'; 
+import { ProductForm } from '../product/product'; 
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -31,22 +31,6 @@ export class ProductService {
   //Borra un producto en la BD
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  //Muestra los productos en la tabla de ventas 
-  //Se usará en features/cobro/cobro.ts
-  getProductsVentas(){
-    return this.http.get<ProductShow[]>(this.apiUrl);
-  }
-
-  //Muestra los productos en la tabla de ventas a través de código de barras
-  //Se usará en features/cobro/cobro.ts
-  findByBarcode(barcode: string){
-    return this.http.get<ProductShow>(`${this.apiUrl}/barcode/${barcode}`);
-  }
-
-  searchProducts(term: string){
-    return this.http.get<ProductShow[]>(`${this.apiUrl}/search?q=${term}`);
   }
   
 }
