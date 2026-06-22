@@ -47,8 +47,11 @@
     <main class="content">
         <!--Buscador-->
         <div class="search-bar">
-            <!--(keyup.enter): -->
-            <!--(keyup.enter)="searchProduct()"-->
+            <input
+                [(ngModel)]="barcode"
+                (keyup.enter)="searchBarcode()"
+                placeholder="Escanear código de barras"
+            >
             <input 
                 [(ngModel)]="search"
                 (input)="onSearch()"
@@ -58,7 +61,7 @@
             <div *ngIf="searchResults.length" class="search-dropdown">
                 <div *ngFor="let p of searchResults" class="search-item" (click)="selectProduct(p)">
                     {{ p.name }}
-                    {{ p.stock }}
+                    stock: {{ p.stock }}
                 </div>
             </div>
         </div>
@@ -96,9 +99,27 @@
                 Total: ${{ total$ | async }}
             </div>
 
-            <button class="pay-btn">
+            <button class="pay-btn" (click)="openPaymenteModal()">
                 Cobrar
             </button>
+
+            <div class="modal-backdrop" *ngIf="showPaymentModal">
+                <div class="modal">
+                    <h3>Cobrar venta</h3>
+                    <input type="number" [(ngModel)]="cashReceived" placeholder="Efectivo recibido">
+                    <p>Cambio: ${{ changePreview }}</p>
+                    
+                    <div class="modal-buttons">
+                        <button (click)="confirmPayment()">
+                            Confirmar
+                        </button>
+
+                        <button (click)="closeModal()">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </div>

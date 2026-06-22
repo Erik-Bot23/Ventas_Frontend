@@ -8,6 +8,8 @@ import { Router } from '@angular/router';;
 import { CobroService } from '../../core/cobro-service/cobro-service';
 import { SaleService } from '../../core/sale-service/sale-service';
 import { SaleRequest } from '../../core/sale/sale';
+import { response } from 'express';
+import { TicketService } from '../../core/ticket-service/ticket-service';
 
 @Component({
   selector: 'app-cobro',
@@ -24,17 +26,23 @@ export class Cobro implements OnInit {
   selectedCategory: string | null = null;
   search = '';
   searchResults: ProductShow[] = [];
+  barcode = '';
 
   cobroItems$!: Observable<CobroItem[]>;
   total$!: Observable<number>;
 
-  //Agrega esto aquí
+  //Desplegar menú
   menuOpen = false;
+
+  //Desplegar modal de cobro
+  showPaymentModal = false;
+  cashReceived = 0;
+
 
   constructor(
     public cobro: CobroService,
-    private productService: SaleService,
     private saleService: SaleService,
+    private ticketService: TicketService,
     private router: Router
   ) {}
 
@@ -46,7 +54,7 @@ export class Cobro implements OnInit {
 
   //Se cargan los productos localmente en la tabla de ventas
   loadProducts(){
-    this.productService.getProductsVentas().subscribe(products => {
+    this.saleService.getProductsVentas().subscribe(products => {
       this.products = products;
       this.filteredProducts = products;
 
@@ -71,7 +79,7 @@ export class Cobro implements OnInit {
       return;
     }
 
-    this.productService.searchProducts(this.search).subscribe(res => {
+    this.saleService.searchProducts(this.search).subscribe(res => {
       this.searchResults = res;
     });
   }
@@ -112,20 +120,37 @@ export class Cobro implements OnInit {
     this.cobro.removeOne(id);
   }
 
-  //Método de cobrar
-  cobrar(){
+  //Método de abrir modal de cobro
+  openPaymenteModal(){
     const items = this.cobro.cart$.value;
 
-    //Se valida si el carro esta vacío
     if(!items.length){
-      alert("⚠️ No hay productos en el carrito");
+      alert("No hay productos en el carrito");
+      return;
+    }
+    this.showPaymentModal = true;
+  }
+
+  //Mostrar cambio a recibir antes de realizar la venta
+  get changePreview(): number{
+    const total = this.cobro.cart$.value.reduce((sum, item) => sum + item.subtotal, 0);
+
+    return this.cashReceived - total;
+  }
+
+  //Confirmar pago
+  confirmPayment(){
+    const items = this.cobro.cart$.value;
+
+    if(!items.length){
       return;
     }
 
     const request: SaleRequest = {
       paymentMethod: 'CASH',
-      cashReceived: 1000,
-      items: items.map(item => ({ 
+      cashReceived: this.cashReceived,
+
+      items: items.map(item => ({
         productId: item.product.id!,
         quantity: item.quantity
       }))
@@ -133,13 +158,45 @@ export class Cobro implements OnInit {
 
     this.saleService.processSale(request).subscribe({
       next: response => {
+        this.ticketService.generateTicket(
+          response.saleId,
+          response.total,
+          response.changeAmount, 
+          items
+        );
+
         alert(`Venta #${response.saleId}
-              Total: ${response.total}`);
-        
-          this.cobro.clear();
-          this.loadProducts();
+              Total: $${response.total}
+              Cambio: $${response.changeAmount}`);
+
+        this.cobro.clear();
+        this.loadProducts();
+        this.closeModal();
       }, error: err => {
-        alert(err.error.message);
+        alert(err.error?.message || 'Error al procesar la venta');
+      }
+    });
+  }
+
+  //Cerrar el modal de cobro
+  closeModal(){
+    this.showPaymentModal = false;
+    this.cashReceived = 0;
+  }
+
+  //Método para buscar por codigo de barras
+  searchBarcode(){
+    if(!this.barcode.trim()){
+      return;
+    }
+
+    this.saleService.findByBarcode(this.barcode).subscribe({
+      next: product => {
+        this.cobro.add(product);
+        this.barcode = '';
+      }, error: () => {
+        alert('Producto no encontrado');
+        this.barcode = '';
       }
     });
   }

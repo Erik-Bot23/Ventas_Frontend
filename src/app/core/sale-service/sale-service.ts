@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SaleRequest, SaleResponse } from '../sale/sale';
+import { SaleHistory, SaleRequest, SaleResponse } from '../sale/sale';
 import { Observable } from 'rxjs';
 import { ProductShow } from '../product/product';
 
@@ -37,5 +37,9 @@ export class SaleService {
     return this.http.get<ProductShow[]>(`${this.apiUrl}/search?q=${term}`);
   }
 
+  //Ver historial de las ventas
+  getSales(){
+    return this.http.get<SaleHistory[]>(this.api);
+  }
 
 }

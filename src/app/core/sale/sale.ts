@@ -19,3 +19,13 @@ export interface SaleResponse {
   total: number;
   changeAmount: number;
 }
+
+//Interface para el historial de la venta
+export interface SaleHistory {
+  id: number;
+  saleDate: string;
+  total: number;
+  paymentMethod: string;
+  cashReceived: number;
+  changeAmount: number;
+}
