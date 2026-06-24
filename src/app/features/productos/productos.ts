@@ -181,48 +181,8 @@ export class Productos implements OnInit {
     }
   }
 
-  //Navegación del menu desplegable
-  perfil(){
-    this.router.navigate(['/perfil']);
-  }
-
-  ventas(){
-    this.router.navigate(['/ventas']);
-  }
-
-  inicio(){
-    this.router.navigate(['/cobro']);
-  }
-
-  caja(){
-    this.router.navigate(['/caja']);
-  }
-
-  clientes(){
-    this.router.navigate(['/cliente']);
-  }
-
-  compras(){
-    this.router.navigate(['/compras']);
-  }
-
-  facturas(){
-    this.router.navigate(['/facturas']);
-  }
-
-  productos(){
-    this.router.navigate(['/productos']);
-  }
-
   categorias(){
     this.router.navigate(['/categorias'])
   }
 
-  reportes(){
-    this.router.navigate(['/reportes']);
-  }
-
-  usuarios(){
-    this.router.navigate(['/usuarios']);
-  }
 }

@@ -1,0 +1,46 @@
+<!-- SIDEBAR reutilizado -->
+  <aside class="sidebar">
+    <div class="user-box" (click)="perfil()">
+      <img src="assets/images/avatar.png">
+      <span class="text">Admin</span>
+    </div>
+
+    <div class="menu-title" (click)="toggleMenu()">
+      ☰ <span class="text">Menú</span>
+    </div>
+
+    <!--Navegación-->
+    <nav class="nav">
+      <!--Esta es la página de cobro-->
+      <a (click)="inicio()">
+        <span class="text">Inicio</span>
+      </a>
+      <a (click)="productos()">
+        <span class="text">Productos</span>
+      </a>
+      <a (click)="categorias()">
+        <span class="text">Categorias</span>
+      </a>
+      <a routerLink="/ventas">
+        <span class="text">Ventas</span>
+      </a>
+      <a routerLink="/compras">
+        <span class="text">Compras</span>
+      </a>
+      <a routerLink="/facturas">
+        <span class="text">Facturas</span>
+      </a>
+      <a routerLink="/reportes">
+        <span class="text">Reportes</span>
+      </a>
+      <a routerLink="/caja">
+        <span class="text">Caja</span>
+      </a>
+      <a routerLink="/cliente">
+        <span class="text">Clientes</span>
+      </a>
+      <a (click)="usuarios()">
+        <span class="text">Usuarios</span>
+      </a>
+    </nav>
+  </aside>
