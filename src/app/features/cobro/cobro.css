@@ -36,11 +36,9 @@
   background: #020617;
   padding: 15px;
   transition: all 0.3s ease;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 4px 0 15px rgba(0,0,0,0.3);
-  padding-top: 20px;
+  height: 100vh;
 }
 
 .sidebar a {
@@ -111,6 +109,11 @@
 }
 
 /*Nav*/
+.nav {
+  overflow-y: auto;
+  flex: 1; /* 👈 ocupa el espacio disponible */
+}
+
 .nav a{
   display: flex;
   align-items: center;
@@ -119,12 +122,27 @@
   color: #94a3b8;
   text-decoration: none;
   transition: 0.2s;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .nav a:hover{
   color: white;
   background: #1e293b;
   border: 6px;
+}
+
+.nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+.nav::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 /* MAIN */

@@ -19,4 +19,12 @@ export class CategoryService {
   getCategories(): Observable<Category[]>{
     return this.http.get<Category[]>(this.apiUrl);
   }
+
+  addCategory(name: string): Observable<Category>{
+    return this.http.post<Category>(this.apiUrl, { name });
+  }
+
+  deleteCategory(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

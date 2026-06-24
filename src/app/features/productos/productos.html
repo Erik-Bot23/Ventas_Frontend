@@ -19,6 +19,9 @@
       <a (click)="productos()">
         <span class="text">Productos</span>
       </a>
+      <a (click)="categorias()">
+        <span class="text">Categorias</span>
+      </a>
       <a routerLink="/ventas">
         <span class="text">Ventas</span>
       </a>
@@ -77,12 +80,18 @@
 
         <div class="field">
           <label>Categoría</label>
-          <select [(ngModel)]="form.categoryId" class="custom-select">
-            <!--let c of: -->
-            <option *ngFor="let c of categories" [value]="c.id"> <!--*ngFor: -->
-              {{ c.name }}
-            </option>
-          </select>
+          <div class="category-row">
+            <select [(ngModel)]="form.categoryId" class="custom-select">
+              <!--let c of: -->
+              <option *ngFor="let c of categories" [value]="c.id"> <!--*ngFor: -->
+                {{ c.name }}
+              </option>
+            </select>
+
+            <button type="button" class="add-category" (click)="categorias()">
+              +
+            </button>
+          </div>
         </div>
 
         <div class="field">
@@ -133,8 +142,8 @@
               <th>Precio</th>
               <th>Stock</th>
               <th>Categoría</th>
-              <th>Stock</th>
-              <th>Stock</th>
+              <th>SKU</th>
+              <th>Barcode</th>
               <th>Acciones</th>
             </tr>
           </thead>

@@ -14,6 +14,8 @@ export const routes: Routes = [
     { path: 'usuarios', loadComponent: () => import('./features/usuarios/usuarios').then(m=>m.Usuarios) },
     { path: 'ventas', loadComponent: () => import('./features/ventas/ventas').then(m=>m.Ventas) },
     { path: 'caja', loadComponent: () => import('./features/caja/caja').then(m=>m.Caja) },
+    { path: 'categorias', loadComponent: () => import('./features/categorias/categorias').then(m=>m.Categorias) },
+    { path: 'roles', loadComponent: () => import('./features/roles/roles').then(m=>m.Roles) },
     { path: '**', redirectTo: '' }
 ];
 

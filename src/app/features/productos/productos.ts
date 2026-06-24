@@ -214,6 +214,10 @@ export class Productos implements OnInit {
     this.router.navigate(['/productos']);
   }
 
+  categorias(){
+    this.router.navigate(['/categorias'])
+  }
+
   reportes(){
     this.router.navigate(['/reportes']);
   }

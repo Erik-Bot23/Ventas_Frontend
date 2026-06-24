@@ -191,8 +191,6 @@
   color: white;
   transition: 0.3s;
   outline: none;
-  height: 38px;
-  box-sizing: border-box;
 }
 
 .form-card input:focus, .custom-select:focus {
@@ -230,26 +228,14 @@
   color: #cbd5e1;
 }
 
-/*Seleccionar categorias*/
-.custom-select {
-  cursor: pointer;
-  appearance: none;
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.custom-select option {
-  background: #0f172a;
-  color: white;
-}
-
 /*Contenedor de la tabla*/
 .table-container {
   width: 100%;
   height: auto;
   overflow-y: auto;
   align-self: stretch;
+  display: flex;
+  justify-content: center;
 }
 
 .table-container::-webkit-scrollbar {
@@ -322,28 +308,6 @@
   background: linear-gradient(135deg, #dc2626, #b91c1c);
   transform: scale(1.05);
 }
-
-/*Ir al modulo de categorias*/
-.category-row {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-}
-
-.add-category {
-  padding: 0 12px;
-  height: 38px; /*misma altura que input */
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.add-category:hover {
-  background: #16a34a;
-  transform: scale(1.05);
-}
-
 
 
 

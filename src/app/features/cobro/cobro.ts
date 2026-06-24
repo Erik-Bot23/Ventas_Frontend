@@ -234,11 +234,18 @@ export class Cobro implements OnInit {
     this.router.navigate(['/productos']);
   }
 
+  categorias(){
+    this.router.navigate(['/categorias'])
+  }
+
   reportes(){
     this.router.navigate(['/reportes']);
   }
 
   usuarios(){
     this.router.navigate(['/usuarios']);
+  }
+  roles(){
+    this.router.navigate(['/roles']);
   }
 }
