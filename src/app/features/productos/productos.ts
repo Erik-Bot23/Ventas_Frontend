@@ -18,7 +18,7 @@ import { error } from 'console';
 
 export class Productos implements OnInit {
   //Se inicializan las variables
-  menuOpen = true;
+  menuOpen = false;
   products: ProductForm[] = []; //Un arreglo de productos
   categories: Category[] = []; //Un arreglo de categorias
   selectedFile: File | null = null;
@@ -53,8 +53,7 @@ export class Productos implements OnInit {
       this.loaded = true;
     }
   }
-
-  //
+  
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
   }

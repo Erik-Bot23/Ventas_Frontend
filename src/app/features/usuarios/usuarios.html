@@ -1,47 +1,5 @@
 <div class="layout" [class.collapsed]="!menuOpen">
-  <!-- SIDEBAR reutilizado -->
-  <aside class="sidebar">
-    <div class="user-box" (click)="perfil()">
-      <img src="assets/images/avatar.png">
-      <span class="text">Admin</span>
-    </div>
-
-    <div class="menu-title" (click)="toggleMenu()">
-      ☰ <span class="text">Menú</span>
-    </div>
-
-    <nav class="nav">
-      <!--Esta es la página de cobro-->
-      <a (click)="inicio()">
-        <span class="text">Inicio</span>
-      </a>
-      <a (click)="productos()">
-        <span class="text">Productos</span>
-      </a>
-      <a routerLink="/ventas">
-        <span class="text">Ventas</span>
-      </a>
-      <a routerLink="/compras">
-        <span class="text">Compras</span>
-      </a>
-      <a routerLink="/facturas">
-        <span class="text">Facturas</span>
-      </a>
-      <a routerLink="/reportes">
-        <span class="text">Reportes</span>
-      </a>
-      <a routerLink="/caja">
-        <span class="text">Caja</span>
-      </a>
-      <a routerLink="/clientes">
-        <span class="text">Clientes</span>
-      </a>
-      <!--Solo la puede ver el ADMIN-->
-      <a (click)="usuarios()">
-        <span class="text">Usuarios</span>
-      </a>
-    </nav>
-  </aside>
+  <app-sidebar (toggle)="menuOpen = $event"></app-sidebar>
 
   <!-- CONTENIDO -->
   <main class="content">

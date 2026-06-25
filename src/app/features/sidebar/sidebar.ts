@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,14 +8,17 @@ import { Router } from '@angular/router';
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private cd: ChangeDetectorRef){}
 
-  menuOpen = true;
+  menuOpen = false;
   @Output() toggle = new EventEmitter<boolean>();
 
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
     this.toggle.emit(this.menuOpen);
+    //this.cd.detectChanges();
   }
 
    //Navegación del menu desplegable
@@ -61,5 +64,9 @@ export class Sidebar {
 
   usuarios(){
     this.router.navigate(['/usuarios']);
+  }
+
+  roles(){
+    this.router.navigate(['/roles']);
   }
 }

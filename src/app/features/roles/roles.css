@@ -1,0 +1,127 @@
+/* Contenido */
+.content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/*Tarjetas de productos*/
+.form-card {
+  background: #1e293b;
+  align-self: start;
+  padding: 16px;
+  border-radius: 12px;
+  display: grid;
+  gap: 8px;
+  max-width: 340px;
+  width: 100%;
+  margin: 0 auto 15px auto;
+
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.form-card input, .custom-select {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 2px solid #334155;
+  background: #020617;
+  color: white;
+  transition: 0.3s;
+  outline: none;
+}
+
+.form-card input:focus, .custom-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59,130,246,0.4);
+}
+
+.form-card button {
+  margin-top: 10px;
+  background: #2563eb;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form-card button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+/*Formulario*/
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+/*Contenedor de la tabla*/
+.table-container {
+  width: 100%;
+  height: auto;
+  overflow-y: auto;
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/*Botones*/
+.delete {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s eas
+}
+
+.delete {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.delete:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: scale(1.05);
+}
+
+
+
+
+
+

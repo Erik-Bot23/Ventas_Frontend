@@ -1,1 +1,4 @@
-<p>caja works!</p>
+<!--[class.collapsed]: -->
+<div class="layout" [class.collapsed]="!menuOpen">
+    <app-sidebar (toggle)="menuOpen = $event"></app-sidebar>
+</div>

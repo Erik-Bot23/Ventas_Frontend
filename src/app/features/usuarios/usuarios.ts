@@ -5,17 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User, UserRole } from '../../core/user/user';
 import { UserService } from '../../core/user-service/user-service';
+import { Sidebar } from '../sidebar/sidebar';
 
 @Component({
   selector: 'app-usuarios',
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar],
   templateUrl: './usuarios.html',
   styleUrl: './usuarios.css',
 })
 
 export class Usuarios implements OnInit {
   //Inicializar las variables
-  menuOpen = true;
+  menuOpen = false;
   users: User[] = []; //Arreglo de usuarios
   roles: UserRole[] = []; //Arreglo de roles
   loading = true;
@@ -161,47 +162,6 @@ export class Usuarios implements OnInit {
         }, error: (err) => console.log('Error al dar de alta', err)
       });
     }
-  }
-
-  //Navegación del menú
-  perfil(){
-    this.router.navigate(['/perfil']);
-  }
-
-  ventas(){
-    this.router.navigate(['/ventas']);
-  }
-
-  inicio(){
-    this.router.navigate(['/cobro']);
-  }
-
-  caja(){
-    this.router.navigate(['/caja']);
-  }
-
-  clientes(){
-    this.router.navigate(['/cliente']);
-  }
-
-  compras(){
-    this.router.navigate(['/compras']);
-  }
-
-  facturas(){
-    this.router.navigate(['/facturas']);
-  }
-
-  productos(){
-    this.router.navigate(['/productos']);
-  }
-
-  reportes(){
-    this.router.navigate(['/reportes']);
-  }
-
-  usuarios(){
-    this.router.navigate(['/usuarios']);
   }
 }
 

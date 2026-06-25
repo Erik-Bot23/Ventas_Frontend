@@ -1,1 +1,36 @@
-<p>roles works!</p>
+<div class="layout" [class.collapsed]="!menuOpen">
+    <app-sidebar (toggle)="menuOpen = $event"></app-sidebar>
+
+    <!-- CONTENIDO -->
+    <main class="content">
+        <h2>Gestión de categorías</h2>
+
+            <!--Formulario-->
+            <div class="form-card">
+                <div class="field">
+                    <label>Nombre del rol</label>
+                    <input [(ngModel)]="roleName">
+                </div>
+
+                <button (click)="saveRole()">Guardar</button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                    <tr *ngFor="let c of roles">
+                        <td>{{ c.role }}</td>
+                        <td>
+                            <button (click)="deleteRole(c.id)" class="delete">
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div> 
+    </main>
+</div>

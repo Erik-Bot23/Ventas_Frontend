@@ -1,1 +1,3 @@
-<p>facturas works!</p>
+<div class="layout" [class.collapsed]="!menuOpen">
+    <app-sidebar (toggle)="menuOpen = $event"></app-sidebar>
+</div>

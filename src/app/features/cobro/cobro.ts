@@ -10,10 +10,11 @@ import { SaleService } from '../../core/sale-service/sale-service';
 import { SaleRequest } from '../../core/sale/sale';
 import { response } from 'express';
 import { TicketService } from '../../core/ticket-service/ticket-service';
+import { Sidebar } from '../sidebar/sidebar';
 
 @Component({
   selector: 'app-cobro',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Sidebar],
   templateUrl: './cobro.html',
   styleUrl: './cobro.css',
 })
@@ -199,53 +200,5 @@ export class Cobro implements OnInit {
         this.barcode = '';
       }
     });
-  }
-
-  //Navegación del menú
-  perfil(){
-    this.router.navigate(['/perfil']);
-  }
-
-  ventas(){
-    this.router.navigate(['/ventas']);
-  }
-
-  inicio(){
-    this.router.navigate(['/cobro']);
-  }
-
-  caja(){
-    this.router.navigate(['/caja']);
-  }
-
-  clientes(){
-    this.router.navigate(['/cliente']);
-  }
-
-  compras(){
-    this.router.navigate(['/compras']);
-  }
-
-  facturas(){
-    this.router.navigate(['/facturas']);
-  }
-
-  productos(){
-    this.router.navigate(['/productos']);
-  }
-
-  categorias(){
-    this.router.navigate(['/categorias'])
-  }
-
-  reportes(){
-    this.router.navigate(['/reportes']);
-  }
-
-  usuarios(){
-    this.router.navigate(['/usuarios']);
-  }
-  roles(){
-    this.router.navigate(['/roles']);
   }
 }

@@ -4,18 +4,19 @@ import { CategoryService } from '../../core/category-service/category-service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Sidebar } from '../sidebar/sidebar';
 
 @Component({
   selector: 'app-categorias',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Sidebar],
   templateUrl: './categorias.html',
   styleUrl: './categorias.css',
 })
 export class Categorias implements OnInit {
   categories: Category[] = [];
   categoryName = '';
-  menuOpen = true;
+  menuOpen = false;
 
   constructor(
     private categoryService: CategoryService,
@@ -51,50 +52,5 @@ export class Categorias implements OnInit {
         this.categories = this.categories.filter(c => c.id !== id);
       });
     }
-  }
-
-  //Navegación del menú
-  perfil(){
-    this.router.navigate(['/perfil']);
-  }
-
-  ventas(){
-    this.router.navigate(['/ventas']);
-  }
-
-  inicio(){
-    this.router.navigate(['/cobro']);
-  }
-
-  caja(){
-    this.router.navigate(['/caja']);
-  }
-
-  clientes(){
-    this.router.navigate(['/cliente']);
-  }
-
-  compras(){
-    this.router.navigate(['/compras']);
-  }
-
-  facturas(){
-    this.router.navigate(['/facturas']);
-  }
-
-  productos(){
-    this.router.navigate(['/productos']);
-  }
-
-  categorias(){
-    this.router.navigate(['/categorias'])
-  }
-
-  reportes(){
-    this.router.navigate(['/reportes']);
-  }
-
-  usuarios(){
-    this.router.navigate(['/usuarios']);
   }
 }

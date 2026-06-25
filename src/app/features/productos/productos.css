@@ -1,35 +1,3 @@
-/*Layout*/
-.layout {
-  display: flex;
-  height: 100vh;
-  background: #0f172a;
-  color: white;
-}
-
-.layout.collapsed .sidebar{
-  width: 70px;
-}
-
-.layout.collapsed .text{
-  display: none;
-}
-
-.layout.collapsed .nav a{
-  justify-content: center;
-}
-
-.layout.collapsed .user-box {
-  justify-content: center;
-}
-
-.layout.collapsed .menu-title {
-  justify-content: center;
-}
-
-.layout.collapsed .user-box img {
-  margin-right: 0;
-}
-
 /* Contenido */
 .content {
   flex: 1;
@@ -246,10 +214,3 @@
   background: #16a34a;
   transform: scale(1.05);
 }
-
-
-
-
-
-
-
