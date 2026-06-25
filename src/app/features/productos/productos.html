@@ -1,5 +1,5 @@
 <div class="layout" [class.collapsed]="!menuOpen">
-  <app-sidebar></app-sidebar>
+  <app-sidebar (toggle)="menuOpen = $event"></app-sidebar>
   <!-- CONTENIDO -->
   <main class="content">
     <h2>Gestión de Productos</h2>

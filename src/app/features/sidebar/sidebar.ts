@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,12 +8,14 @@ import { Router } from '@angular/router';
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
-  menuOpen = true;
-
   constructor(private router: Router){}
+
+  menuOpen = true;
+  @Output() toggle = new EventEmitter<boolean>();
 
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
+    this.toggle.emit(this.menuOpen);
   }
 
    //Navegación del menu desplegable

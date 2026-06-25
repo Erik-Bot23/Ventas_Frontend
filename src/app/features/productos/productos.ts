@@ -6,11 +6,12 @@ import { ProductService } from '../../core/product-service/product-service';
 import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoryService } from '../../core/category-service/category-service';
+import { Sidebar } from '../sidebar/sidebar';
 import { error } from 'console';
 
 @Component({
   selector: 'app-productos',
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar],
   templateUrl: './productos.html',
   styleUrl: './productos.css',
 })
