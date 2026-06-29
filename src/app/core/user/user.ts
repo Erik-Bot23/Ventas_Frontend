@@ -16,7 +16,7 @@ export interface User {
 //Se usará en features/cobro/cobro.ts
 export interface UserRole {
   id: number;
-  role: string;
+  name: string;
 }
 
 //Interface para crear un usuario
