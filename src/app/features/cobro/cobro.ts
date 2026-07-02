@@ -11,6 +11,7 @@ import { SaleRequest } from '../../core/sale/sale';
 import { response } from 'express';
 import { TicketService } from '../../core/ticket-service/ticket-service';
 import { Sidebar } from '../sidebar/sidebar';
+import { CashService } from '../../core/cash-service/cash-service';
 
 @Component({
   selector: 'app-cobro',
@@ -29,6 +30,16 @@ export class Cobro implements OnInit {
   searchResults: ProductShow[] = [];
   barcode = '';
 
+  //Variables para cash
+  cash: any = null;
+  showOpenCashModal = false;
+  openingAmount = 0 ;
+
+  showCloseCashModal = false;
+  closingAmount = 0;
+
+  userName = 'Erik';
+
   cobroItems$!: Observable<CobroItem[]>;
   total$!: Observable<number>;
 
@@ -44,6 +55,7 @@ export class Cobro implements OnInit {
     public cobro: CobroService,
     private saleService: SaleService,
     private ticketService: TicketService,
+    private cashService: CashService,
     private router: Router
   ) {}
 
