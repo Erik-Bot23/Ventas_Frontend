@@ -2,82 +2,134 @@
 <div class="layout" [class.collapsed]="!menuOpen">
     <app-sidebar (toggle)="menuOpen = $event"></app-sidebar>
 
-    <!--Contenido-->
-    <main class="content">
-        <!--Buscador-->
-        <div class="search-bar">
-            <input
-                [(ngModel)]="barcode"
-                (keyup.enter)="searchBarcode()"
-                placeholder="Escanear código de barras"
-            >
-            <input 
-                [(ngModel)]="search"
-                (input)="onSearch()"
-                placeholder="Buscar por nombre, SKU o código de barras"
-            />
-
-            <div *ngIf="searchResults.length" class="search-dropdown">
-                <div *ngFor="let p of searchResults" class="search-item" (click)="selectProduct(p)">
-                    {{ p.name }}
-                    stock: {{ p.stock }}
-                </div>
-            </div>
+    <!--Modal de caja-->
+    <div class="top-bar">
+        <div>   
+            {{ userName }}
+        </div>
+            
+        <div>
+            Caja #{{ cash.id }}
         </div>
 
-        <!--Carrito-->
-        <div class="cart">
-            <h3>Venta actual</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
+        <div>
+            {{ cash.openedAt | date: 'short' }}
+        </div>
 
-                <tbody>
-                    <tr *ngFor="let item of cobroItems$ | async">
-                        <td>{{ item.product.name }}</td>
-                        <td>{{ item.unitPrice }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.subtotal }}</td>
-                        <td>
-                            <button (click)="increase(item.product)">+</button>
-                            <button (click)="decrease(item.product.id)">-</button>
-                            <button (click)="removeItem(item.product.id)">X</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <button *ngIf="cash" (click)="showCloseCashModal = true">
+            Cerrar caja
+        </button>
+    </div>
 
-            <div class="total">
-                Total: ${{ total$ | async }}
-            </div>
 
-            <button class="pay-btn" (click)="openPaymenteModal()">
-                Cobrar
-            </button>
+    <!--Contenido-->
+    <main class="content">
+        <!--Bloquear si no hay caja-->
+        <div *ngIf="!cash" class="blocked">
+            <h2>No hay caja abierta</h2>
+        </div>
 
-            <div class="modal-backdrop" *ngIf="showPaymentModal">
-                <div class="modal">
-                    <h3>Cobrar venta</h3>
-                    <input type="number" [(ngModel)]="cashReceived" placeholder="Efectivo recibido">
-                    <p>Cambio: ${{ changePreview }}</p>
-                    
-                    <div class="modal-buttons">
-                        <button (click)="confirmPayment()">
-                            Confirmar
-                        </button>
+        <div *ngIf="cash">
+            <!--Buscador-->
+            <div class="search-bar">
+                <input
+                    [(ngModel)]="barcode"
+                    (keyup.enter)="searchBarcode()"
+                    placeholder="Escanear código de barras"
+                >
+                <input 
+                    [(ngModel)]="search"
+                    (input)="onSearch()"
+                    placeholder="Buscar por nombre, SKU o código de barras"
+                />
 
-                        <button (click)="closeModal()">
-                            Cancelar
-                        </button>
+                <div *ngIf="searchResults.length" class="search-dropdown">
+                    <div *ngFor="let p of searchResults" class="search-item" (click)="selectProduct(p)">
+                        {{ p.name }}
+                        stock: {{ p.stock }}
                     </div>
                 </div>
+            </div>
+
+            <!--Carrito-->
+            <div class="cart">
+                <h3>Venta actual</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let item of cobroItems$ | async">
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.unitPrice }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.subtotal }}</td>
+                            <td>
+                                <button (click)="increase(item.product)">+</button>
+                                <button (click)="decrease(item.product.id)">-</button>
+                                <button (click)="removeItem(item.product.id)">X</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="total">
+                    Total: ${{ total$ | async }}
+                </div>
+
+                <button class="pay-btn" (click)="openPaymenteModal()">
+                    Cobrar
+                </button>
+
+                <!--Modal para realizar el cobro-->
+                <div class="modal-backdrop" *ngIf="showPaymentModal">
+                    <div class="modal">
+                        <h3>Cobrar venta</h3>
+                        <input type="number" [(ngModel)]="cashReceived" placeholder="Efectivo recibido">
+                        <p>Cambio: ${{ changePreview }}</p>
+                        
+                        <div class="modal-buttons">
+                            <button (click)="confirmPayment()">
+                                Confirmar
+                            </button>
+
+                            <button (click)="closeModalCobro()">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal de abrir caja-->
+                <div class="modal-backdrop" *ngIf="showOpenCashModal">
+                    <div class="modal">
+                        <h3>Abrir caja</h3>
+
+                        <input type="number" [(ngModel)]="openingAmount" placeholder="Monto inicial">
+                        <div class="modal-buttons">
+                            <button (click)="openCash()">Abrir</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal de cerrar caja-->
+                <div class="modal-backdrop" *ngIf="showCloseCashModal">
+                    <div class="modal">
+                        <h3>Cerrar caja</h3>
+                        <input type="number" [(ngModel)]="closingAmount" placeholder="Monto final">
+                        <button (click)="closeCash()">Cerrar</button>
+                        <button (click)="showCloseCashModal = false">Cancelar</button>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </main>

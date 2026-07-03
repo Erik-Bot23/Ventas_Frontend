@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductShow } from '../../core/product/product';
-import { Observable } from 'rxjs';
+import { last, Observable } from 'rxjs';
 import { CobroItem } from '../../core/cobro/cobro';
 import { Router } from '@angular/router';;
 import { CobroService } from '../../core/cobro-service/cobro-service';
@@ -30,16 +30,6 @@ export class Cobro implements OnInit {
   searchResults: ProductShow[] = [];
   barcode = '';
 
-  //Variables para cash
-  cash: any = null;
-  showOpenCashModal = false;
-  openingAmount = 0 ;
-
-  showCloseCashModal = false;
-  closingAmount = 0;
-
-  userName = 'Erik';
-
   cobroItems$!: Observable<CobroItem[]>;
   total$!: Observable<number>;
 
@@ -49,6 +39,16 @@ export class Cobro implements OnInit {
   //Desplegar modal de cobro
   showPaymentModal = false;
   cashReceived = 0;
+
+  //Variables para cash
+  cash: any = null;
+  showOpenCashModal = false;
+  openingAmount = 0 ;
+
+  showCloseCashModal = false;
+  closingAmount = 0;
+
+  userName = 'Erik';
 
 
   constructor(
@@ -63,6 +63,48 @@ export class Cobro implements OnInit {
     this.loadProducts();
     this.cobroItems$ = this.cobro.cart$;
     this.total$ = this.cobro.getTotalLocal();
+    this.checkCash();
+  }
+
+  //Método para abrir modal de caja
+  openCash(){
+    if(this.openingAmount <= 0){
+      alert('Monto inválido');
+      return;
+    }
+
+    this.cashService.openCash(this.openingAmount).subscribe({
+      next: (res) => {
+        this.cash = res;
+        alert('Caja abierta');
+        this.showOpenCashModal = false;
+      }, error: (err) => {
+            alert(err.error.message);
+      }
+    });
+  }
+
+  //Método para cerrar modal de caja
+  closeCash(){
+    this.cashService.closeCash(this.closingAmount).subscribe({
+      next: () => {
+        this.cash = null;
+        this.closingAmount = 0;
+        this.showCloseCashModal = false;
+        this.showOpenCashModal = true;
+      }
+    })
+  }
+
+  //Método para checar caja activa
+  checkCash(){
+    this.cashService.getActiveCash().subscribe({
+      next: (res) => {
+        this.cash = res;
+      }, error: () => {
+        this.showOpenCashModal = true;
+      }
+    })
   }
 
   //Se cargan los productos localmente en la tabla de ventas
@@ -135,6 +177,11 @@ export class Cobro implements OnInit {
 
   //Método de abrir modal de cobro
   openPaymenteModal(){
+    if(!this.cash){
+      alert("No hay caja abierta");
+      return;
+    }
+
     const items = this.cobro.cart$.value;
 
     if(!items.length){
@@ -184,7 +231,7 @@ export class Cobro implements OnInit {
 
         this.cobro.clear();
         this.loadProducts();
-        this.closeModal();
+        this.closeModalCobro();
       }, error: err => {
         alert(err.error?.message || 'Error al procesar la venta');
       }
@@ -192,7 +239,7 @@ export class Cobro implements OnInit {
   }
 
   //Cerrar el modal de cobro
-  closeModal(){
+  closeModalCobro(){
     this.showPaymentModal = false;
     this.cashReceived = 0;
   }
