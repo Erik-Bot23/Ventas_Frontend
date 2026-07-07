@@ -12,6 +12,7 @@ import { response } from 'express';
 import { TicketService } from '../../core/ticket-service/ticket-service';
 import { Sidebar } from '../sidebar/sidebar';
 import { CashService } from '../../core/cash-service/cash-service';
+import { CashRegister } from '../../core/cash-interface/cash-interface';
 
 @Component({
   selector: 'app-cobro',
@@ -41,7 +42,7 @@ export class Cobro implements OnInit {
   cashReceived = 0;
 
   //Variables para cash
-  cash: any = null;
+  cashFlag?: CashRegister;
   showOpenCashModal = false;
   openingAmount = 0 ;
 
@@ -63,48 +64,55 @@ export class Cobro implements OnInit {
     this.loadProducts();
     this.cobroItems$ = this.cobro.cart$;
     this.total$ = this.cobro.getTotalLocal();
-    this.checkCash();
+    this.loadCashRegister();
   }
 
   //Método para abrir modal de caja
-  openCash(){
-    if(this.openingAmount <= 0){
-      alert('Monto inválido');
-      return;
-    }
+  openCashModal(){
+    this.showOpenCashModal = true;
+  }
 
+  confirmOpenCashModal(){
     this.cashService.openCash(this.openingAmount).subscribe({
-      next: (res) => {
-        this.cash = res;
-        alert('Caja abierta');
+      next: res => {
+        this.cashFlag = res;
         this.showOpenCashModal = false;
-      }, error: (err) => {
+        this.openingAmount = 0;
+        alert('Caja abierta');
+      }, error: err => {
             alert(err.error.message);
       }
     });
   }
 
   //Método para cerrar modal de caja
-  closeCash(){
+  closeCashModal(){
+    this.showCloseCashModal = true;
+  }
+
+  confirmCloseCashModal(){
     this.cashService.closeCash(this.closingAmount).subscribe({
       next: () => {
-        this.cash = null;
-        this.closingAmount = 0;
+        this.cashFlag = undefined;
         this.showCloseCashModal = false;
-        this.showOpenCashModal = true;
+        this.closingAmount = 0;
+        alert('Caja cerrada');
+      }, error: err => {
+        alert(err.error.message);
       }
-    })
+    });
   }
 
   //Método para checar caja activa
-  checkCash(){
+  loadCashRegister(){
     this.cashService.getActiveCash().subscribe({
-      next: (res) => {
-        this.cash = res;
+      next: res => {
+        this.cashFlag = res;
       }, error: () => {
-        this.showOpenCashModal = true;
+        this.cashFlag = undefined;
+        //this.showOpenCashModal = true;
       }
-    })
+    });
   }
 
   //Se cargan los productos localmente en la tabla de ventas
@@ -177,7 +185,7 @@ export class Cobro implements OnInit {
 
   //Método de abrir modal de cobro
   openPaymenteModal(){
-    if(!this.cash){
+    if(!this.cashFlag){
       alert("No hay caja abierta");
       return;
     }
@@ -222,11 +230,13 @@ export class Cobro implements OnInit {
           response.saleId,
           response.total,
           response.changeAmount, 
+          response.cashReceived,
           items
         );
 
         alert(`Venta #${response.saleId}
               Total: $${response.total}
+              Recibido: $${response.cashReceived}
               Cambio: $${response.changeAmount}`);
 
         this.cobro.clear();

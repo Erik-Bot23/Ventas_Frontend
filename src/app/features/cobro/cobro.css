@@ -5,10 +5,66 @@
   overflow-y: auto;
 }
 
+/*Contenedor de buscador y caja*/
+.top-bar{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 25px;
+}
+
+/*Modal de caja*/
+.cash-info{
+  width: 260px;
+  background: #1d2638;
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,.25);
+}
+
+/*Boton de abrir modal de caja*/
+.open-btn{
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #28c65d;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  transition: .2s;
+}
+
+.open-btn:hover{
+  background: #21ab4d;
+}
+
+/*Boton para cerrar modal de caja*/
+.close.btn{
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #d9534f;
+  color: white;
+}
+ 
+.close.btn:hover{
+  background: #bf403d;
+}
+
 /* BUSCADOR */
 .search-bar {
-  position: relative;
-  max-width: 500px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .search-bar input {
@@ -292,9 +348,3 @@ td button:nth-child(3):hover {
   background: #dc2626;
 }
 
-/* BLOQUEO */
-.blocked {
-  text-align: center;
-  margin-top: 50px;
-  color: #e2e8f0;
-}

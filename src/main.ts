@@ -6,13 +6,6 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { routes } from './app/app.routes';
 
-bootstrapApplication(App, 
-{
-  providers: [
-    provideRouter(routes),
-    //provideAnimations(),
-    provideHttpClient(withFetch())
-  ]
-});
+bootstrapApplication(App, appConfig).catch(err => console.error(err));
 
 

@@ -10,6 +10,7 @@ export class TicketService {
   generateTicket(
     saleId: number,
     total: number,
+    recibido: number,
     cambio: number,
     items: any[]
   ){
@@ -44,16 +45,12 @@ export class TicketService {
 
     const finalY = (doc as any).lastAutoTable.finalY;
 
-    doc.text(
-      `Total: $${total}`, 20, finalY + 20
-    );
+    doc.text(`Recibido: $${recibido}`, 20, finalY + 30);
 
-    doc.text(
-      `Cambio: $${cambio}`, 20, finalY + 30
-    );
+    doc.text(`Total: $${total}`, 20, finalY + 20);
 
-    doc.save(
-      `venta-${saleId}.pdf`
-    );
+    doc.text(`Cambio: $${cambio}`, 20, finalY + 40);
+
+    doc.save(`venta-${saleId}.pdf`);
   }   
 }

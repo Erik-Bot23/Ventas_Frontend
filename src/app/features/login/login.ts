@@ -49,6 +49,8 @@ export class Login {
         if(res.success){ //success:
           this.snack.open('Bienvenido', '', {duration: 1000});//snack:
           // Luego aquí irá JWT
+          localStorage.setItem('token', res.token);
+
           localStorage.setItem('user', JSON.stringify({//localStorage:
             id: res.id,                                 //JSON.stringify:
             email: res.email,

@@ -18,6 +18,7 @@ export interface SaleResponse {
   saleId: number;
   total: number;
   changeAmount: number;
+  cashReceived: number;
 }
 
 //Interface para el historial de la venta

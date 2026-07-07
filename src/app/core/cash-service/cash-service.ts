@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CashRegister } from '../cash-interface/cash-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -10,15 +11,15 @@ export class CashService {
 
   constructor(private http: HttpClient){}
 
-  getActiveCash(): Observable<any>{
-    return this.http.get(`${this.apiUrl}/active`);
+  getActiveCash(){
+    return this.http.get<CashRegister>(`${this.apiUrl}/active`);
   }
 
-  openCash(amount: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/open`, {openingAmount: amount});
+  openCash(openingAmount: number) {
+    return this.http.post<CashRegister>(`${this.apiUrl}/open`, {openingAmount});
   }  
 
-  closeCash(amount: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/close`, {closingAmount: amount});
+  closeCash(closingAmount: number) {
+    return this.http.post<CashRegister>(`${this.apiUrl}/close`, {closingAmount});
   }
 }

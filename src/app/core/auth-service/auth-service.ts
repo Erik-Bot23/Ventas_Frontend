@@ -15,4 +15,6 @@ export class AuthService {
   login(data: LoginRequest): Observable<LoginResponse>{
     return this.http.post<LoginResponse>(`${this.api}/login`, data);
   }
+
+  
 }
