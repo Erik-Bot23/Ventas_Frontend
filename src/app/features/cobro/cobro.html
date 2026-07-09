@@ -25,8 +25,37 @@
                     </div>
                 </div>
             </div>
-
             
+            <!--Modal de caja-->
+            <div class="cash-info">
+                <h4>Caja</h4>
+
+                <ng-container *ngIf="cashFlag">
+                        <div class="cash-status open">
+                            Estado:
+                            🟢 Abierta
+                        </div>
+
+                        <div class="cash-data">
+                            <span>Fondo inicial:</span>
+                            <strong>${{ cashFlag.openingAmount }}</strong> 
+                        </div>
+                        
+                        <button class="btn-cash close" (click)="closeCashModal()">
+                            Cerrar caja
+                        </button>
+                </ng-container>
+
+                <ng-container *ngIf="!cashFlag">
+                        <div class="cash-status closed">
+                            🔴 Caja cerrada
+                        </div>
+
+                        <button class="btn-cash open" (click)="openCashModal()">
+                            Abrir caja
+                        </button>
+                </ng-container>
+            </div>
        </div>
 
         <!--Carrito-->
@@ -82,6 +111,28 @@
                             Cancelar
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <!--Modal de abrir caja-->
+            <div class="modal-backdrop" *ngIf="showOpenCashModal">
+                <div class="modal">
+                    <h3>Abrir caja</h3>
+
+                    <input type="number" [(ngModel)]="openingAmount" placeholder="Monto inicial">
+                    <div class="modal-buttons">
+                        <button (click)="confirmOpenCashModal()">Abrir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal de cerrar caja-->
+            <div class="modal-backdrop" *ngIf="showCloseCashModal">
+                <div class="modal">
+                    <h3>Cerrar caja</h3>
+                    <input type="number" [(ngModel)]="closingAmount" placeholder="Monto final">
+                    <button class="btn-confirm" (click)="confirmCloseCashModal()">Cerrar</button>
+                    <button class="btn-cancel" (click)="showCloseCashModal = false">Cancelar</button>
                 </div>
             </div>
         </div>

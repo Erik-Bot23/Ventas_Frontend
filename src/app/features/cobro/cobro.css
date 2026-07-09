@@ -9,8 +9,9 @@
 /* HEADER SUPERIOR */
 .top-bar {
   display: flex;
+  gap: 20px;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
   background: #020617;
   border: 1px solid #1e293b;
   padding: 10px 20px;
@@ -35,60 +36,103 @@
 /*Modal de caja*/
 .cash-info{
   width: 280px;
+  min-height: 280px;
   background: #0f172a;
-  border: 1px solid #334155;
+  border: 1px solid #1e293b;
   border-radius: 16px;
   padding: 20px;
-  color: #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
-  transition: .2s;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
 }
 
 .cash-info h4{
-  margin-bottom: 15px;
-  color: #cbd5e1;
+  margin: 0;
+  color: #e2e8f0;
   font-size: 18px;
+}
+
+.cash-status{
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
   font-weight: 600;
 }
 
-.cash-info p{
-  margin: 8px 0;
+.cash-status.open{
+  background: rgba(34, 197, 94, .15);
+  color: #22c55e;
+}
+
+.cash-status.closed{
+  background: rgba(239,68,68,.15);
+  color: #ef4444;
+}
+
+.cash-data{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.cash-data span{
   color: #94a3b8;
 }
 
-/*Boton de abrir modal de caja*/
-.open-btn{
+.cash-data strong{
+  color: #f8fafc;
+  font-size: 18px;
+}
+
+/*Botones*/
+.btn-cash{
   width: 100%;
-  margin-top: 15px;
-  padding: 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  padding: 12px;
   cursor: pointer;
-  background: #28c65d;
-  color: white;
-  font-size: 15px;
   font-weight: 600;
   transition: .2s;
 }
 
-.open-btn:hover{
-  background: #21ab4d;
+/*Boton de abrir modal de caja*/
+.btn-cash.open{
+  background:#22c55e;
+  color:white;
+}
+
+.btn-cash.open:hover{
+  background: #16a34a;
 }
 
 /*Boton para cerrar modal de caja*/
-.close-btn{
-  width: 100%;
-  margin-top: 15px;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: #d9534f;
+.btn-cash.close{
+  background: #ef4444;
   color: white;
 }
  
-.close-btn:hover{
-  background: #bf403d;
+.btn-cash:hover{
+  background: #dc2626;
+}
+
+/*Botones de modal cerrar*/
+.btn-confirm{
+  background: #ef4444;
+  color: white;
+}
+
+.btn-confirm:hover{
+  background: #dc2626;
+}
+
+.btn-cancel{
+  background: #475569;
+  color: white;
+}
+
+.btn-cancel:hover{
+  background: #334155;
 }
 
 /* BUSCADOR */

@@ -65,7 +65,7 @@ export class Cobro implements OnInit {
     this.loadProducts();
     this.cobroItems$ = this.cobro.cart$;
     this.total$ = this.cobro.getTotalLocal();
-    //this.loadCashRegister();
+    this.loadCashRegister();
   }
 
   //Método para abrir modal de caja
@@ -74,13 +74,15 @@ export class Cobro implements OnInit {
   }
 
   confirmOpenCashModal(){
+    this.showOpenCashModal = false;
+
     this.cashService.openCash(this.openingAmount).subscribe({
       next: res => {
         this.cashFlag = res;
-        this.showOpenCashModal = false;
         this.openingAmount = 0;
         alert('Caja abierta');
       }, error: err => {
+            this.showOpenCashModal = true;
             alert(err.error.message);
       }
     });
@@ -92,13 +94,15 @@ export class Cobro implements OnInit {
   }
 
   confirmCloseCashModal(){
+    this.showCloseCashModal = false;
+
     this.cashService.closeCash(this.closingAmount).subscribe({
       next: () => {
         this.cashFlag = undefined;
-        this.showCloseCashModal = false;
         this.closingAmount = 0;
         alert('Caja cerrada');
       }, error: err => {
+        this.showCloseCashModal = true;
         alert(err.error.message);
       }
     });
