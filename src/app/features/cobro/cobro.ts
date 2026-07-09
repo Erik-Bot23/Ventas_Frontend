@@ -13,6 +13,7 @@ import { TicketService } from '../../core/ticket-service/ticket-service';
 import { Sidebar } from '../sidebar/sidebar';
 import { CashService } from '../../core/cash-service/cash-service';
 import { CashRegister } from '../../core/cash-interface/cash-interface';
+import { error } from 'node:console';
 
 @Component({
   selector: 'app-cobro',
@@ -64,7 +65,7 @@ export class Cobro implements OnInit {
     this.loadProducts();
     this.cobroItems$ = this.cobro.cart$;
     this.total$ = this.cobro.getTotalLocal();
-    this.loadCashRegister();
+    //this.loadCashRegister();
   }
 
   //Método para abrir modal de caja
@@ -142,8 +143,13 @@ export class Cobro implements OnInit {
       return;
     }
 
-    this.saleService.searchProducts(this.search).subscribe(res => {
+    this.saleService.searchProducts(this.search).subscribe({
+      next: res => {
+      console.log("Resultados", res);
       this.searchResults = res;
+    }, error: err => {
+      console.error(err);
+      }
     });
   }
 

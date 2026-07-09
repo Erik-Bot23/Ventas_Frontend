@@ -26,36 +26,7 @@
                 </div>
             </div>
 
-            <!--Modal de caja-->
-            <div class="cash-info">
-                <h4>Caja</h4>
-
-                <ng-container *ngIf="cashFlag">
-                        <p>
-                            Estado:
-                            🟢 Abierta
-                        </p>
-
-                        <p>
-                            Fondo:
-                            ${{ cashFlag.openingAmount }}
-                        </p>
-                        
-                        <button class="open-btn" (click)="closeCashModal()">
-                            Cerrar caja
-                        </button>
-                </ng-container>
-
-                <ng-container *ngIf="!cashFlag">
-                        <p>
-                            🔴 Caja cerrada
-                        </p>
-
-                        <button class="close-btn" (click)="openCashModal()">
-                            Abrir caja
-                        </button>
-                </ng-container>
-            </div>
+            
        </div>
 
         <!--Carrito-->
@@ -113,29 +84,6 @@
                     </div>
                 </div>
             </div>
-
-            <!--Modal de abrir caja-->
-            <div class="modal-backdrop" *ngIf="showOpenCashModal">
-                <div class="modal">
-                    <h3>Abrir caja</h3>
-
-                    <input type="number" [(ngModel)]="openingAmount" placeholder="Monto inicial">
-                    <div class="modal-buttons">
-                        <button (click)="confirmOpenCashModal()">Abrir</button>
-                    </div>
-                </div>
-            </div>
-
-            <!--Modal de cerrar caja-->
-            <div class="modal-backdrop" *ngIf="showCloseCashModal">
-                <div class="modal">
-                    <h3>Cerrar caja</h3>
-                    <input type="number" [(ngModel)]="closingAmount" placeholder="Monto final">
-                    <button (click)="confirmCloseCashModal()">Cerrar</button>
-                    <button (click)="showCloseCashModal = false">Cancelar</button>
-                </div>
-            </div>
-
         </div>
     </main>
 </div>
