@@ -14,6 +14,7 @@ import { Sidebar } from '../sidebar/sidebar';
 import { CashService } from '../../core/cash-service/cash-service';
 import { CashRegister } from '../../core/cash-interface/cash-interface';
 import { error } from 'node:console';
+import { AuthService } from '../../core/auth-service/auth-service';
 
 @Component({
   selector: 'app-cobro',
@@ -50,7 +51,10 @@ export class Cobro implements OnInit {
   showCloseCashModal = false;
   closingAmount = 0;
 
-  userName = 'Erik';
+  userName = '';
+
+  //Variables para fecha
+  today: string = '';
 
 
   constructor(
@@ -58,6 +62,7 @@ export class Cobro implements OnInit {
     private saleService: SaleService,
     private ticketService: TicketService,
     private cashService: CashService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -66,6 +71,13 @@ export class Cobro implements OnInit {
     this.cobroItems$ = this.cobro.cart$;
     this.total$ = this.cobro.getTotalLocal();
     this.loadCashRegister();
+    this.date();
+    this.showUser();
+  }
+
+  //Obtener el usuario
+  showUser(){
+    this.userName = this.authService.getUsername();
   }
 
   //Método para abrir modal de caja
@@ -113,8 +125,10 @@ export class Cobro implements OnInit {
     this.cashService.getActiveCash().subscribe({
       next: res => {
         this.cashFlag = res;
-      }, error: () => {
-        this.cashFlag = undefined;
+      }, error: err => {
+        if(err.status === 404){
+          this.cashFlag = undefined;
+        }
         //this.showOpenCashModal = true;
       }
     });
@@ -239,8 +253,8 @@ export class Cobro implements OnInit {
         this.ticketService.generateTicket(
           response.saleId,
           response.total,
-          response.changeAmount, 
           response.cashReceived,
+          response.changeAmount, 
           items
         );
 
@@ -278,6 +292,15 @@ export class Cobro implements OnInit {
         alert('Producto no encontrado');
         this.barcode = '';
       }
+    });
+  }
+
+  //Método de fecha
+  date(){
+    this.today = new Date().toLocaleDateString('es-MX', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
     });
   }
 }

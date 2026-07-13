@@ -30,6 +30,16 @@
             <div class="cash-info">
                 <h4>Caja</h4>
 
+                <div class="cash-user">
+                    <span>Usuario</span>
+                    <strong>{{ userName }}</strong>
+                </div>
+
+                <div class="cash-user">
+                    <span>Fecha</span>
+                    <strong>{{ today }}</strong>
+                </div>
+
                 <ng-container *ngIf="cashFlag">
                         <div class="cash-status open">
                             Estado:
@@ -120,8 +130,8 @@
                     <h3>Abrir caja</h3>
 
                     <input type="number" [(ngModel)]="openingAmount" placeholder="Monto inicial">
-                    <div class="modal-buttons">
-                        <button (click)="confirmOpenCashModal()">Abrir</button>
+                    <div class="button-box">
+                        <button class="btn-confirm-open" (click)="confirmOpenCashModal()">Abrir</button>
                     </div>
                 </div>
             </div>
@@ -131,8 +141,10 @@
                 <div class="modal">
                     <h3>Cerrar caja</h3>
                     <input type="number" [(ngModel)]="closingAmount" placeholder="Monto final">
-                    <button class="btn-confirm" (click)="confirmCloseCashModal()">Cerrar</button>
-                    <button class="btn-cancel" (click)="showCloseCashModal = false">Cancelar</button>
+                    <div class="button-box">
+                        <button class="btn-confirm-close" (click)="confirmCloseCashModal()">Cerrar</button>
+                        <button class="btn-cancel" (click)="showCloseCashModal = false">Cancelar</button>
+                    </div>
                 </div>
             </div>
         </div>

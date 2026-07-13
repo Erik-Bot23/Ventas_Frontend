@@ -49,14 +49,11 @@ export class Login {
         if(res.success){ //success:
           this.snack.open('Bienvenido', '', {duration: 1000});//snack:
           // Luego aquí irá JWT
-          localStorage.setItem('token', res.token);
+          this.auth.saveToken(res.token);
 
-          localStorage.setItem('user', JSON.stringify({//localStorage:
-            id: res.id,                                 //JSON.stringify:
-            email: res.email,
-            name: res.name,
-            role: res.role
-          }));
+          this.auth.saveUser(res);//localStorage:
+                                //JSON.stringify:
+
           this.router.navigate(['/cobro']); //navigate: función para nevegar entre secciones
         } else{
           this.snack.open('Credenciales incorrectas', '', {duration: 1500});

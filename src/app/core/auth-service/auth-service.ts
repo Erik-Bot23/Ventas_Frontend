@@ -16,5 +16,51 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.api}/login`, data);
   }
 
-  
+  //Guardar el token
+  saveToken(token: string): void{
+    localStorage.setItem('token', token);
+  }
+
+  //Obtener el token
+  getToken(): string | null{
+    return localStorage.getItem('token');
+  }
+
+  //Guardar el usuario
+  saveUser(user: LoginResponse): void{
+    localStorage.setItem('user', JSON.stringify({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role
+    }));
+  }
+
+  //Obtener el usuario
+  getUser(){
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+
+  //Obtener el nombre
+  getUsername(): string{
+    return this.getUser()?.name ?? '';
+  }
+
+  //Obtener el rol
+  getRole(): string{
+    return this.getUser()?.role ?? '';
+  }
+
+  //Saber si inicio sesión
+  isLogged(): boolean{
+    return !!this.getToken();
+  }
+
+  //Cerrar sesión
+  logout(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+
 }
