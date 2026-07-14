@@ -2,13 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
 import { LoginRequest, LoginResponse } from '../login/login';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 
 //Esta clase es para el LOGIN en features/login/login.ts
 export class AuthService {
   //La ruta a la que va a responder en el backend
-  private api = 'http://localhost:8081/api/auth';
+  private api = `${environment.api}/auth`;
+  
+  //private api = 'http://localhost:8081/api/auth';
   constructor(private http: HttpClient){}
 
   //Validar usuario y mandar a la página inicial
