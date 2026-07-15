@@ -10,8 +10,8 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
   //La ruta a la que va a responder en el backend
   private api = `${environment.api}/auth`;
-  
   //private api = 'http://localhost:8081/api/auth';
+  
   constructor(private http: HttpClient){}
 
   //Validar usuario y mandar a la página inicial

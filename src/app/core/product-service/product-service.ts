@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProductForm } from '../product/product'; 
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 //Se usará en features/productos/productos.ts
 export class ProductService {
-  private apiUrl = 'http://localhost:8081/api/products';
+  private apiUrl = `${environment.api}/products`;
+  //private apiUrl = 'http://localhost:8081/api/products';
 
   constructor(private http: HttpClient){}
 

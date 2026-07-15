@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { SaleHistory, SaleRequest, SaleResponse } from '../sale/sale';
 import { Observable } from 'rxjs';
 import { ProductShow } from '../product/product';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,11 @@ import { ProductShow } from '../product/product';
 
 //Se usará en features/cobro/cobro.ts
 export class SaleService {
-  private api = 'http://localhost:8081/api/sales';
-  private apiUrl = 'http://localhost:8081/api/products';
+  private api = `${environment.api}/sales`;
+  private apiUrl = `${environment.api}/products`;
+
+  /*private api = 'http://localhost:8081/api/sales';
+  private apiUrl = 'http://localhost:8081/api/products';*/
 
   constructor(private http: HttpClient){}
 

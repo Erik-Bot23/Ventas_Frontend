@@ -2,12 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CashRegister } from '../cash-interface/cash-interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CashService {
-  private apiUrl = 'http://localhost:8081/api/cash';
+  private apiUrl = `${environment.api}/cash`;
+  //private apiUrl = 'http://localhost:8081/api/cash';
 
   constructor(private http: HttpClient){}
 

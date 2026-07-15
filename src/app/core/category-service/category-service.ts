@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Category } from '../product/product'; 
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,8 @@ import { Category } from '../product/product';
 //Esta clase se utliza en cobre-service
 export class CategoryService {
   //Ruta a la que tiene que responder ene l backend
-  private apiUrl = 'http://localhost:8081/api/categories';
+  private apiUrl = `${environment.api}/categories`;
+  //private apiUrl = 'http://localhost:8081/api/categories';
 
   constructor(private http: HttpClient){}
 
