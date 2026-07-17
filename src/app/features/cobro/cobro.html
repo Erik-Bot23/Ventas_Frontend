@@ -138,9 +138,24 @@
 
             <!--Modal de cerrar caja-->
             <div class="modal-backdrop" *ngIf="showCloseCashModal">
-                <div class="modal">
-                    <h3>Cerrar caja</h3>
-                    <input type="number" [(ngModel)]="closingAmount" placeholder="Monto final">
+                <div class="modal cash-close-modal">
+                    <h3>Corte de caja</h3>
+                    <div class="cash-sumary">
+                        <div class="cash-row">
+                            <span>Fondo inicial</span>
+                            <strong>${{ cashFlag?.openingAmount }}</strong>
+                        </div>
+                        <div class="cash-row">
+                            <span>Fondo inicial</span>
+                            <strong>${{ cashFlag?.openingAmount }}</strong>
+                        </div>
+                        <div class="cash-row">
+                            <span>Fondo inicial</span>
+                            <strong>${{ cashFlag?.openingAmount }}</strong>
+                        </div>
+                        
+                    </div>
+                    <input type="number" [(ngModel)]="closingAmount" placeholder="Dinero contado">
                     <div class="button-box">
                         <button class="btn-confirm-close" (click)="confirmCloseCashModal()">Cerrar</button>
                         <button class="btn-cancel" (click)="showCloseCashModal = false">Cancelar</button>
