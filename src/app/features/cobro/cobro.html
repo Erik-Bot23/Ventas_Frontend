@@ -146,16 +146,42 @@
                             <strong>${{ cashFlag?.openingAmount }}</strong>
                         </div>
                         <div class="cash-row">
-                            <span>Fondo inicial</span>
-                            <strong>${{ cashFlag?.openingAmount }}</strong>
+                            <span>Ventas en efectivo</span>
+                            <strong>${{ cashFlag?.cashSales }}</strong>
                         </div>
                         <div class="cash-row">
-                            <span>Fondo inicial</span>
-                            <strong>${{ cashFlag?.openingAmount }}</strong>
+                            <span>Ventas débito</span>
+                            <strong>${{ cashFlag?.debitSales }}</strong>
                         </div>
-                        
+                        <div class="cash-row">
+                            <span>Ventas crédito</span>
+                            <strong>${{ cashFlag?.creditSales }}</strong>
+                        </div>
+                        <div class="cash-row">
+                            <span>Total vendido</span>
+                            <strong>${{ cashFlag?.totalSales }}</strong>
+                        </div>
+                        <div class="cash-row">
+                            <span>Tickets</span>
+                            <strong>${{ cashFlag?.totalTickets }}</strong>
+                        </div>
+                        <div class="cash-row">
+                            <span>Monto esperado</span>
+                            <strong>${{ cashFlag?.expectedAmount }}</strong>
+                        </div>
                     </div>
+
                     <input type="number" [(ngModel)]="closingAmount" placeholder="Dinero contado">
+
+                    <div class="difference-preview" *ngIf="closingAmount">
+                        Diferencia: 
+                        <strong
+                                [class.positive]="differencePreview >= 0"
+                                [class.negative]="differencePreview < 0">
+                            ${{ differencePreview }}
+                        </strong>
+                    </div>
+
                     <div class="button-box">
                         <button class="btn-confirm-close" (click)="confirmCloseCashModal()">Cerrar</button>
                         <button class="btn-cancel" (click)="showCloseCashModal = false">Cancelar</button>

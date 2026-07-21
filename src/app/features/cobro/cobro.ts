@@ -303,4 +303,13 @@ export class Cobro implements OnInit {
       year: 'numeric'
     });
   }
+
+  //Diferencia en tiempo real
+  get differencePreview(): number{
+    if(!this.cashFlag){
+      return 0;
+    }
+
+    return this.closingAmount - (this.cashFlag.expectedAmount || 0);
+  }
 }

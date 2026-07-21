@@ -448,5 +448,57 @@ td button:nth-child(3):hover {
     color: white;
 }
 
+/*Corte de caja*/
+.cash-close-modal{
+  width: 520;
+}
 
+/*==Resumen del corte de caja==*/
+.cash-summary{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
+.cash-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10p 0;
+  border-bottom: 1px solid #1e293b;
+}
+
+.cash-row span{
+  color: #94a3b8
+}
+
+.cash-row strong{
+  color: #f8fafc
+}
+
+.cash-row.total{
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cash-row.expected{
+  background: rgb(34, 197, 94, .12);
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+}
+
+.difference-preview{
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.positive{
+  color: #22c55e;
+}
+
+.negative{
+  color: #ef4444;
+}
