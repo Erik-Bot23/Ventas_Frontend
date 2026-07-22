@@ -44,6 +44,7 @@ export class Cobro implements OnInit {
   cashReceived = 0;
 
   //Variables para cash
+  cashSummary?: CashSummary;
   cashFlag?: CashRegister;
   cashSummary?: CashSummary;
   showOpenCashModal = false;

@@ -12,13 +12,13 @@ export interface CashRegister {
 export interface CashSummary{
   cashId: number;
   openingAmount: number;
+  expectedAmount: number;
+  difference: number;
   cashSales: number;
   debitSales: number;
   creditSales: number;
   totalSales: number;
-  expectedAmount: number;
   totalTickets: number;
-  difference: number;
 }
 
 export interface OpenCashRequest{
