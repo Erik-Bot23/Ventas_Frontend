@@ -46,7 +46,6 @@ export class Cobro implements OnInit {
   //Variables para cash
   cashSummary?: CashSummary;
   cashFlag?: CashRegister;
-  cashSummary?: CashSummary;
   showOpenCashModal = false;
   openingAmount = 0 ;
 
@@ -319,7 +318,6 @@ export class Cobro implements OnInit {
     if(!this.cashSummary){
       return 0;
     }
-
     return this.closingAmount - (this.cashSummary.expectedAmount || 0);
   }
 }
