@@ -140,34 +140,34 @@
             <div class="modal-backdrop" *ngIf="showCloseCashModal">
                 <div class="modal cash-close-modal">
                     <h3>Corte de caja</h3>
-                    <div class="cash-sumary">
+                    <div class="cash-summary">
                         <div class="cash-row">
                             <span>Fondo inicial</span>
-                            <strong>${{ cashFlag?.openingAmount }}</strong>
+                            <strong>${{ cashSummary?.openingAmount }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Ventas en efectivo</span>
-                            <strong>${{ cashFlag?.cashSales }}</strong>
+                            <strong>${{ cashSummary?.cashSales }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Ventas débito</span>
-                            <strong>${{ cashFlag?.debitSales }}</strong>
+                            <strong>${{ cashSummary?.debitSales }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Ventas crédito</span>
-                            <strong>${{ cashFlag?.creditSales }}</strong>
+                            <strong>${{ cashSummary?.creditSales }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Total vendido</span>
-                            <strong>${{ cashFlag?.totalSales }}</strong>
+                            <strong>${{ cashSummary?.totalSales }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Tickets</span>
-                            <strong>${{ cashFlag?.totalTickets }}</strong>
+                            <strong>{{ cashSummary?.totalTickets }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Monto esperado</span>
-                            <strong>${{ cashFlag?.expectedAmount }}</strong>
+                            <strong>${{ cashSummary?.expectedAmount }}</strong>
                         </div>
                     </div>
 

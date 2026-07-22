@@ -12,7 +12,7 @@ import { response } from 'express';
 import { TicketService } from '../../core/ticket-service/ticket-service';
 import { Sidebar } from '../sidebar/sidebar';
 import { CashService } from '../../core/cash-service/cash-service';
-import { CashRegister } from '../../core/cash-interface/cash-interface';
+import { CashRegister, CashSummary } from '../../core/cash-interface/cash-interface';
 import { error } from 'node:console';
 import { AuthService } from '../../core/auth-service/auth-service';
 
@@ -45,6 +45,7 @@ export class Cobro implements OnInit {
 
   //Variables para cash
   cashFlag?: CashRegister;
+  cashSummary?: CashSummary;
   showOpenCashModal = false;
   openingAmount = 0 ;
 
@@ -102,7 +103,14 @@ export class Cobro implements OnInit {
 
   //Método para cerrar modal de caja
   closeCashModal(){
-    this.showCloseCashModal = true;
+    this.cashService.getSummary().subscribe({
+      next: res => {
+        this.cashSummary = res;
+        this.showCloseCashModal = true;
+      }, error: err => {
+        alert(err.error?.message || 'Error al cargar el resumen');
+      }
+    });
   }
 
   confirmCloseCashModal(){
@@ -111,6 +119,7 @@ export class Cobro implements OnInit {
     this.cashService.closeCash(this.closingAmount).subscribe({
       next: () => {
         this.cashFlag = undefined;
+        this.cashSummary = undefined;
         this.closingAmount = 0;
         alert('Caja cerrada');
       }, error: err => {
@@ -306,10 +315,10 @@ export class Cobro implements OnInit {
 
   //Diferencia en tiempo real
   get differencePreview(): number{
-    if(!this.cashFlag){
+    if(!this.cashSummary){
       return 0;
     }
 
-    return this.closingAmount - (this.cashFlag.expectedAmount || 0);
+    return this.closingAmount - (this.cashSummary.expectedAmount || 0);
   }
 }

@@ -7,13 +7,18 @@ export interface CashRegister {
   openingAmount: number;
   closingAmount: number;
   active: boolean;
-  expectedAmount: number;
-  difference: number;
+}
+
+export interface CashSummary{
+  cashId: number;
+  openingAmount: number;
   cashSales: number;
   debitSales: number;
   creditSales: number;
   totalSales: number;
+  expectedAmount: number;
   totalTickets: number;
+  difference: number;
 }
 
 export interface OpenCashRequest{
