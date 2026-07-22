@@ -24,4 +24,8 @@ export class CashService {
   closeCash(closingAmount: number) {
     return this.http.post<CashRegister>(`${this.apiUrl}/close`, {closingAmount});
   }
+
+  getSummary(){
+    return this.http.get<any>(`${this.apiUrl}/summary`);
+  }
 }

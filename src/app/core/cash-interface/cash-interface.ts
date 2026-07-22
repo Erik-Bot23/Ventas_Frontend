@@ -7,6 +7,11 @@ export interface CashRegister {
   openingAmount: number;
   closingAmount: number;
   active: boolean;
+}
+
+export interface CashSummary{
+  cashId: number;
+  openingAmount: number;
   expectedAmount: number;
   difference: number;
   cashSales: number;

@@ -12,7 +12,7 @@ import { response } from 'express';
 import { TicketService } from '../../core/ticket-service/ticket-service';
 import { Sidebar } from '../sidebar/sidebar';
 import { CashService } from '../../core/cash-service/cash-service';
-import { CashRegister } from '../../core/cash-interface/cash-interface';
+import { CashRegister, CashSummary } from '../../core/cash-interface/cash-interface';
 import { error } from 'node:console';
 import { AuthService } from '../../core/auth-service/auth-service';
 
@@ -44,6 +44,7 @@ export class Cobro implements OnInit {
   cashReceived = 0;
 
   //Variables para cash
+  cashSummary?: CashSummary;
   cashFlag?: CashRegister;
   showOpenCashModal = false;
   openingAmount = 0 ;
