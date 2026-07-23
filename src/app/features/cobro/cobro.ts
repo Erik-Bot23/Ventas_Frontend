@@ -108,6 +108,11 @@ export class Cobro implements OnInit {
         this.cashSummary = res;
         this.showCloseCashModal = true;
       }, error: err => {
+        console.log(err);
+        console.log('ERROR SUMMARY', err);
+        console.log(err);
+        console.log(err.status);
+        console.log(err.error);
         alert(err.error?.message || 'Error al cargar el resumen');
       }
     });
