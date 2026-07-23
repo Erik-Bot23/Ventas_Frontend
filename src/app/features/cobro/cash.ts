@@ -10,7 +10,7 @@ import { Sidebar } from "../sidebar/sidebar";
   styleUrl: './cobro.css',
 })
 
-export class Modales implements OnInit{
+export class Cash implements OnInit {
     ngOnInit(): void {
         
     }
