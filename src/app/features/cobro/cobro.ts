@@ -2,19 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductShow } from '../../core/product/product';
-import { last, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CobroItem } from '../../core/cobro/cobro';
-import { Router } from '@angular/router';;
 import { CobroService } from '../../core/cobro-service/cobro-service';
 import { SaleService } from '../../core/sale-service/sale-service';
 import { SaleRequest } from '../../core/sale/sale';
-import { response } from 'express';
 import { TicketService } from '../../core/ticket-service/ticket-service';
 import { Sidebar } from '../sidebar/sidebar';
-import { CashService } from '../../core/cash-service/cash-service';
-import { CashRegister, CashSummary } from '../../core/cash-interface/cash-interface';
-import { error } from 'node:console';
-import { AuthService } from '../../core/auth-service/auth-service';
+import { CashRegister } from '../../core/cash-interface/cash-interface';
+
 
 @Component({
   selector: 'app-cobro',
@@ -36,6 +32,8 @@ export class Cobro implements OnInit {
   cobroItems$!: Observable<CobroItem[]>;
   total$!: Observable<number>;
 
+  cashRegister?: CashRegister;
+
   //Desplegar menú
   menuOpen = false;
 
@@ -43,109 +41,16 @@ export class Cobro implements OnInit {
   showPaymentModal = false;
   cashReceived = 0;
 
-  //Variables para cash
-  cashSummary?: CashSummary;
-  cashFlag?: CashRegister;
-  showOpenCashModal = false;
-  openingAmount = 0 ;
-
-  showCloseCashModal = false;
-  closingAmount = 0;
-
-  userName = '';
-
-  //Variables para fecha
-  today: string = '';
-
-
   constructor(
     public cobro: CobroService,
     private saleService: SaleService,
     private ticketService: TicketService,
-    private cashService: CashService,
-    private authService: AuthService,
-    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
     this.cobroItems$ = this.cobro.cart$;
     this.total$ = this.cobro.getTotalLocal();
-    this.loadCashRegister();
-    this.date();
-    this.showUser();
-  }
-
-  //Obtener el usuario
-  showUser(){
-    this.userName = this.authService.getUsername();
-  }
-
-  //Método para abrir modal de caja
-  openCashModal(){
-    this.showOpenCashModal = true;
-  }
-
-  confirmOpenCashModal(){
-    this.showOpenCashModal = false;
-
-    this.cashService.openCash(this.openingAmount).subscribe({
-      next: res => {
-        this.cashFlag = res;
-        this.openingAmount = 0;
-        alert('Caja abierta');
-      }, error: err => {
-            this.showOpenCashModal = true;
-            alert(err.error.message);
-      }
-    });
-  }
-
-  //Método para cerrar modal de caja
-  closeCashModal(){
-    this.cashService.getSummary().subscribe({
-      next: res => {
-        this.cashSummary = res;
-        this.showCloseCashModal = true;
-      }, error: err => {
-        console.log(err);
-        console.log('ERROR SUMMARY', err);
-        console.log(err);
-        console.log(err.status);
-        console.log(err.error);
-        alert(err.error?.message || 'Error al cargar el resumen');
-      }
-    });
-  }
-
-  confirmCloseCashModal(){
-    this.showCloseCashModal = false;
-
-    this.cashService.closeCash(this.closingAmount).subscribe({
-      next: () => {
-        this.cashFlag = undefined;
-        this.cashSummary = undefined;
-        this.closingAmount = 0;
-        alert('Caja cerrada');
-      }, error: err => {
-        this.showCloseCashModal = true;
-        alert(err.error.message);
-      }
-    });
-  }
-
-  //Método para checar caja activa
-  loadCashRegister(){
-    this.cashService.getActiveCash().subscribe({
-      next: res => {
-        this.cashFlag = res;
-      }, error: err => {
-        if(err.status === 404){
-          this.cashFlag = undefined;
-        }
-        //this.showOpenCashModal = true;
-      }
-    });
   }
 
   //Se cargan los productos localmente en la tabla de ventas
@@ -185,12 +90,12 @@ export class Cobro implements OnInit {
     });
   }
 
+  //No se selecciona un producto si no hay
   selectProduct(product: ProductShow){
     if(product.stock <= 0){
       alert('Producto sin existencia');
       return;
     }
-
     this.cobro.add(product);
     this.search = '';
     this.searchResults = [];
@@ -223,7 +128,7 @@ export class Cobro implements OnInit {
 
   //Método de abrir modal de cobro
   openPaymenteModal(){
-    if(!this.cashFlag){
+    if(!this.cashRegister){
       alert("No hay caja abierta");
       return;
     }
@@ -240,7 +145,6 @@ export class Cobro implements OnInit {
   //Mostrar cambio a recibir antes de realizar la venta
   get changePreview(): number{
     const total = this.cobro.cart$.value.reduce((sum, item) => sum + item.subtotal, 0);
-
     return this.cashReceived - total;
   }
 
@@ -307,22 +211,5 @@ export class Cobro implements OnInit {
         this.barcode = '';
       }
     });
-  }
-
-  //Método de fecha
-  date(){
-    this.today = new Date().toLocaleDateString('es-MX', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  }
-
-  //Diferencia en tiempo real
-  get differencePreview(): number{
-    if(!this.cashSummary){
-      return 0;
-    }
-    return this.closingAmount - (this.cashSummary.expectedAmount || 0);
   }
 }
