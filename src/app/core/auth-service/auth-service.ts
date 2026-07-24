@@ -66,4 +66,16 @@ export class AuthService {
     localStorage.removeItem('user');
   }
 
+  forgotPassword(email: string){
+    return this.http.post(`${this.api}/forgot-password`, {email});
+  }
+
+  resetPassword(token: string, newPassword: string){
+    return this.http.post(`${this.api}/reset-password`, {token, newPassword});
+  }
+
+  changePassword(currentPassword: string, newPassword: string){
+    return this.http.post(`${this.api}/change-password`, {currentPassword, newPassword});
+  }
+
 }

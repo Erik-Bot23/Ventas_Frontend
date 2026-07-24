@@ -12,4 +12,18 @@
     <button class="logout-btn" (click)="logout()">
         Cerrar sesión
     </button>
+
+    <button class="change-btn" (click)="togglePasswordForm()">
+        Cambiar contraseña
+    </button>
+
+    <div *ngIf="showPasswordForm" class="password-card">
+        <input type="password" placeholder="Contraseña actual" [(ngModel)]="currentPassword">
+        <input type="password" placeholder="Nueva contraseña" [(ngModel)]="newPssword">
+        <input type="password" placeholder="Confirmar contraseña" [(ngModel)]="confirmPassword">
+
+        <button>
+            Guardar contraseña
+        </button>
+    </div>
 </div>

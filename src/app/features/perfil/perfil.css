@@ -19,3 +19,25 @@
   border-radius: 6px;
   color: white;
 }
+
+.password-card{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.password-card input{
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+}
+
+.change-btn{
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  margin-right: 10px;
+}

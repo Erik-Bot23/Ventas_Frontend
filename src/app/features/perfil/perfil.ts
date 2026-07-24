@@ -17,6 +17,13 @@ export class Perfil implements OnInit {
   //any:
   user: any = null;
 
+  //Cambio de contraseña
+  currentPassword = '';
+  newPassword = '';
+  confirmPassword = '';
+
+  showPasswordForm = false;
+
   constructor(
     private userservice: UserService,
     private router: Router
@@ -36,6 +43,11 @@ export class Perfil implements OnInit {
   logout(){
     //localStorage.clear(); //si tienes JWT
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+
+  togglePasswordForm(){
+    this.showPasswordForm = !this.showPasswordForm;
   }
 }
