@@ -1,6 +1,6 @@
 <!--[class.collapsed]: -->
-<div class="layout" [class.collapsed]="!menuOpen">
-    <app-sidebar (toggle)="menuOpen = $event"></app-sidebar>
+<div class="layout" [class.collapsed]="!saleFacade.menuOpen">
+    <app-sidebar (toggle)="saleFacade.menuOpen = $event"></app-sidebar>
 
     <!--Contenido-->
     <main class="content">
@@ -8,18 +8,18 @@
             <!--Buscador-->
             <div class="search-bar">
                 <input
-                    [(ngModel)]="barcode"
-                    (keyup.enter)="searchBarcode()"
+                    [(ngModel)]="saleFacade.barcode"
+                    (keyup.enter)="saleFacade.searchBarcode()"
                     placeholder="Escanear código de barras"
                 >
                 <input 
-                    [(ngModel)]="search"
-                    (input)="onSearch()"
+                    [(ngModel)]="saleFacade.search"
+                    (input)="saleFacade.onSearch()"
                     placeholder="Buscar por nombre, SKU o código de barras"
                 />
 
-                <div *ngIf="searchResults.length" class="search-dropdown">
-                    <div *ngFor="let p of searchResults" class="search-item" (click)="selectProduct(p)">
+                <div *ngIf="saleFacade.searchResults.length" class="search-dropdown">
+                    <div *ngFor="let p of saleFacade.searchResults" class="search-item" (click)="saleFacade.selectProduct(p)">
                         {{ p.name }}
                         stock: {{ p.stock }}
                     </div>
@@ -32,15 +32,15 @@
 
                 <div class="cash-user">
                     <span>Usuario</span>
-                    <strong>{{ userName }}</strong>
+                    <strong>{{ cashFacade.userName }}</strong>
                 </div>
 
                 <div class="cash-user">
                     <span>Fecha</span>
-                    <strong>{{ today }}</strong>
+                    <strong>{{ cashFacade.today }}</strong>
                 </div>
 
-                <ng-container *ngIf="cashFlag">
+                <ng-container *ngIf="cashFacade.cashStatus">
                         <div class="cash-status open">
                             Estado:
                             🟢 Abierta
@@ -48,20 +48,20 @@
 
                         <div class="cash-data">
                             <span>Fondo inicial:</span>
-                            <strong>${{ cashFlag.openingAmount }}</strong> 
+                            <strong>${{ cashFacade.cashStatus.openingAmount }}</strong> 
                         </div>
                         
-                        <button class="btn-cash close" (click)="closeCashModal()">
+                        <button class="btn-cash close" (click)="cashFacade.closeCashModal()">
                             Cerrar caja
                         </button>
                 </ng-container>
 
-                <ng-container *ngIf="!cashFlag">
+                <ng-container *ngIf="!cashFacade.cashStatus">
                         <div class="cash-status closed">
                             🔴 Caja cerrada
                         </div>
 
-                        <button class="btn-cash open" (click)="openCashModal()">
+                        <button class="btn-cash open" (click)="cashFacade.openCashModal()">
                             Abrir caja
                         </button>
                 </ng-container>
@@ -83,41 +83,41 @@
                 </thead>
 
                 <tbody>
-                    <tr *ngFor="let item of cobroItems$ | async">
+                    <tr *ngFor="let item of saleFacade.cobroItems$ | async">
                         <td>{{ item.product.name }}</td>
                         <td>{{ item.unitPrice }}</td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ item.subtotal }}</td>
                         <td>
-                            <button (click)="increase(item.product)">+</button>
-                            <button (click)="decrease(item.product.id)">-</button>
-                            <button (click)="removeItem(item.product.id)">X</button>
+                            <button (click)="saleFacade.increase(item.product)">+</button>
+                            <button (click)="saleFacade.decrease(item.product.id)">-</button>
+                            <button (click)="saleFacade.removeItem(item.product.id)">X</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="total">
-                Total: ${{ total$ | async }}
+                Total: ${{ saleFacade.total$ | async }}
             </div>
 
-            <button class="pay-btn" (click)="openPaymenteModal()">
+            <button class="pay-btn" (click)="saleFacade.openPaymenteModal()">
                 Cobrar
             </button>
 
             <!--Modal para realizar el cobro-->
-            <div class="modal-backdrop" *ngIf="showPaymentModal">
+            <div class="modal-backdrop" *ngIf="saleFacade.showPaymentModal">
                 <div class="modal">
                     <h3>Cobrar venta</h3>
-                    <input type="number" [(ngModel)]="cashReceived" placeholder="Efectivo recibido">
-                    <p>Cambio: ${{ changePreview }}</p>
+                    <input type="number" [(ngModel)]="saleFacade.cashReceived" placeholder="Efectivo recibido">
+                    <p>Cambio: ${{ saleFacade.changePreview }}</p>
                     
                     <div class="modal-buttons">
-                        <button (click)="confirmPayment()">
+                        <button (click)="saleFacade.confirmPayment()">
                             Confirmar
                         </button>
 
-                        <button (click)="closeModalCobro()">
+                        <button (click)="saleFacade.closeModalCobro()">
                             Cancelar
                         </button>
                     </div>
@@ -125,66 +125,66 @@
             </div>
 
             <!--Modal de abrir caja-->
-            <div class="modal-backdrop" *ngIf="showOpenCashModal">
+            <div class="modal-backdrop" *ngIf="cashFacade.showOpenCashModal">
                 <div class="modal">
                     <h3>Abrir caja</h3>
 
-                    <input type="number" [(ngModel)]="openingAmount" placeholder="Monto inicial">
+                    <input type="number" [(ngModel)]="cashFacade.openingAmount" placeholder="Monto inicial">
                     <div class="button-box">
-                        <button class="btn-confirm-open" (click)="confirmOpenCashModal()">Abrir</button>
+                        <button class="btn-confirm-open" (click)="cashFacade.confirmOpenCashModal()">Abrir</button>
                     </div>
                 </div>
             </div>
 
             <!--Modal de cerrar caja-->
-            <div class="modal-backdrop" *ngIf="showCloseCashModal">
+            <div class="modal-backdrop" *ngIf="cashFacade.showCloseCashModal">
                 <div class="modal cash-close-modal">
                     <h3>Corte de caja</h3>
                     <div class="cash-summary">
                         <div class="cash-row">
                             <span>Fondo inicial</span>
-                            <strong>${{ cashSummary?.openingAmount }}</strong>
+                            <strong>${{ cashFacade.cashSummary?.openingAmount }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Ventas en efectivo</span>
-                            <strong>${{ cashSummary?.cashSales }}</strong>
+                            <strong>${{ cashFacade.cashSummary?.cashSales }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Ventas débito</span>
-                            <strong>${{ cashSummary?.debitSales }}</strong>
+                            <strong>${{ cashFacade.cashSummary?.debitSales }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Ventas crédito</span>
-                            <strong>${{ cashSummary?.creditSales }}</strong>
+                            <strong>${{ cashFacade.cashSummary?.creditSales }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Total vendido</span>
-                            <strong>${{ cashSummary?.totalSales }}</strong>
+                            <strong>${{ cashFacade.cashSummary?.totalSales }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Tickets</span>
-                            <strong>{{ cashSummary?.totalTickets }}</strong>
+                            <strong>{{ cashFacade.cashSummary?.totalTickets }}</strong>
                         </div>
                         <div class="cash-row">
                             <span>Monto esperado</span>
-                            <strong>${{ cashSummary?.expectedAmount }}</strong>
+                            <strong>${{ cashFacade.cashSummary?.expectedAmount }}</strong>
                         </div>
                     </div>
 
-                    <input type="number" [(ngModel)]="closingAmount" placeholder="Dinero contado">
+                    <input type="number" [(ngModel)]="cashFacade.closingAmount" placeholder="Dinero contado">
 
-                    <div class="difference-preview" *ngIf="closingAmount">
+                    <div class="difference-preview" *ngIf="cashFacade.closingAmount">
                         Diferencia: 
                         <strong
-                                [class.positive]="differencePreview >= 0"
-                                [class.negative]="differencePreview < 0">
-                            ${{ differencePreview }}
+                                [class.positive]="cashFacade.differencePreview >= 0"
+                                [class.negative]="cashFacade.differencePreview < 0">
+                            ${{ cashFacade.differencePreview }}
                         </strong>
                     </div>
 
                     <div class="button-box">
-                        <button class="btn-confirm-close" (click)="confirmCloseCashModal()">Cerrar</button>
-                        <button class="btn-cancel" (click)="showCloseCashModal = false">Cancelar</button>
+                        <button class="btn-confirm-close" (click)="cashFacade.confirmCloseCashModal()">Cerrar</button>
+                        <button class="btn-cancel" (click)="cashFacade.showCloseCashModal = false">Cancelar</button>
                     </div>
                 </div>
             </div>

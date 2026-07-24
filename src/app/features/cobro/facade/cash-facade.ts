@@ -1,19 +1,13 @@
-import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { Sidebar } from "../sidebar/sidebar";
-import { CashRegister, CashSummary } from "../../core/cash-interface/cash-interface";
-import { CashService } from "../../core/cash-service/cash-service";
-import { AuthService } from "../../core/auth-service/auth-service";
+import { Injectable } from "@angular/core";
+import { CashRegister, CashSummary } from "../../../core/cash-interface/cash-interface";
+import { CashService } from "../../../core/cash-service/cash-service";
+import { AuthService } from "../../../core/auth-service/auth-service";
 
-@Component({
-  selector: 'app-cobro',
-  imports: [CommonModule, FormsModule, Sidebar],
-  templateUrl: './cobro.html',
-  styleUrl: './cobro.css',
+@Injectable({
+  providedIn: 'root'
 })
 
-export class Cash implements OnInit {
+export class CashFacade  {
 
   //Variables para cash
   cashStatus?: CashRegister;
@@ -35,7 +29,7 @@ export class Cash implements OnInit {
     private authService: AuthService
   ){}
 
-  ngOnInit(): void {
+  initialize(){
     this.loadCashRegister();
     this.showUser();
     this.date();
@@ -123,5 +117,10 @@ export class Cash implements OnInit {
       month: '2-digit',
       year: 'numeric'
     });
+  }
+
+  //Estatus de la caja
+  get isOpen(): boolean {
+    return !!this.cashStatus;
   }
 }
