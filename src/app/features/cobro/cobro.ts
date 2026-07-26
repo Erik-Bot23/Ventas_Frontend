@@ -5,6 +5,7 @@ import { Sidebar } from '../sidebar/sidebar';
 import { CashFacade } from './facade/cash-facade';
 import { SaleFacade } from './facade/sale-facade';
 
+
 @Component({
   selector: 'app-cobro',
   imports: [CommonModule, FormsModule, Sidebar],
@@ -15,13 +16,12 @@ import { SaleFacade } from './facade/sale-facade';
 export class Cobro implements OnInit {
 
   constructor(
-    public cashFacade: CashFacade,
-    public saleFacade: SaleFacade
+    public cash: CashFacade,
+    public sale: SaleFacade
   ) {}
 
   ngOnInit(): void {
-    this.cashFacade.initialize();
-    this.saleFacade.initialize();
+    this.cash.initialize();
+    this.sale.initialize();
   }
-
 }

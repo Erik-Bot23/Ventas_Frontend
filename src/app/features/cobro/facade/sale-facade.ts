@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';;
 import { Observable } from 'rxjs';
 import { ProductShow } from '../../../core/product/product';
 import { CobroItem } from '../../../core/cobro/cobro';
-import { CashRegister } from '../../../core/cash-interface/cash-interface';
 import { CobroService } from '../../../core/cobro-service/cobro-service';
 import { SaleService } from '../../../core/sale-service/sale-service';
 import { TicketService } from '../../../core/ticket-service/ticket-service';

@@ -1,43 +1,81 @@
-.perfil-container {
-  padding: 20px;
-  color: white;
-  background: #0f172a;
-  height: 100vh;
+.perfil-container{
+  min-height:100vh;
+  background:#0f172a;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.card {
-  background: #1e293b;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
+.card{
+  width:450px;
+  background:#1e293b;
+
+  color:white;
+
+  padding:25px;
+
+  border-radius:15px;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,.3);
 }
 
-.logout-btn {
-  padding: 10px;
-  background: #ef4444;
-  border: none;
-  border-radius: 6px;
-  color: white;
+.avatar{
+  font-size:60px;
+  text-align:center;
 }
 
-.password-card{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
+.role{
+  display:block;
+  margin-bottom:20px;
+  color:#60a5fa;
 }
 
-.password-card input{
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
 }
 
 .change-btn{
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  margin-right: 10px;
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  background:#3b82f6;
+  color:white;
+  cursor:pointer;
+}
+
+.logout-btn{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  background:#ef4444;
+  color:white;
+  cursor:pointer;
+}
+
+.password-card{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:20px;
+}
+
+.password-card input{
+  padding:10px;
+  border:none;
+  border-radius:6px;
+}
+
+.save-btn{
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  background:#22c55e;
+  color:white;
+  cursor:pointer;
 }
