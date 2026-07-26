@@ -1,21 +1,10 @@
 <div class="login-container">
-
   <div class="login-card">
-
     <h2>Iniciar sesión</h2>
 
     <!--[(ngModel)]: -->
-    <input 
-      type="text"
-      placeholder="Correo electronico"
-      [(ngModel)]="email" 
-    />
-
-    <input 
-      type="password"
-      placeholder="Contraseña"
-      [(ngModel)]="password"
-    />
+    <input type="text" placeholder="Correo electronico" [(ngModel)]="email"/>
+    <input type="password" placeholder="Contraseña" [(ngModel)]="password"/>
 
     <div class="forgot-container">
       <a routerLink="/forgot-password">
@@ -26,5 +15,4 @@
     <button (click)="submit()">Entrar</button>
 
   </div>
-
 </div>

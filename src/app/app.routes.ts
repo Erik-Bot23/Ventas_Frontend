@@ -16,6 +16,8 @@ export const routes: Routes = [
     { path: 'caja', loadComponent: () => import('./features/caja/caja').then(m=>m.Caja) },
     { path: 'categorias', loadComponent: () => import('./features/categorias/categorias').then(m=>m.Categorias) },
     { path: 'roles', loadComponent: () => import('./features/roles/roles').then(m=>m.Roles) },
+    { path: 'forgot-password', loadComponent: () => import('./features/login/forgot-password/forgot-password').then(m=>m.ForgotPassword) },
+    { path: 'reset-password', loadComponent: () => import('./features/login/reset-password/reset-password').then(m=>m.ResetPassword) },
     { path: '**', redirectTo: '' }
 ];
 

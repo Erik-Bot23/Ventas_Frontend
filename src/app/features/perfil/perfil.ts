@@ -43,37 +43,42 @@ export class Perfil implements OnInit {
     }
   }
 
+  //Abrir modal para cambiar contraseña
   togglePasswordForm(){
     this.showPasswordForm = !this.showPasswordForm;
   }
 
   savePassword(){
+    //Validar que se rellenen todos los campos
     if(!this.currentPassword || !this.newPassword || !this.confirmPassword){
       this.snack.open('Todos los campos son obligatorios', '', {duration:2000});
       return;
     }
 
+    //Validar que al menos sean 8 caracteres
     if(this.newPassword.length < 8){
       this.snack.open('La contraseña debe tener mínimo 8 caracteres', '', {duration:2000});
       return;
     }
 
+    //Validar que las contraseñas coincidan
     if(this.newPassword !== this.confirmPassword){
       this.snack.open('Las contraseñas no coinciden', '', {duration:2000});
       return;
     }
 
+    //Cambiar contraseña
     this.auth.changePassword(this.currentPassword, this.newPassword).subscribe({
       next: () => {
         this.currentPassword = '';
         this.newPassword = '';
         this.confirmPassword = '';
-
-        this.snack.open('Contraseña actualizada correctamente', '', {duration:2000});
+        //snack:
+        this.snack.open('Contraseña actualizada correctamente', '', {duration:2000});//open:
         this.showPasswordForm = false;
       },
       error: () => {
-        this.snack.open('La contraseña actual es incorrecta', '', {duration:2000});
+        this.snack.open('La contraseña actual es incorrecta', '', {duration:2000});//La vieja contraseña no se escribio bien
       }
     });
   }
@@ -82,5 +87,9 @@ export class Perfil implements OnInit {
   logout(){
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  inicio(){
+    this.router.navigate(['/cobro'])
   }
 }

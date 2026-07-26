@@ -32,10 +32,10 @@ export class ForgotPassword {
       next: () => {
         this.loading=false;
         this.snack.open('Correo enviado correctamente', '', {duration:3000});
-      }, error: ()=>{
+      }, error: err =>{
         this.loading=false;
 
-        this.snack.open('No fue posible enviar el correo', '', {duration:3000});
+        this.snack.open(err.error?.message ?? 'No fue posible enviar el correo', '', {duration:3000});
       }
     });
 

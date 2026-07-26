@@ -66,14 +66,17 @@ export class AuthService {
     localStorage.removeItem('user');
   }
 
+  //Recuperar contraseña si se olvido
   forgotPassword(email: string){
     return this.http.post(`${this.api}/forgot-password`, {email});
   }
 
+  //Borrar la contraseña actual
   resetPassword(token: string, newPassword: string){
     return this.http.post(`${this.api}/reset-password`, {token, newPassword});
   }
 
+  //Cambiar la contraseña desde perfil
   changePassword(currentPassword: string, newPassword: string){
     return this.http.post(`${this.api}/change-password`, {currentPassword, newPassword});
   }

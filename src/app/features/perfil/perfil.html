@@ -31,22 +31,21 @@
       <button class="logout-btn" (click)="logout()">
         Cerrar sesión
       </button>
+
+      <button class="back-btn" (click)="inicio()">
+        Regresar
+      </button>
     </div>
 
-    <div
-      *ngIf="showPasswordForm"
-      class="password-card">
-
+    <div *ngIf="showPasswordForm" class="password-card">
       <input type="password" placeholder="Contraseña actual" [(ngModel)]="currentPassword">
-
       <input type="password" placeholder="Nueva contraseña" [(ngModel)]="newPassword">
-
       <input type="password" placeholder="Confirmar contraseña" [(ngModel)]="confirmPassword">
 
       <button class="save-btn" (click)="savePassword()">
         Guardar contraseña
       </button>
-
     </div>
+    
   </div>
 </div>

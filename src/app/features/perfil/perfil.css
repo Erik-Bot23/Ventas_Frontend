@@ -58,6 +58,16 @@
   cursor:pointer;
 }
 
+.back-btn{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  background:#6fca47fc;
+  color:white;
+  cursor:pointer;
+}
+
 .password-card{
   display:flex;
   flex-direction:column;
