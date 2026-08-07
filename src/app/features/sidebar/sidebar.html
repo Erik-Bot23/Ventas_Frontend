@@ -2,7 +2,7 @@
 <aside class="sidebar" [class.collapsed]="!menuOpen">
   <div class="user-box" (click)="perfil()">
     <img src="assets/images/avatar.png">
-    <span class="text">Admin</span>
+    <span class="text">{{ userName }}</span>
   </div>
 
   <div class="menu-title" (click)="toggleMenu()">

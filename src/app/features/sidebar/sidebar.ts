@@ -1,5 +1,7 @@
 import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/auth-service/auth-service';
+import { permission } from 'process';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,7 +12,8 @@ import { Router } from '@angular/router';
 export class Sidebar {
   constructor(
     private router: Router,
-    private cd: ChangeDetectorRef){}
+    private cd: ChangeDetectorRef,
+    private auth: AuthService){}
 
   menuOpen = false;
   @Output() toggle = new EventEmitter<boolean>();
@@ -18,7 +21,42 @@ export class Sidebar {
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
     this.toggle.emit(this.menuOpen);
-    //this.cd.detectChanges();
+    this.cd.detectChanges();
+  }
+
+  //Obtener el nombre del usuario}
+  get userName(): string {
+    return this.auth.getUsername();
+  }
+
+  //
+  menuItems = [
+    {
+      label: 'Productos',
+      route: '/productos',
+      permission: 'VER_PRODUCTOS'
+    },
+    {
+      label: 'Usuarios',
+      route: '/usuarios',
+      permission: 'VER_USUARIOS'
+    },
+    {
+      label: 'Ventas',
+      route: '/ventas',
+      permission: 'VER_VENTAS'
+    },
+    {
+      label: 'Roles',
+      route: '/roles',
+      permission: 'VER_ROLES'
+    }
+  ]
+
+
+  //
+  go(route: string){
+    this.router.navigate([route]);
   }
 
    //Navegación del menu desplegable

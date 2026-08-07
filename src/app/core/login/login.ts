@@ -16,12 +16,10 @@ export interface LoginResponse {
   token: string;
 }
 
-//Esta interface la cree para separar la logica del auth con la de los permisos
-export interface AuthLoginResponse{
-  success: boolean;
+export interface AuthUser{
   id: number;
   name: string;
   email: string;
   role: string;
-  token: string;
+  permissions: string[];
 }

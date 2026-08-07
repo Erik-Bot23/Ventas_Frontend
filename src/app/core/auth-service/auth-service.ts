@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
-import { LoginRequest, LoginResponse } from '../login/login';
+import { AuthUser, LoginRequest, LoginResponse } from '../login/login';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -31,18 +31,21 @@ export class AuthService {
 
   //Guardar el usuario
   saveUser(user: LoginResponse): void{
-    localStorage.setItem('user', JSON.stringify({
+    const authUser: AuthUser = {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: user.role
-    }));
+      role: user.role,
+      permissions: user.permissions
+    }
+    
+    localStorage.setItem('user', JSON.stringify(authUser));
   }
-
+ 
   //Obtener el usuario
-  getUser(){
+  getUser(): AuthUser | null{
     const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    return user ? JSON.parse(user) as AuthUser : null;
   }
 
   //Obtener el nombre
@@ -81,4 +84,10 @@ export class AuthService {
     return this.http.post(`${this.api}/change-password`, {currentPassword, newPassword});
   }
 
+  //Función para los permisos en todo el frontend
+  hasPermission(permission: string): boolean{
+    const permissions = this.getUser()?.permissions ?? [];
+    return permissions.includes(permission);
+  }
+  
 }
