@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductForm, Category } from '../../core/product/product';
+import { ProductForm, Category } from '../../core/interfaces/product/product';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProductService } from '../../core/product-service/product-service';
+import { ProductService } from '../../core/service/product-service/product-service';
 import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { CategoryService } from '../../core/category-service/category-service';
+import { CategoryService } from '../../core/service/category-service/category-service';
 import { Sidebar } from '../sidebar/sidebar';
 import { error } from 'console';
 

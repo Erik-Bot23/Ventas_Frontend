@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';;
 import { Observable } from 'rxjs';
-import { ProductShow } from '../../../core/product/product';
-import { CobroItem } from '../../../core/cobro/cobro';
-import { CobroService } from '../../../core/cobro-service/cobro-service';
-import { SaleService } from '../../../core/sale-service/sale-service';
-import { TicketService } from '../../../core/ticket-service/ticket-service';
-import { SaleRequest } from '../../../core/sale/sale';
+import { ProductShow } from '../../../core/interfaces/product/product';
+import { CobroItem } from '../../../core/interfaces/cobro/cobro';
+import { CobroService } from '../../../core/service/cobro-service/cobro-service';
+import { SaleService } from '../../../core/service/sale-service/sale-service';
+import { TicketService } from '../../../core/service/ticket-service/ticket-service';
+import { SaleRequest } from '../../../core/interfaces/sale/sale';
 import { CashFacade } from './cash-facade';
 
 

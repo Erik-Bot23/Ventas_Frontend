@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { Cobro, CobroItem } from '../cobro/cobro';
+import { Cobro, CobroItem } from '../../interfaces/cobro/cobro';
 import { HttpClient } from '@angular/common/http';
-import { ProductShow } from '../product/product'; 
+import { ProductShow } from '../../interfaces/product/product'; 
 
 @Injectable({
   providedIn: 'root',

@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../sidebar/sidebar';
-import { UserRole } from '../../core/user/user';
-import { RoleService } from '../../core/role-service/role-service';
+import { UserRole } from '../../core/interfaces/user/user';
+import { RoleService } from '../../core/service/role-service/role-service';
 import { Router } from '@angular/router';
 
 @Component({

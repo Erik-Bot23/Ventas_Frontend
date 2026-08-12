@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Category } from '../../core/product/product';
-import { CategoryService } from '../../core/category-service/category-service';
+import { Category } from '../../core/interfaces/product/product';
+import { CategoryService } from '../../core/service/category-service/category-service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

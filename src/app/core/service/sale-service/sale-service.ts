@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SaleHistory, SaleRequest, SaleResponse } from '../sale/sale';
+import { SaleHistory, SaleRequest, SaleResponse } from '../../interfaces/sale/sale';
 import { Observable } from 'rxjs';
-import { ProductShow } from '../product/product';
-import { environment } from '../../../environments/environment';
+import { ProductShow } from '../../interfaces/product/product';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

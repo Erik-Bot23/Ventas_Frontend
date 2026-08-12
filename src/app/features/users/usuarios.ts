@@ -3,8 +3,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { User, UserRole } from '../../core/user/user';
-import { UserService } from '../../core/user-service/user-service';
+import { User, UserRole } from '../../core/interfaces/user/user';
+import { UserService } from '../../core/service/user-service/user-service';
 import { Sidebar } from '../sidebar/sidebar';
 
 @Component({

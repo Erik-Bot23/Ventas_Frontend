@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { CashRegister, CashSummary } from "../../../core/cash-interface/cash-interface";
-import { CashService } from "../../../core/cash-service/cash-service";
-import { AuthService } from "../../../core/auth-service/auth-service";
+import { CashRegister, CashSummary } from "../../../core/interfaces/cash-interface/cash-interface";
+import { CashService } from "../../../core/service/cash-service/cash-service"; 
+import { AuthService } from "../../../core/service/auth-service/auth-service"; 
 
 @Injectable({
   providedIn: 'root'

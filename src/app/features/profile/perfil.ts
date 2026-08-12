@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../../core/user/user';
-import { UserService } from '../../core/user-service/user-service';
+import { User } from '../../core/interfaces/user/user';
+import { UserService } from '../../core/service/user-service/user-service';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../core/auth-service/auth-service';
