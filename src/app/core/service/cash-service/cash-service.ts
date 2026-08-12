@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { CashRegister, CashSummary } from '../cash-interface/cash-interface';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment'; 
+import { CashRegister, CashSummary } from '../../interfaces/cash-interface/cash-interface';
 
 @Injectable({
   providedIn: 'root',

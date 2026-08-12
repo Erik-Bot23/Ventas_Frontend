@@ -4,7 +4,7 @@ import { User } from '../../core/interfaces/user/user';
 import { UserService } from '../../core/service/user-service/user-service';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../core/auth-service/auth-service';
+import { AuthService } from '../../core/service/auth-service/auth-service'; 
 import { FormsModule } from '@angular/forms';
 
 @Component({

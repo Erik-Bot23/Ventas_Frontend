@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/auth-service/auth-service';
+import { AuthService } from '../../core/service/auth-service/auth-service'; 
 import { permission } from 'process';
 
 @Component({

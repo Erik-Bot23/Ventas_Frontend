@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../sidebar/sidebar';
-import { UserRole } from '../../core/interfaces/user/user';
 import { RoleService } from '../../core/service/role-service/role-service';
 import { Router } from '@angular/router';
+import { CreateRoleRequest, PermissionModel, RoleModel, UpdateRoleRequest } from '../../core/models/role-model';
+import { PermissionService } from '../../core/service/permission-service/permission-service';
 
 @Component({
   selector: 'app-roles',
@@ -17,44 +18,111 @@ export class Roles implements OnInit {
   menuOpen = false;
 
   //Declarar variables
-  roles: UserRole[] = [];
+  roles: RoleModel[] = [];
+  permissions: PermissionModel[] = [];
   roleName = '';
+  selectedPermissions: string[] = [];
+  editingRoleId: number | null = null;
 
   //Abrir y cerrar el menú
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
   }
 
+  togglePermission(permissionName: string): void{
+    if(this.selectedPermissions.includes(permissionName)){
+      this.selectedPermissions=this.selectedPermissions.filter(
+        permission => permission !== permissionName
+      );
+    } else {
+      this.selectedPermissions = [
+        ...this.selectedPermissions, permissionName
+      ];
+    }
+  }
+
   constructor(
     private roleService: RoleService,
+    private permissionService: PermissionService,
     private router: Router
   ){}
 
   ngOnInit() {
     this.loadRoles();
+    this.loadPermissions();
   }
 
-  loadRoles(){
+  loadRoles(): void {
     this.roleService.getRoles().subscribe(data => {
       this.roles = data;
     });
   }
 
-  saveRole(){
-    if(!this.roleName.trim()) return;
-
-    this.roleService.addRole(this.roleName).subscribe(newCat => {
-      this.roles = [newCat, ...this.roles];
-      this.roleName = '';
-    })
+  loadPermissions(): void {
+    this.permissionService.getPermissions().subscribe(data => {
+      this.permissions = data;
+    });
   }
 
-  deleteRole(id: number){
-    if(confirm('¿Eliminar role?')){
+  hasPermissionSelected(permissionName: string): boolean{
+    return this.selectedPermissions.includes(permissionName);
+  }
+
+  saveRole(): void{
+    if(this.editingRoleId !== null){
+      this.updateRole();
+      return;
+    }
+
+    if(!this.roleName.trim()) return;
+
+    const request: CreateRoleRequest = {
+      name: this.roleName.trim(),
+      permissions: this.selectedPermissions
+    };
+
+    this.roleService.addRole(request).subscribe(newRole => {
+      this.roles = [newRole, ...this.roles];
+      this.resetForm();
+    });
+  }
+
+  editRole(role: RoleModel): void{
+    this.editingRoleId = role.id;
+    this.roleName=role.name;
+    this.selectedPermissions=role.permissions.map(permission => permission.name);
+  }
+
+  updateRole(): void{
+    if(this.editingRoleId === null || !this.roleName.trim()){
+      return;
+    }
+
+    const request: UpdateRoleRequest = {
+      name: this.roleName.trim(),
+      permissions: this.selectedPermissions
+    };
+
+    this.roleService.updateRole(this.editingRoleId, request).subscribe(
+      updatedRole => {
+        this.roles = this.roles.map(role => role.id===updatedRole.id ? updatedRole : role);
+        this.resetForm();
+      }
+    );
+  }
+
+  deleteRole(id: number): void{
+    if(confirm('¿Eliminar rol?')){
 
       this.roleService.deleteRole(id).subscribe(() => {
-        this.roles = this.roles.filter(c => c.id !== id);
+        this.roles = this.roles.filter(role => role.id !== id);
       });
     }
+  }
+
+  resetForm(): void{
+    this.roleName ='';
+    this.selectedPermissions = [];
+    this.editingRoleId = null;
   }
 }

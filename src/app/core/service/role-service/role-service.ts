@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserRole } from '../../interfaces/user/user';
 import { environment } from '../../../../environments/environment';
+import { CreateRoleRequest, RoleModel, UpdateRoleRequest } from '../../models/role-model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +13,20 @@ export class RoleService {
 
   constructor(private http: HttpClient){}
 
-  getRoles(): Observable<UserRole[]>{
-    return this.http.get<UserRole[]>(this.apiUrl);
+  getRoles(): Observable<RoleModel[]>{
+    return this.http.get<RoleModel[]>(this.apiUrl);
   }
 
-  addRole(name: string): Observable<UserRole>{
-    return this.http.post<UserRole>(this.apiUrl, { name });
+  getRole(id: number): Observable<RoleModel>{
+    return this.http.get<RoleModel>(`${this.apiUrl}/${id}`);
+  }
+
+  addRole(request: CreateRoleRequest): Observable<RoleModel>{
+    return this.http.post<RoleModel>(this.apiUrl, request);
+  }
+
+  updateRole(id: number, request: UpdateRoleRequest): Observable<RoleModel>{
+    return this.http.put<RoleModel>(`${this.apiUrl}/${id}`, request);
   }
 
   deleteRole(id: number): Observable<void>{
