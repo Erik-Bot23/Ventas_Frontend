@@ -20,11 +20,12 @@ export class Roles implements OnInit {
 
   //Declarar variables
   roles: RoleModel[] = [];
-  permissions: PermissionModel[] = [];
   roleName = '';
 
-  selectedPermissions: string[] = [];
+  permissions: PermissionModel[] = [];
   groupedPermissions: {[module: string]: PermissionModel[];} = {};
+  selectedPermissions: string[] = [];
+  
 
   editingRoleId: number | null = null;
 

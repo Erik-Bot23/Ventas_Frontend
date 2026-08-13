@@ -5,47 +5,58 @@
     <main class="content">
         <h2>Gestión de roles</h2>
 
-            <!--Formulario-->
-            <div class="form-card">
-                <div class="field">
-                    <label>Nombre del rol</label>
-                    <input [(ngModel)]="roleName">
-                </div>
-
-                <div class="permission-section">
-                    <div class="permission-group" *ngFor="let group of groupedPermissions | keyvalue">
-                        <h4>
-                           {{ group.key }} 
-                        </h4>
-
-                        <label class="permission-item" *ngFor="let permission of group.value">
-                            <input type="checkbox" [checked]="hasPermissionSelected(permission.name)"
-                                (change)="togglePermission(permission.name)">
-
-                            {{ formatPermissionName(permission.name) }}
-                        </label>
+        <div class="roles-layout">
+            <!--FORMULARIO-->
+            <div class="form-panel">
+                <div class="form-card">
+                    <div class="field">
+                        <label>Nombre del rol</label>
+                        <input [(ngModel)]="roleName">
                     </div>
-                </div>
 
-                <button (click)="saveRole()">{{ editingRoleId ? 'Actualizar rol' : 'Guardar rol'}}</button>
+                    <div class="permission-section">
+                        <div class="permission-group" *ngFor="let group of groupedPermissions | keyvalue">
+                            <h4>
+                                {{ group.key }} 
+                            </h4>
+
+                            <label class="permission-item" *ngFor="let permission of group.value">
+                                <input type="checkbox" [checked]="hasPermissionSelected(permission.name)"
+                                    (change)="togglePermission(permission.name)">
+
+                                {{ formatPermissionName(permission.name) }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <button (click)="saveRole()">{{ editingRoleId ? 'Actualizar rol' : 'Guardar rol'}}</button>
+                </div>
             </div>
 
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <th>Rol</th>
-                        <th>Acciones</th>
-                    </tr>
+            <div class="table-panel">
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Rol</th>
+                            <th>Permisos</th>
+                            <th>Acciones</th>
+                        </tr>
 
-                    <tr *ngFor="let c of roles">
-                        <td>{{ c.name }}</td>
-                        <td>
-                            <button (click)="deleteRole(c.id)" class="delete">
-                                Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                </table>
-            </div> 
+                        <tr *ngFor="let c of roles">
+                            <td>{{ c.name }}</td>
+                            <td>{{ c.permissions.length }} permisos</td>
+                            <td>
+                                <button class="editRole" (click)="editRole(c)">
+                                    Editar
+                                </button>
+                                <button class="delete" (click)="deleteRole(c.id)">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
