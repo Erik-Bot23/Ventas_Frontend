@@ -3,7 +3,7 @@
 
     <!-- CONTENIDO -->
     <main class="content">
-        <h2>Gestión de categorías</h2>
+        <h2>Gestión de roles</h2>
 
             <!--Formulario-->
             <div class="form-card">
@@ -12,7 +12,22 @@
                     <input [(ngModel)]="roleName">
                 </div>
 
-                <button (click)="saveRole()">Guardar</button>
+                <div class="permission-section">
+                    <div class="permission-group" *ngFor="let group of groupedPermissions | keyvalue">
+                        <h4>
+                           {{ group.key }} 
+                        </h4>
+
+                        <label class="permission-item" *ngFor="let permission of group.value">
+                            <input type="checkbox" [checked]="hasPermissionSelected(permission.name)"
+                                (change)="togglePermission(permission.name)">
+
+                            {{ formatPermissionName(permission.name) }}
+                        </label>
+                    </div>
+                </div>
+
+                <button (click)="saveRole()">{{ editingRoleId ? 'Actualizar rol' : 'Guardar rol'}}</button>
             </div>
 
             <div class="table-container">

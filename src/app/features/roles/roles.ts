@@ -6,6 +6,7 @@ import { RoleService } from '../../core/service/role-service/role-service';
 import { Router } from '@angular/router';
 import { CreateRoleRequest, PermissionModel, RoleModel, UpdateRoleRequest } from '../../core/models/role-model';
 import { PermissionService } from '../../core/service/permission-service/permission-service';
+import { permission } from 'process';
 
 @Component({
   selector: 'app-roles',
@@ -21,7 +22,10 @@ export class Roles implements OnInit {
   roles: RoleModel[] = [];
   permissions: PermissionModel[] = [];
   roleName = '';
+
   selectedPermissions: string[] = [];
+  groupedPermissions: {[module: string]: PermissionModel[];} = {};
+
   editingRoleId: number | null = null;
 
   //Abrir y cerrar el menú
@@ -61,7 +65,30 @@ export class Roles implements OnInit {
   loadPermissions(): void {
     this.permissionService.getPermissions().subscribe(data => {
       this.permissions = data;
+      this.groupPermissions();
     });
+  }
+
+  //Agrupar los permisos
+  private groupPermissions(): void {
+    this.groupedPermissions = {};
+
+    this.permissions.forEach(permission => {
+      const parts = permission.name.split('_');
+
+      const module = parts.slice(1).join('_');
+
+      if(!this.groupedPermissions[module]){
+        this.groupedPermissions[module] = [];
+      }
+
+      this.groupedPermissions[module].push(permission);
+    });
+  }
+
+  //Separar las palabras de los permisos
+  formatPermissionName(name: string): string{
+    return name.toLowerCase().replaceAll('_', ' ').replace(/\b\w/g, letter => letter.toUpperCase())
   }
 
   hasPermissionSelected(permissionName: string): boolean{
