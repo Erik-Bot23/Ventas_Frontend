@@ -7,10 +7,12 @@ import { Router } from '@angular/router';
 import { CreateRoleRequest, PermissionModel, RoleModel, UpdateRoleRequest } from '../../core/models/role-model';
 import { PermissionService } from '../../core/service/permission-service/permission-service';
 import { permission } from 'process';
+import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
+import { AuthService } from '../../core/service/auth-service/auth-service';
 
 @Component({
   selector: 'app-roles',
-  imports: [CommonModule, FormsModule, Sidebar],
+  imports: [CommonModule, FormsModule, Sidebar, HasPermissionDirectives],
   templateUrl: './roles.html',
   styleUrl: './roles.css',
 })
@@ -49,7 +51,8 @@ export class Roles implements OnInit {
   constructor(
     private roleService: RoleService,
     private permissionService: PermissionService,
-    private router: Router
+    private router: Router,
+    public auth: AuthService
   ){}
 
   ngOnInit() {

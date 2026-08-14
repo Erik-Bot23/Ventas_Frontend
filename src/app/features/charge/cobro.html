@@ -51,7 +51,7 @@
                             <strong>${{ cash.cashStatus.openingAmount }}</strong> 
                         </div>
                         
-                        <button class="btn-cash close" (click)="cash.closeCashModal()">
+                        <button *hasPermission="'CERRAR_CAJA'" class="btn-cash close" (click)="cash.closeCashModal()">
                             Cerrar caja
                         </button>
                 </ng-container>
@@ -61,7 +61,7 @@
                             🔴 Caja cerrada
                         </div>
 
-                        <button class="btn-cash open" (click)="cash.openCashModal()">
+                        <button *hasPermission="'ABRIR_CAJA'" class="btn-cash open" (click)="cash.openCashModal()">
                             Abrir caja
                         </button>
                 </ng-container>
@@ -101,7 +101,7 @@
                 Total: ${{ sale.total$ | async }}
             </div>
 
-            <button class="pay-btn" (click)="sale.openPaymenteModal()">
+            <button *hasPermission="'CREAR_VENTAS'" class="pay-btn" (click)="sale.openPaymenteModal()">
                 Cobrar
             </button>
 

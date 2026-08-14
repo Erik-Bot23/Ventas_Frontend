@@ -5,11 +5,13 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../sidebar/sidebar';
+import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
+import { AuthService } from '../../core/service/auth-service/auth-service';
 
 @Component({
   selector: 'app-categorias',
   standalone: true,
-  imports: [CommonModule, FormsModule, Sidebar],
+  imports: [CommonModule, FormsModule, Sidebar, HasPermissionDirectives],
   templateUrl: './categorias.html',
   styleUrl: './categorias.css',
 })
@@ -20,7 +22,8 @@ export class Categorias implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    public auth: AuthService
   ){}
 
   ngOnInit() {

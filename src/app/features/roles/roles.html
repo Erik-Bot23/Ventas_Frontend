@@ -7,7 +7,7 @@
 
         <div class="roles-layout">
             <!--FORMULARIO-->
-            <div class="form-panel">
+            <div class="form-panel" *ngIf="auth.hasPermission('CREAR_ROLES') || auth.hasPermission('EDITAR_ROLES')">
                 <div class="form-card">
                     <div class="field">
                         <label>Nombre del rol</label>
@@ -29,7 +29,9 @@
                         </div>
                     </div>
 
-                    <button (click)="saveRole()">{{ editingRoleId ? 'Actualizar rol' : 'Guardar rol'}}</button>
+                    <button (click)="saveRole()">
+                        {{ editingRoleId ? 'Actualizar rol' : 'Guardar rol'}}
+                    </button>
                 </div>
             </div>
 
@@ -46,10 +48,10 @@
                             <td>{{ c.name }}</td>
                             <td>{{ c.permissions.length }} permisos</td>
                             <td>
-                                <button class="editRole" (click)="editRole(c)">
+                                <button *hasPermission="'EDITAR_ROLES'" class="editRole" (click)="editRole(c)">
                                     Editar
                                 </button>
-                                <button class="delete" (click)="deleteRole(c.id)">
+                                <button *hasPermission="'ELIMINAR_ROLES'" class="delete" (click)="deleteRole(c.id)">
                                     Eliminar
                                 </button>
                             </td>

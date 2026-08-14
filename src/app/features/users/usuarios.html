@@ -7,7 +7,7 @@
 
     <div class="main-grid">
       <!-- FORMULARIO -->
-    <div class="form-card">
+    <div class="form-card" *ngIf="auth.hasPermission('CREAR_USUARIOS') || auth.hasPermission('EDITAR_USUARIOS')">
         <div class="field">
           <label>Nombre del usuario</label>
           <input [(ngModel)]="form.name" />
@@ -35,7 +35,7 @@
 
         <button type="button" (click)="save()" [disabled]="isSaving">
           <!--{{ isSaving ? 'Guardando...' : 'Guardar' }}-->
-           {{ form.id ? 'Actualizar' : 'Guardar' }}
+           {{ form.id ? 'Actualizar usuarios' : 'Guardar usuario' }}
         </button>
       </div>
 
@@ -64,9 +64,19 @@
               <td>{{ p.active ? 'Activo' : 'Inactivo' }}</td> <!--Se muestra si esta activo o inactivo-->
               <td>
                 <!--Se verifica si esta activo el usuario-->
-                <button type="button" (click)="editUser(p)" class="edit">Editar</button>
-                <button *ngIf="p.active" type="button" (click)="deactivateUser(p.id)" class="delete">Dar de baja</button>
-                <button *ngIf="!p.active" type="button" (click)="activateUser(p.id)" class="activate">Dar de alta</button>
+                <button *hasPermission="'EDITAR_USUARIOS'" type="button" (click)="editUser(p)" class="edit">Editar</button>
+
+                <ng-container *hasPermission="'DESACTIVAR_USUARIOS'">
+                  <button *ngIf="p.active" type="button" (click)="deactivateUser(p.id)" class="delete">
+                    Dar de baja
+                  </button>
+                </ng-container>
+                
+                <ng-container *hasPermission="'ACTIVAR_USUARIOS'">
+                  <button *ngIf="!p.active" type="button" (click)="activateUser(p.id)" class="activate">
+                    Dar de alta
+                  </button>
+                </ng-container>
               </td>
             </tr>
           </tbody>

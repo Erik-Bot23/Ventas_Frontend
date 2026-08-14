@@ -6,7 +6,7 @@
     <h2>Gestión de categorías</h2>
 
         <!--Formulario-->
-        <div class="form-card">
+        <div class="form-card" *ngIf="auth.hasPermission('CREAR_CATEGORIAS')">
             <div class="field">
                 <label>Nombre de la categoría</label>
                 <input [(ngModel)]="categoryName">
@@ -25,7 +25,7 @@
                 <tr *ngFor="let c of categories">
                     <td>{{ c.name }}</td>
                     <td>
-                        <button (click)="deleteCategory(c.id)" class="delete">
+                        <button *hasPermission="'ELIMINAR_CATEGORIAS'" (click)="deleteCategory(c.id)" class="delete">
                             Eliminar
                         </button>
                     </td>

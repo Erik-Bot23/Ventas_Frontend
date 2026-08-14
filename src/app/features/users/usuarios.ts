@@ -6,10 +6,12 @@ import { Router } from '@angular/router';
 import { User, UserRole } from '../../core/interfaces/user/user';
 import { UserService } from '../../core/service/user-service/user-service';
 import { Sidebar } from '../sidebar/sidebar';
+import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
+import { AuthService } from '../../core/service/auth-service/auth-service';
 
 @Component({
   selector: 'app-usuarios',
-  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar],
+  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar, HasPermissionDirectives],
   templateUrl: './usuarios.html',
   styleUrl: './usuarios.css',
 })
@@ -31,7 +33,8 @@ export class Usuarios implements OnInit {
 
   constructor(
     private userservice: UserService,
-    private router: Router
+    private router: Router,
+    public auth: AuthService
   ){}
 
   //Cargar usuarios y roles al entrar a la sección

@@ -8,7 +8,7 @@ export const routes: Routes = [
     { path: '', loadComponent: () => import('./features/login/login').then(m=>m.Login) },
     { path: 'cobro', loadComponent: () => import('./features/charge/cobro').then(m=>m.Cobro), canActivate:[PermissionGuard], data:{permission: 'VER_COBRO'} },
     { path: 'perfil', loadComponent: () => import('./features/profile/perfil').then(m=>m.Perfil) },
-    { path: 'cliente', loadComponent: () => import('./features/clients/clientes').then(m=>m.Clientes), canActivate:[PermissionGuard], data:{permission: 'VER_CLIENTES'} },
+    { path: 'clientes', loadComponent: () => import('./features/clients/clientes').then(m=>m.Clientes), canActivate:[PermissionGuard], data:{permission: 'VER_CLIENTES'} },
     { path: 'compras', loadComponent: () => import('./features/shopping/compras').then(m=>m.Compras), canActivate:[PermissionGuard], data:{permission: 'VER_COMPRAS'} },
     { path: 'facturas', loadComponent: () => import('./features/invoices/facturas').then(m=>m.Facturas), canActivate:[PermissionGuard], data:{permission: 'VER_FACTURAS'} },
     { path: 'productos', loadComponent: () => import('./features/products/productos').then(m=>m.Productos), canActivate:[PermissionGuard], data:{permission: 'VER_PRODUCTOS'} },

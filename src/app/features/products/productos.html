@@ -6,7 +6,7 @@
 
     <div class="main-grid">
       <!-- FORMULARIO -->
-    <div class="form-card">
+      <div class="form-card" *ngIf="auth.hasPermission('CREAR_PRODUCTOS') || auth.hasPermission('EDITAR_PRODUCTOS')">
         <div class="field">
           <label>Nombre del producto</label>
           <input [(ngModel)]="form.name" />
@@ -77,7 +77,7 @@
           <!--{{ isSaving ? 'Guardando...' : 'Guardar' }}-->
            <!--?-->
            <!--:-->
-           {{ form.id ? 'Actualizar' : 'Guardar' }}
+           {{ form.id ? 'Actualizar producto' : 'Guardar producto' }}
         </button>
       </div>
 
@@ -112,8 +112,8 @@
               <td>{{ p.sku }}</td>
               <td>{{ p.barcode }}</td>
               <td>
-                <button type="button" (click)="editProduct(p)" class="edit">Editar</button>
-                <button type="button" (click)="deleteProduct(p.id)" class="delete">Eliminar</button>
+                <button *hasPermission="'EDITAR_PRODUCTOS'" type="button" (click)="editProduct(p)" class="edit">Editar</button>
+                <button *hasPermission="'ELIMINAR_PRODUCTOS'" type="button" (click)="deleteProduct(p.id)" class="delete">Eliminar</button>
               </td>
             </tr>
           </tbody>

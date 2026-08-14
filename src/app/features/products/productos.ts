@@ -8,10 +8,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { CategoryService } from '../../core/service/category-service/category-service';
 import { Sidebar } from '../sidebar/sidebar';
 import { error } from 'console';
+import { AuthService } from '../../core/service/auth-service/auth-service';
+import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
 
 @Component({
   selector: 'app-productos',
-  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar],
+  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar, HasPermissionDirectives],
   templateUrl: './productos.html',
   styleUrl: './productos.css',
 })
@@ -43,7 +45,8 @@ export class Productos implements OnInit {
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    public auth: AuthService
   ){}
 
   ngOnInit() {
@@ -83,6 +86,14 @@ export class Productos implements OnInit {
 
   //Guardar el producto en la BD
   save(){
+    if(!this.form.id && !this.auth.hasPermission('CREAR_PRODUCTOS')){
+      return;
+    }
+
+    if(this.form.id && !this.auth.hasPermission('EDITAR_PRODUCTOS')){
+      return;
+    }
+
     if(this.isSaving) return;
 
     this.isSaving = true;
@@ -162,6 +173,10 @@ export class Productos implements OnInit {
 
   //Se elimina el producto de la BD
   deleteProduct(id?: number){
+    if(!this.auth.hasPermission('ELIMINAR_PRODUCTOS')){
+      return;
+    }
+
     if(!id) return;
 
     if(confirm('¿Seguro que deseas eliminar este producto?')){
