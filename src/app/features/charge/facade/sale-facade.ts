@@ -7,6 +7,7 @@ import { SaleService } from '../../../core/service/sale-service/sale-service';
 import { TicketService } from '../../../core/service/ticket-service/ticket-service';
 import { SaleRequest } from '../../../core/interfaces/sale/sale';
 import { CashFacade } from './cash-facade';
+import { PaymentMethod } from '../../../core/enums/paymentMethod';
 
 
 @Injectable({
@@ -31,7 +32,25 @@ export class SaleFacade {
 
   //Desplegar modal de cobro
   showPaymentModal = false;
+  selectedPaymentMethod: PaymentMethod = PaymentMethod.CASH;
   cashReceived = 0;
+
+  //Lista de métodos
+  //Permite generar botones automaticamente
+  paymentMethods = [
+    {
+      value: PaymentMethod.CASH,
+      label: 'Efectivo'
+    },
+    {
+      value: PaymentMethod.DEBIT,
+      label: 'Tarjeta de débito'
+    },
+    {
+      value: PaymentMethod.CREDIT,
+      label: 'Tarjeta de crédito'
+    }
+  ]
 
   constructor(
     public cobro: CobroService,
@@ -132,11 +151,18 @@ export class SaleFacade {
       alert("No hay productos en el carrito");
       return;
     }
+
+    this.selectedPaymentMethod = PaymentMethod.CASH;
+    this.cashReceived = 0;
     this.showPaymentModal = true;
   }
 
   //Mostrar cambio a recibir antes de realizar la venta
   get changePreview(): number{
+    if(this.selectedPaymentMethod !== PaymentMethod.CASH){
+      return 0;
+    }
+
     const total = this.cobro.cart$.value.reduce((sum, item) => sum + item.subtotal, 0);
     return this.cashReceived - total;
   }
@@ -150,7 +176,7 @@ export class SaleFacade {
     }
 
     const request: SaleRequest = {
-      paymentMethod: 'CASH',
+      paymentMethod: this.selectedPaymentMethod,
       cashReceived: this.cashReceived,
 
       items: items.map(item => ({
@@ -159,20 +185,38 @@ export class SaleFacade {
       }))
     };
 
+    //Solo efectivo utiliza cashReceived
+    if(this.selectedPaymentMethod === PaymentMethod.CASH){
+      request.cashReceived = this.cashReceived;
+    }
+
     this.saleService.processSale(request).subscribe({
       next: response => {
+          const paymentLabel = this.selectedPaymentMethod === PaymentMethod.CASH ? 'Efectivo'
+                              : this.selectedPaymentMethod === PaymentMethod.DEBIT ? 'Tarjeta de débito'
+                              : 'Tarjeta de crédito';
+          
+          let message = `
+                        Venta #${response.saleId}
+                        Método: ${paymentLabel}
+                        Total: $${response.total}`;
+
+          if(response.paymentMethod === PaymentMethod.CASH){
+            message += `
+                        Recibido: $${response.cashReceived}
+                        Cambio: $${response.changeAmount}`;
+          }        
+        
         this.ticketService.generateTicket(
           response.saleId,
           response.total,
-          response.cashReceived,
-          response.changeAmount, 
-          items
+          response.cashReceived ?? 0,
+          response.changeAmount ?? 0, 
+          items,
+          response.paymentMethod
         );
 
-        alert(`Venta #${response.saleId}
-              Total: $${response.total}
-              Recibido: $${response.cashReceived}
-              Cambio: $${response.changeAmount}`);
+        alert(message);
 
         this.cobro.clear();
         this.loadProducts();
@@ -181,6 +225,15 @@ export class SaleFacade {
         alert(err.error?.message || 'Error al procesar la venta');
       }
     });
+  }
+
+  //Método para seleccionar el pago
+  selectPaymentMethod(method: PaymentMethod){
+    this.selectedPaymentMethod = method;
+
+    if(method !== PaymentMethod.CASH){
+      this.cashReceived = 0;
+    }
   }
 
   //Cerrar el modal de cobro

@@ -107,17 +107,65 @@
 
             <!--Modal para realizar el cobro-->
             <div class="modal-backdrop" *ngIf="sale.showPaymentModal">
-                <div class="modal">
+                <div class="modal payment-modal">
                     <h3>Cobrar venta</h3>
-                    <input type="number" [(ngModel)]="sale.cashReceived" placeholder="Efectivo recibido">
-                    <p>Cambio: ${{ sale.changePreview }}</p>
-                    
+
+                    <!--Total-->
+                    <div class="payment-total">
+                        <span>Total a pagar</span>
+
+                        <strong>${{ sale.total$ | async }}</strong>
+                    </div>
+
+                    <!--Método de pago-->
+                    <div class="payment-method">
+                        <label>Método de pago</label>
+
+                        <div class="payment-options">
+                            <button *ngFor="let method of sale.paymentMethods"
+                                    type="button"
+                                    [class.selected]="sale.selectedPaymentMethod === method.value"
+                                    (click)="sale.selectPaymentMethod(method.value)">
+                                {{ method.label }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--Efectivo-->
+                    <ng-container *ngIf="sale.selectedPaymentMethod === 'CASH'">
+                        <label>
+                            Efectivo recibido
+                        </label>
+
+                        <input type="number" [(ngModel)]="sale.cashReceived" placeholder="Efectivo recibido" min="0">
+
+                        <div class="change-preview">
+                            Cambio:
+                            <strong [class.negative]="sale.changePreview < 0">
+                                ${{ sale.changePreview }}
+                            </strong>
+                        </div>
+                    </ng-container>
+
+                    <!--Tarjeta-->
+                    <ng-container *ngIf="sale.selectedPaymentMethod == 'DEBIT' ||
+                                        sale.selectedPaymentMethod == 'CREDIT'">
+                        <div class="card-payment-info">
+                            <span>Pago con tarjeta</span>
+
+                            <p>
+                                La tarjeta será procesada mediante la terminal de pago.
+                            </p>
+                        </div>
+                    </ng-container>
+
+                    <!--Botones-->
                     <div class="modal-buttons">
-                        <button (click)="sale.confirmPayment()">
-                            Confirmar
+                        <button type="button" (click)="sale.confirmPayment()">
+                            Confirmar pago
                         </button>
 
-                        <button (click)="sale.closeModalCobro()">
+                        <button type="button" (click)="sale.closeModalCobro()">
                             Cancelar
                         </button>
                     </div>

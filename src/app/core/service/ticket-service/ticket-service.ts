@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
+import { PaymentMethod } from '../../enums/paymentMethod';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class TicketService {
     total: number,
     recibido: number,
     cambio: number,
-    items: any[]
+    items: any[],
+    paymentMethod: PaymentMethod
   ){
     const doc = new jsPDF();
 
@@ -26,8 +28,14 @@ export class TicketService {
       `Venta #${saleId}`, 20, 30
     );
 
+    const paymentLabel = paymentMethod === PaymentMethod.CASH ? 'Efectivo' :
+                         paymentMethod === PaymentMethod.DEBIT ? 'Tarjeta de débito' :
+                         'Tarjeta de crédito';
+    
+    doc.text(`Método de pago: ${paymentLabel}`, 20, 38);
+
     const result = autoTable(doc, {
-      startY: 40,
+      startY: 48,
       head: [[
         'Product',
         'Cantidad',
