@@ -8,7 +8,7 @@ import { UserService } from '../../core/service/user-service/user-service';
 import { Sidebar } from '../sidebar/sidebar';
 import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
 import { AuthService } from '../../core/service/auth-service/auth-service';
-
+//Prueba para git
 @Component({
   selector: 'app-usuarios',
   imports: [CommonModule, FormsModule, HttpClientModule, Sidebar, HasPermissionDirectives],
