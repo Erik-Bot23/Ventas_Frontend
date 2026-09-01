@@ -8,6 +8,7 @@ import { TicketService } from '../../../core/service/ticket-service/ticket-servi
 import { SaleRequest } from '../../../core/interfaces/sale/sale';
 import { CashFacade } from './cash-facade';
 import { PaymentMethod } from '../../../core/enums/paymentMethod';
+import { CardPaymentResponse } from '../../../core/interfaces/payment/payment';
 
 
 @Injectable({
@@ -34,6 +35,20 @@ export class SaleFacade {
   showPaymentModal = false;
   selectedPaymentMethod: PaymentMethod = PaymentMethod.CASH;
   cashReceived = 0;
+
+  //Modal de tarjeta
+  showCardModal = false;
+  cardNumber = '';
+  cardPin = '';
+  cardProcessing = false;
+  cardPaymentResult?: CardPaymentResponse;
+  cardError?: string;
+
+  //Modal de espera
+  showWaitingModal = false;
+  waitingTransactionId = '';
+  waitingAttempts = 0;
+  waitingInterval? : any;
 
   //Lista de métodos
   //Permite generar botones automaticamente
