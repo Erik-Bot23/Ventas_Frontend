@@ -9,6 +9,7 @@ import { SaleRequest } from '../../../core/interfaces/sale/sale';
 import { CashFacade } from './cash-facade';
 import { PaymentMethod } from '../../../core/enums/paymentMethod';
 import { CardPaymentResponse } from '../../../core/interfaces/payment/payment';
+import { PaymentService } from '../../../core/service/payment-service/payment-service';
 
 
 @Injectable({
@@ -71,7 +72,8 @@ export class SaleFacade {
     public cobro: CobroService,
     private saleService: SaleService,
     private ticketService: TicketService,
-    private cashFacade: CashFacade
+    private cashFacade: CashFacade,
+    private paymentService: PaymentService
   ) {}
 
   initialize(){
@@ -154,7 +156,7 @@ export class SaleFacade {
   }
 
   //Método de abrir modal de cobro
-  openPaymenteModal(){
+  openPaymentModal(){
     if(!this.cashFacade.isOpen){
       alert("No hay caja abierta");
       return;
@@ -172,14 +174,201 @@ export class SaleFacade {
     this.showPaymentModal = true;
   }
 
-  //Mostrar cambio a recibir antes de realizar la venta
-  get changePreview(): number{
-    if(this.selectedPaymentMethod !== PaymentMethod.CASH){
-      return 0;
+  //Método para seleccionar el pago
+  selectPaymentMethod(method: PaymentMethod){
+    this.selectedPaymentMethod = method;
+
+    if(method !== PaymentMethod.CASH){
+      this.cashReceived = 0;
+    }
+  }
+
+  //Formatear número de tarjeta
+  formatCardNumber(event: any){
+    let value = event.target.value.replace(/\D/g, '');
+
+    if(value.length > 16){
+      value = value.slice(0, 16);
     }
 
-    const total = this.cobro.cart$.value.reduce((sum, item) => sum + item.subtotal, 0);
-    return this.cashReceived - total;
+    //Formato: 4111 1111 1111 1111
+    let formatted = '';
+    for(let i = 0; i < value.length; i++){
+      if(i > 0 && i % 4 === 0){
+        formatted += ' ';
+      }
+      formatted += value[i];
+    }
+    this.cardNumber = formatted;
+    event.target.value = formatted;
+  }
+
+  //Abrir modal de tarjeta
+  openCardModal(){
+    this.cardNumber = '';
+    this.cardPin = '';
+    this.cardError = undefined;
+    this.showCardModal = true;
+  }
+
+  //Confirmar pago con tarjeta
+  confirmCardPayment(){
+    const cleanCard = this.cardNumber.replace(/\s/g, '');
+
+    //Validaciones
+    if(cleanCard.length !== 16){
+      this.cardError = 'El número de tarjeta debe tener 16 dígitos';
+      return;
+    }
+
+    if(!this.cardPin || this.cardPin.length != 4){
+      this.cardError = 'El PIN debe tener 4 dígitos';
+      return;
+    }
+
+    this.cardError = undefined;
+    this.showCardModal = false;
+    this.cardProcessing = true;
+    this.showWaitingModal = true;
+
+    //Continuar con el pago
+    this.processCardPayment();
+  }
+
+  //Procesar pago con tarjeta
+  private processCardPayment(){
+    const items = this.cobro.cart$.value;
+    const cleanCard = this.cardNumber.replace(/\s/, '');
+
+    const request: SaleRequest = {
+      paymentMethod: this.selectedPaymentMethod,
+      items: items.map(item => ({
+        productId: item.product.id!,
+        quantity: item.quantity
+      })),
+      cardPayment: {
+        paymentMethod: this.selectedPaymentMethod,
+        pin:this.cardPin,
+        cardNumber: cleanCard
+      }
+    };
+
+    //Enviar al backend
+    this.saleService.processSale(request).subscribe({
+      next: (response) => {
+        if(response.paymentStatus === 'PENDING' && response.cardPaymentResponse){
+          //Iniciar polling para consultar estado
+          this.waitingTransactionId = response.cardPaymentResponse.transactionId;
+          this.startPolling(response.cardPaymentResponse);
+        } else if(response.paymentStatus === 'APPROVED' && response.cardPaymentResponse){
+          //Pago aprobado
+          this.handleCardSuccess(response.cardPaymentResponse);
+        } else {
+          //Pago rechazado
+          this.handleCardError('Pago rechazado');
+        }
+      },
+      error: (err) => {
+        this.cardProcessing = false;
+        this.showWaitingModal = false;
+        alert(err.error?.message || 'Error al procesar el pago');
+        this.closeModalCobro();
+      }
+    });
+  }
+
+  //Polling para consultar estado
+  private startPolling(initialResponse: CardPaymentResponse){
+    this.waitingAttempts = 0;
+    const maxAttempts = 12; //60 segundos (5 segundos * 12)
+
+    //Mostrar mensaje inicial
+    this.cardPaymentResult = initialResponse;
+
+    this.waitingInterval = setInterval(() => {
+      this.waitingAttempts++;
+
+      this.paymentService.getPaymentStatus(this.waitingTransactionId).subscribe({
+        next: (response) => {
+          this.cardPaymentResult = response;
+
+          if(response.status === 'APPROVED'){
+            //Pago aprobado
+            clearInterval(this.waitingInterval);
+            this.handleCardSuccess(response);
+          } else if(response.status === 'REJECTED'){
+            //Pago rechazado
+            clearInterval(this.waitingInterval);
+            this.handleCardError(response.message || 'Pago rechazado por el banco');
+          }
+          //Si sigue PENDING, continuar esperando
+        },
+        error: () => {
+          if(this.waitingAttempts >= maxAttempts){
+            //Timeout
+            clearInterval(this.waitingInterval);
+            this.handleCardError('Tiempo de espera agotado. El pago está pendiente de confirmación.');
+          }
+        }
+      });
+    }, 5000); //Consultar cada 5 segundos
+  }
+
+  //Manejar éxito de tarjeta
+  private handleCardSuccess(response: CardPaymentResponse){
+    this.cardProcessing = false;
+    this.showWaitingModal = false;
+
+    //Generar ticket
+    this.generateTicket({
+      saleId: response.saleId,
+      total: response.amount,
+      paymentMethod: this.selectPaymentMethod,
+      cashReceived: null,
+      changeAmount: null,
+      cardPaymentResponse: response
+    });
+
+    //Mostrar mensaje de éxito
+    alert(`Pago aprobado\n\nTransacción: ${response.transactionId}\nCódigo: 
+      ${response.authorizationCode}\nMonto: $${response.amount}`);
+
+    //Limpiar carrito y cerrar modales
+    this.cobro.clear();
+    this.loadProducts();
+    this.closeModalCobro();
+    this.cardNumber = '';
+    this.cardPin = '';
+    this.cardPaymentResult = undefined;  
+  }
+
+  //Manejar error de tarjeta
+  private handleCardError(message: string){
+    this.cardProcessing = false;
+    this.showWaitingModal = false;
+
+    alert(`${message}`);
+
+    //Permitir reintentar
+    this.cardError = message;
+    this.showCardModal = true;
+  }
+
+  //Generar ticket (refactorizado)
+  private generateTicket(response: any){
+    const items = this.cobro.cart$.value;
+    const paymentLabel = this.selectedPaymentMethod === PaymentMethod.CASH ? 'Efectivo' : 
+                         this.selectedPaymentMethod === PaymentMethod.DEBIT ? 'Tarjeta de débito' :
+                         'Tarjeta de crédito';
+
+    this.ticketService.generateTicket(
+      response.saleId,
+      response.total,
+      response.cashReceived ?? 0,
+      response.changeAmount ?? 0,
+      items,
+      response.paymentMethod
+    );
   }
 
   //Confirmar pago
@@ -190,6 +379,14 @@ export class SaleFacade {
       return;
     }
 
+    //Si es tarjeta, abrir modal de tarjeta
+    if(this.selectedPaymentMethod === PaymentMethod.DEBIT ||
+        this.selectedPaymentMethod === PaymentMethod.CREDIT){
+      this.openCardModal();
+      return;
+    }
+
+    //Si es efectivo, continuar con el flujo actual
     const request: SaleRequest = {
       paymentMethod: this.selectedPaymentMethod,
       cashReceived: this.cashReceived,
@@ -200,57 +397,54 @@ export class SaleFacade {
       }))
     };
 
-    //Solo efectivo utiliza cashReceived
-    if(this.selectedPaymentMethod === PaymentMethod.CASH){
-      request.cashReceived = this.cashReceived;
-    }
-
     this.saleService.processSale(request).subscribe({
-      next: response => {
-          const paymentLabel = this.selectedPaymentMethod === PaymentMethod.CASH ? 'Efectivo'
-                              : this.selectedPaymentMethod === PaymentMethod.DEBIT ? 'Tarjeta de débito'
-                              : 'Tarjeta de crédito';
-          
-          let message = `
-                        Venta #${response.saleId}
-                        Método: ${paymentLabel}
-                        Total: $${response.total}`;
-
-          if(response.paymentMethod === PaymentMethod.CASH){
-            message += `
-                        Recibido: $${response.cashReceived}
-                        Cambio: $${response.changeAmount}`;
-          }        
-        
-        this.ticketService.generateTicket(
-          response.saleId,
-          response.total,
-          response.cashReceived ?? 0,
-          response.changeAmount ?? 0, 
-          items,
-          response.paymentMethod
-        );
-
-        alert(message);
-
+      next: (response) => {
+        this.generateTicket(response);
+        alert(`Venta completada\n\nTotal: $${response.total}\nCmabio: $${response.changeAmount}`);
         this.cobro.clear();
         this.loadProducts();
         this.closeModalCobro();
-      }, error: err => {
-        alert(err.error?.message || 'Error al procesar la venta');
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Error al procesar la venta')
       }
     });
   }
 
-  //Método para seleccionar el pago
-  selectPaymentMethod(method: PaymentMethod){
-    this.selectedPaymentMethod = method;
-
-    if(method !== PaymentMethod.CASH){
-      this.cashReceived = 0;
+  //Mostrar cambio a recibir antes de realizar la venta
+  get changePreview(): number{
+    if(this.selectedPaymentMethod !== PaymentMethod.CASH){
+      return 0;
     }
+
+    const total = this.cobro.cart$.value.reduce((sum, item) => sum + item.subtotal, 0);
+    return this.cashReceived - total;
   }
 
+  //Cerrar modal de tarjeta
+  closeCardModal(){
+    if(this.cardProcessing){
+      if(!confirm('¿Estás seguro de cancelar el pago?')) return;
+    }
+
+    this.showCardModal = false;
+    this.cardNumber = '';
+    this.cardPin = '';
+    this.cardError = undefined;
+    this.cardProcessing = false;
+  }
+
+  //Cerrar modal de espera
+  closeWaitingModal(){
+    if(this.waitingInterval){
+      clearInterval(this.waitingInterval);
+      this.waitingInterval = undefined;
+    }
+
+    this.showWaitingModal = false;
+    this.cardProcessing = false;
+  }
+  
   //Cerrar el modal de cobro
   closeModalCobro(){
     this.showPaymentModal = false;

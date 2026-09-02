@@ -172,6 +172,76 @@
                 </div>
             </div>
 
+            <!--Modal de pago con tarjeta-->
+            <div class="modal-backdrop" *ngIf="sale.showCardModa">
+                <div class="modal card-modal">
+                    <h3>Pago con tarjeta</h3>
+
+                    <div class="card-payment-form">
+                        <div class="form-group">
+                            <label>Número de tarjeta</label>
+
+                            <input type="text" [ngModel]="sale.cardNumber" (ngModelChange)="sale.cardNumber = $event"
+                                (input)="sale.formatCardNumber($event)" placeholder="**** **** **** ****" maxlength="19"
+                                [disabled]="sale.cardProcessing">
+                        </div>
+
+                        <div class="form-group">
+                            <label>PIN</label>
+                            <input type="password" [(ngModel)]="sale.cardPin" placeholder="Ingrese su pin" maxlength="4"
+                            pattern="[0-9]*" [disabled]="sale.cardProcessing">
+                        </div>
+
+                        <div *ngIf="sale.cardError" class="card-error">
+                            {{ sale.cardError }}
+                        </div>
+
+                        <div class="card-hint">
+                            Tarjetas de prueba disponibles:
+                            <ul>
+                                <li><strong>VISA Débito</strong> (Saldo: $10,000) - 4111 1111 1111 1111 (PIN: 1234) </li>
+                                <li><strong>VISA Débito</strong> (Saldo insuficiente) - 4000 0000 0000 0002 (PIN: 1234) </li>
+                                <li><strong>MASTERCARD Crédito</strong> (Bloqueada) - 5500 0000 0000 0003 (PIN: 1234) </li>
+                                <li><strong>AMEX Crédito</strong> (PIN incorrecto) - 3400 0000 0000 0004 (PIN: 0000) </li>
+                                <li><strong>MASTERCARD Crédito</strong> Saldo: $15,000) - 5555 5555 5555 4444 (PIN: 1234 </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button type="button" (click)="sale.confirmCardPayment()" [disabled]="sale.cardProcessing" class="btn-pay">
+                            {{ sale.cardProcessing ? 'Procesando...' : 'Pagar' }}
+                        </button>
+
+                        <button type="button" (click)="sale.closeCardModal()" class="btn-cancel" [disabled]="sale.cardProcessing">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal de espar-->
+            <div class="modal-backdrop" *ngIf="sale.showWaitingModal">
+                <div class="modal waiting-moda">
+                    <div class="spinner"></div>
+
+                    <h3>Procesando pago</h3>
+                    <p>Esperando confirmación de la terminal...</p>
+                    
+                    <p class="transaction-id" *ngIf="sale.cardPaymentResult">
+                        Transacción: <strong>{{ sale.cardPaymentResult.transactionId }}</strong>
+                    </p>
+
+                    <p class="waiting-status">
+                        Intento {{ sale.waitingAttempts }} / 12
+                    </p>
+
+                    <button type="button" (click)="sale.closeWaitingModal()" class="btn-cancel">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+
             <!--Modal de abrir caja-->
             <div class="modal-backdrop" *ngIf="cash.showOpenCashModal">
                 <div class="modal">
