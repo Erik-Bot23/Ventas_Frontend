@@ -89,31 +89,170 @@ export class TicketService {
     doc.text(`Método: ${paymentLabel}`, 10, y);
     y += 6;
 
-    const result = autoTable(doc, {
-      startY: 48,
-      head: [[
-        'Product',
-        'Cantidad',
-        'Precio',
-        'Subtotal'
-      ]],
+    // =========================================
+    // 4. DETALLES DE TARJETA (si aplica)
+    // =========================================
+    if(cardData && paymentMethod !== PaymentMethod.CASH){
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
 
-      body: items.map(item => [
-        item.product.name,
-        item.quantity,
-        item.unitPrice,
-        item.subtotal
-      ])
+      //Mostrar los últimos 4 dígitos
+      const lastFour = cardData.authorizationCode?.slice(-4) || '****';
+      doc.text(`Tarjeta: ****-****-****-${lastFour}`, 10, y);
+      y += 4;
+
+      doc.text(`Transacción: ${cardData.transactionId}`, 10, y);
+      y += 4;
+
+      doc.text(`Código de autorización: ${cardData.authorizationCode || 'N/A'}`, 10, y);
+      y += 4;
+
+      doc.text(`Fecha de pago: ${new Date(cardData.paymentDate).toLocaleString('es-MX')}`, 10, y);
+      y += 4;
+
+      //Estado del pago
+      const statusLabel = cardData?.status === 'APPROVED' ? 'APROBADO'
+                          : cardData?.status === 'REJECTED' ? 'RECHAZADO'
+                          : 'PENDIENTE';
+
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Estado: ${statusLabel}`, 10, y);
+      y += 6;
+      
+      doc.setFont('helvetica', 'normal');
+    }
+
+    // =========================================
+    // 5. PRODUCTOS
+    // =========================================
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text('PRODUCTO', 10, y);
+    doc.text('CANTIDAD', 55, y);
+    doc.text('PRECIO', 65, y);
+    y += 2;
+    
+    doc.line(5, y, 75, y);
+    y += 3;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(50, 50, 50);
+
+    items.forEach((item) => {
+      // Nombre del producto (truncar si es muy largo)
+      let productName = item.product.name;
+      if (productName.length > 20) {
+        productName = productName.substring(0, 18) + '...';
+      }
+      
+      doc.text(productName, 10, y);
+      doc.text(`${item.quantity}`, 58, y, { align: 'center' });
+      doc.text(`$${item.unitPrice.toFixed(2)}`, 68, y, { align: 'right' });
+      
+      // Subtotal en la siguiente línea (más pequeño)
+      if (item.quantity > 1) {
+        y += 3;
+        doc.setFontSize(6);
+        doc.setTextColor(150, 150, 150);
+        doc.text(`(${item.quantity} x $${item.unitPrice.toFixed(2)} = $${item.subtotal.toFixed(2)})`, 10, y);
+        doc.setFontSize(7);
+        doc.setTextColor(50, 50, 50);
+      }
+      
+      y += 4;
     });
 
-    const finalY = (doc as any).lastAutoTable.finalY;
+    // Línea separadora
+    y += 2;
+    doc.line(5, y, 75, y);
+    y += 4;
 
-    doc.text(`Recibido: $${recibido}`, 20, finalY + 30);
+    // =========================================
+    // 6. TOTALES
+    // =========================================
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 0, 0);
+    
+    // Subtotal (si hay más de 1 producto, mostrar)
+    if (items.length > 1) {
+      const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+      doc.text('SUBTOTAL:', 10, y);
+      doc.text(`$${subtotal.toFixed(2)}`, 68, y, { align: 'right' });
+      y += 5;
+    }
 
-    doc.text(`Total: $${total}`, 20, finalY + 20);
+    // Total
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text('TOTAL:', 10, y);
+    doc.text(`$${total.toFixed(2)}`, 68, y, { align: 'right' });
+    y += 6;
 
-    doc.text(`Cambio: $${cambio}`, 20, finalY + 40);
+    // =========================================
+    // 7. INFORMACIÓN DE PAGO
+    // =========================================
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(50, 50, 50);
 
-    doc.save(`venta-${saleId}.pdf`);
+    if (paymentMethod === PaymentMethod.CASH) {
+      // Efectivo
+      doc.text(`Recibido: $${recibido.toFixed(2)}`, 10, y);
+      y += 4;
+      doc.text(`Cambio: $${cambio.toFixed(2)}`, 10, y);
+      y += 6;
+    } else if (cardData) {
+      // Tarjeta
+      doc.text(`Monto: $${total.toFixed(2)}`, 10, y);
+      y += 4;
+      
+      // Si fue aprobado
+      if (cardData.status === 'APPROVED') {
+        doc.setTextColor(0, 150, 0);
+        doc.setFont('helvetica', 'bold');
+        doc.text('PAGO APROBADO', 10, y);
+        y += 4;
+      }
+    }
+
+    // =========================================
+    // 8. PIE DE PÁGINA
+    // =========================================
+    y += 4;
+    doc.setDrawColor(200, 200, 200);
+    doc.line(5, y, 75, y);
+    y += 4;
+
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(150, 150, 150);
+    doc.text('¡Gracias por su compra!', 40, y, { align: 'center' });
+    y += 4;
+    doc.text('Este ticket es su comprobante de pago', 40, y, { align: 'center' });
+    y += 4;
+    doc.text('Productos no reembolsables', 40, y, { align: 'center' });
+    y += 6;
+
+    // Código de barras simulado (líneas decorativas)
+    doc.setDrawColor(0, 0, 0);
+    for (let i = 0; i < 20; i++) {
+      const x = 10 + i * 3;
+      const height = i % 3 === 0 ? 4 : 2;
+      doc.line(x, y, x, y + height);
+    }
+    y += 6;
+
+    doc.text(`Venta #${String(saleId).padStart(6, '0')}`, 40, y, { align: 'center' });
+    y += 4;
+    doc.setFont('helvetica', 'normal');
+    doc.text('Gracias por preferirnos', 40, y, { align: 'center' });
+
+    // =========================================
+    // 9. GUARDAR PDF
+    // =========================================
+    doc.save(`ticket-venta-${saleId}.pdf`);
   }   
 }

@@ -101,7 +101,7 @@
                 Total: ${{ sale.total$ | async }}
             </div>
 
-            <button *hasPermission="'CREAR_VENTAS'" class="pay-btn" (click)="sale.openPaymenteModal()">
+            <button *hasPermission="'CREAR_VENTAS'" class="pay-btn" (click)="sale.openPaymentModal()">
                 Cobrar
             </button>
 
@@ -173,7 +173,7 @@
             </div>
 
             <!--Modal de pago con tarjeta-->
-            <div class="modal-backdrop" *ngIf="sale.showCardModa">
+            <div class="modal-backdrop" *ngIf="sale.showCardModal">
                 <div class="modal card-modal">
                     <h3>Pago con tarjeta</h3>
 

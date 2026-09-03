@@ -326,7 +326,7 @@ export class SaleFacade {
       paymentMethod: this.selectPaymentMethod,
       cashReceived: null,
       changeAmount: null,
-      cardPaymentResponse: response
+      cardData: response //Pasar datos de la tarjeta
     });
 
     //Mostrar mensaje de éxito
@@ -367,7 +367,8 @@ export class SaleFacade {
       response.cashReceived ?? 0,
       response.changeAmount ?? 0,
       items,
-      response.paymentMethod
+      response.paymentMethod,
+      response.cardData //Pasar datos de tarjeta (Puede ser undefined)
     );
   }
 
@@ -399,8 +400,18 @@ export class SaleFacade {
 
     this.saleService.processSale(request).subscribe({
       next: (response) => {
-        this.generateTicket(response);
+        //Generar ticket con datos de efectivo
+        this.generateTicket({
+          saleId: response.saleId,
+          total: response.total,
+          paymentMethod: this.selectedPaymentMethod,
+          cashReceived: response.cashReceived || 0,
+          changeAmount: response.changeAmount || 0,
+          cardData: undefined //No hay datos de tarjeta
+        });
+
         alert(`Venta completada\n\nTotal: $${response.total}\nCmabio: $${response.changeAmount}`);
+
         this.cobro.clear();
         this.loadProducts();
         this.closeModalCobro();
