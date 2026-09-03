@@ -185,11 +185,15 @@ export class SaleFacade {
 
   //Formatear número de tarjeta
   formatCardNumber(event: any){
-    let value = event.target.value.replace(/\D/g, '');
+    //let value = event.target.value.replace(/\D/g, '');
+    let value = event.target.value.replace(/[^0-9]/g, '');
 
     if(value.length > 16){
       value = value.slice(0, 16);
     }
+
+    //Guardar el valor sin espacios en la variable
+    this.cardNumber = value; //Almacena solo números
 
     //Formato: 4111 1111 1111 1111
     let formatted = '';
@@ -238,7 +242,7 @@ export class SaleFacade {
   //Procesar pago con tarjeta
   private processCardPayment(){
     const items = this.cobro.cart$.value;
-    const cleanCard = this.cardNumber.replace(/\s/, '');
+    const cleanCard = this.cardNumber.replace(/\s/g, '');
 
     const request: SaleRequest = {
       paymentMethod: this.selectedPaymentMethod,

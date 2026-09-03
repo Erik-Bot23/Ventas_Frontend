@@ -181,9 +181,9 @@
                         <div class="form-group">
                             <label>Número de tarjeta</label>
 
-                            <input type="text" [ngModel]="sale.cardNumber" (ngModelChange)="sale.cardNumber = $event"
+                            <input type="text" [(ngModel)]="sale.cardNumber" (ngModelChange)="sale.cardNumber = $event"
                                 (input)="sale.formatCardNumber($event)" placeholder="**** **** **** ****" maxlength="19"
-                                [disabled]="sale.cardProcessing">
+                                [disabled]="sale.cardProcessing" inputmode="numeric" pattern="[0-9 ]*">
                         </div>
 
                         <div class="form-group">
@@ -203,7 +203,7 @@
                                 <li><strong>VISA Débito</strong> (Saldo insuficiente) - 4000 0000 0000 0002 (PIN: 1234) </li>
                                 <li><strong>MASTERCARD Crédito</strong> (Bloqueada) - 5500 0000 0000 0003 (PIN: 1234) </li>
                                 <li><strong>AMEX Crédito</strong> (PIN incorrecto) - 3400 0000 0000 0004 (PIN: 0000) </li>
-                                <li><strong>MASTERCARD Crédito</strong> Saldo: $15,000) - 5555 5555 5555 4444 (PIN: 1234 </li>
+                                <li><strong>MASTERCARD Crédito</strong> (Saldo: $15,000) - 5555 5555 5555 4444 (PIN: 1234) </li>
                             </ul>
                         </div>
                     </div>
