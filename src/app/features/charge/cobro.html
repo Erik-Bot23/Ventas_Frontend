@@ -220,7 +220,7 @@
                 </div>
             </div>
 
-            <!--Modal de espar-->
+            <!--Modal de espera-->
             <div class="modal-backdrop" *ngIf="sale.showWaitingModal">
                 <div class="modal waiting-moda">
                     <div class="spinner"></div>
@@ -234,6 +234,10 @@
 
                     <p class="waiting-status">
                         Intento {{ sale.waitingAttempts }} / 12
+                    </p>
+
+                    <p *ngIf="sale.cardError" class="card-error">
+                        {{ sale.cardError }}
                     </p>
 
                     <button type="button" (click)="sale.closeWaitingModal()" class="btn-cancel">

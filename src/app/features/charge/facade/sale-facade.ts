@@ -10,6 +10,7 @@ import { CashFacade } from './cash-facade';
 import { PaymentMethod } from '../../../core/enums/paymentMethod';
 import { CardPaymentResponse } from '../../../core/interfaces/payment/payment';
 import { PaymentService } from '../../../core/service/payment-service/payment-service';
+import { error } from 'console';
 
 
 @Injectable({
@@ -273,10 +274,34 @@ export class SaleFacade {
         }
       },
       error: (err) => {
+         // ✅ LOGS DE DEPURACIÓN
+        console.log('=== ERROR COMPLETO ===');
+        console.log('Status:', err.status);
+        console.log('Error object:', err);
+        console.log('Error.error:', err.error);
+        console.log('Error.error?.code:', err.error?.code);
+        console.log('Error.error?.message:', err.error?.message);
+        console.log('Error.message:', err.message);
+        console.log('=======================');
+
         this.cardProcessing = false;
         this.showWaitingModal = false;
-        alert(err.error?.message || 'Error al procesar el pago');
-        this.closeModalCobro();
+
+        //Verificar si es un error de pago rechazado
+        if(err.status === 402 && err.error?.code === 'PAYMENT_REJECTED'){
+          //Mostrar el mensaje específico del backend
+          const errorMessage = err.error?.message || 'Pago rechazado';
+          this.handleCardError(errorMessage);
+        } else if (err.status === 402) {
+          // Si es 402 pero no tiene el código específico
+          const errorMessage = err.error?.message || 'Pago rechazado';
+          this.handleCardError(errorMessage);
+        } else {
+          // Otros errores (400, 500, etc.)
+          const errorMessage = err.error?.message || 'Error al procesar el pago';
+          alert(errorMessage);
+          this.closeModalCobro();
+        }
       }
     });
   }
@@ -303,12 +328,17 @@ export class SaleFacade {
           } else if(response.status === 'REJECTED'){
             //Pago rechazado
             clearInterval(this.waitingInterval);
-            this.handleCardError(response.message || 'Pago rechazado por el banco');
+            const errorMsg = response.message || 'Pago rechazado por el banco';
+            this.handleCardError(errorMsg);
           }
           //Si sigue PENDING, continuar esperando
         },
-        error: () => {
-          if(this.waitingAttempts >= maxAttempts){
+        error: (err) => {
+          if(err.status === 402 && err.error?.code === 'PAYMENT_REJECTED'){
+            clearInterval(this.waitingInterval);
+            const errorMsg = err.error?.message || 'Pago rechazado';
+            this.handleCardError(errorMsg);
+          } else if(this.waitingAttempts >= maxAttempts){
             //Timeout
             clearInterval(this.waitingInterval);
             this.handleCardError('Tiempo de espera agotado. El pago está pendiente de confirmación.');
@@ -351,6 +381,7 @@ export class SaleFacade {
     this.cardProcessing = false;
     this.showWaitingModal = false;
 
+    //Mostrar alerta con el mensaje específico
     alert(`${message}`);
 
     //Permitir reintentar
