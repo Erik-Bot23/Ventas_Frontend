@@ -186,8 +186,8 @@ export class SaleFacade {
 
   //Formatear número de tarjeta
   formatCardNumber(event: any){
-    //let value = event.target.value.replace(/\D/g, '');
-    let value = event.target.value.replace(/[^0-9]/g, '');
+    let value = event.target.value.replace(/\D/g, '');
+    //let value = event.target.value.replace(/[^0-9]/g, '');
 
     if(value.length > 16){
       value = value.slice(0, 16);
@@ -269,31 +269,24 @@ export class SaleFacade {
           //Pago aprobado
           this.handleCardSuccess(response.cardPaymentResponse);
         } else {
+          alert("Llegamos aquí 1");
           //Pago rechazado
           this.handleCardError('Pago rechazado');
         }
       },
       error: (err) => {
-         // ✅ LOGS DE DEPURACIÓN
-        console.log('=== ERROR COMPLETO ===');
-        console.log('Status:', err.status);
-        console.log('Error object:', err);
-        console.log('Error.error:', err.error);
-        console.log('Error.error?.code:', err.error?.code);
-        console.log('Error.error?.message:', err.error?.message);
-        console.log('Error.message:', err.message);
-        console.log('=======================');
-
         this.cardProcessing = false;
         this.showWaitingModal = false;
 
         //Verificar si es un error de pago rechazado
         if(err.status === 402 && err.error?.code === 'PAYMENT_REJECTED'){
           //Mostrar el mensaje específico del backend
+          alert("Llegamos aquí 2");
           const errorMessage = err.error?.message || 'Pago rechazado';
           this.handleCardError(errorMessage);
         } else if (err.status === 402) {
           // Si es 402 pero no tiene el código específico
+          alert("Llegamos aquí 3");
           const errorMessage = err.error?.message || 'Pago rechazado';
           this.handleCardError(errorMessage);
         } else {
@@ -336,6 +329,7 @@ export class SaleFacade {
         error: (err) => {
           if(err.status === 402 && err.error?.code === 'PAYMENT_REJECTED'){
             clearInterval(this.waitingInterval);
+            alert("Llegamos aquí 4");
             const errorMsg = err.error?.message || 'Pago rechazado';
             this.handleCardError(errorMsg);
           } else if(this.waitingAttempts >= maxAttempts){
@@ -350,7 +344,8 @@ export class SaleFacade {
 
   //Manejar éxito de tarjeta
   private handleCardSuccess(response: CardPaymentResponse){
-    this.cardProcessing = false;
+    setTimeout(() => {
+       this.cardProcessing = false;
     this.showWaitingModal = false;
 
     //Generar ticket
@@ -373,20 +368,20 @@ export class SaleFacade {
     this.closeModalCobro();
     this.cardNumber = '';
     this.cardPin = '';
-    this.cardPaymentResult = undefined;  
+    this.cardPaymentResult = undefined;
+    },0)
   }
 
   //Manejar error de tarjeta
   private handleCardError(message: string){
-    this.cardProcessing = false;
-    this.showWaitingModal = false;
-
-    //Mostrar alerta con el mensaje específico
-    alert(`${message}`);
-
-    //Permitir reintentar
-    this.cardError = message;
-    this.showCardModal = true;
+    //Forzar la detección de cambios después de actualizar el estado
+    setTimeout(() => {
+      this.cardProcessing = false;
+      this.showWaitingModal = false;
+      alert(`${message}`);
+      this.cardError = message;
+      this.showCardModal = true;
+    }, 0);
   }
 
   //Generar ticket (refactorizado)

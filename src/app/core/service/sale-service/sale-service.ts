@@ -25,7 +25,7 @@ export class SaleService {
     return this.http.post<SaleResponse>(this.api, request);
   }
   
-   //Muestra los productos en la tabla de ventas 
+  //Muestra los productos en la tabla de ventas 
   //Se usará en features/cobro/cobro.ts
   getProductsVentas(){
     return this.http.get<ProductShow[]>(this.apiUrl);

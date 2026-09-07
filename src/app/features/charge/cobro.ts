@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../sidebar/sidebar';
 import { CashFacade } from './facade/cash-facade';
@@ -20,7 +20,8 @@ export class Cobro implements OnInit {
   constructor(
     public cash: CashFacade,
     public sale: SaleFacade,
-    public auth: AuthService
+    public auth: AuthService,
+    private cdr: ChangeDetectorRef 
   ) {}
 
   ngOnInit(): void {
