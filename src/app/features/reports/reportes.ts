@@ -10,10 +10,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './reportes.css',
 })
 export class Reportes {
-  //Desplegar menú
   menuOpen = false;
 
-  //Abrir y cerrar el menú
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
   }

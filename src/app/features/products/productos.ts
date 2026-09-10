@@ -4,30 +4,25 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/service/product-service/product-service';
 import { Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 import { CategoryService } from '../../core/service/category-service/category-service';
 import { Sidebar } from '../sidebar/sidebar';
-import { error } from 'console';
 import { AuthService } from '../../core/service/auth-service/auth-service';
 import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
 
 @Component({
   selector: 'app-productos',
-  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar, HasPermissionDirectives],
+  imports: [CommonModule, FormsModule, Sidebar, HasPermissionDirectives],
   templateUrl: './productos.html',
   styleUrl: './productos.css',
 })
 
 export class Productos implements OnInit {
-  //Se inicializan las variables
   menuOpen = false;
-  products: ProductForm[] = []; //Un arreglo de productos
-  categories: Category[] = []; //Un arreglo de categorias
+  products: ProductForm[] = [];
+  categories: Category[] = [];
   selectedFile: File | null = null;
   loading = true;
-  //Se carga el gestor de archivos para elegir la img
-  //VierChild:
-  @ViewChild('fileInput') fileInput: any; //fileInput:
+  @ViewChild('fileInput') fileInput: any;
   isSaving = false;
   private loaded = false;
 
@@ -56,7 +51,7 @@ export class Productos implements OnInit {
       this.loaded = true;
     }
   }
-  
+
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
   }

@@ -32,11 +32,11 @@ export class TicketService {
     doc.setTextColor(0,0,0);
     doc.setFont('helvetica', 'bold');
     doc.text('Tienda "Buscar nombre"', 40, y, { align: 'center' });
-    y *= 6;
+    y += 6;
 
     doc.setFontSize(8);
-    doc.setFont('helvitica', 'normal');
-    doc.setTextColor(100, 100, 1000);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
     doc.text('Calle Principal No.123, Col. Centro', 40, y, { align: 'center' });
     y += 4;
     doc.text('Tel: 555-123-4567', 40, y, {align: 'center'});
@@ -74,7 +74,7 @@ export class TicketService {
       second: '2-digit'
     });
 
-    doc.text(`Ticket: #${String(saleId).padStart(6, 'o')}`, 10, y);
+    doc.text(`Ticket: #${String(saleId).padStart(6, '0')}`, 10, y);
     doc.text(`Fecha: ${fecha} ${hora}`, 10, y + 4);
     y += 10;
 
@@ -125,43 +125,49 @@ export class TicketService {
     // =========================================
     // 5. PRODUCTOS
     // =========================================
-    doc.setFontSize(8);
+    doc.setFontSize(5);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
+
+    // x=10: nombre alineado a la izquierda, x=42: cantidad centrada, x=68: precio centrado
     doc.text('PRODUCTO', 10, y);
-    doc.text('CANTIDAD', 55, y);
-    doc.text('PRECIO', 65, y);
+    doc.text('CANTIDAD', 42, y, { align: 'center' });
+    doc.text('PRECIO', 68, y, { align: 'center' });
     y += 2;
     
-    doc.line(5, y, 75, y);
+    doc.line(2, y, 75, y); // Linea separadora debajo de los headers
     y += 3;
 
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7);
     doc.setTextColor(50, 50, 50);
 
     items.forEach((item) => {
-      // Nombre del producto (truncar si es muy largo)
+      // Mismo tamaño de letra para toda la fila (nombre, cantidad, precio)
+      doc.setFontSize(7);
+
+      // Nombre del producto truncado para que no se encime con cantidad
       let productName = item.product.name;
-      if (productName.length > 20) {
-        productName = productName.substring(0, 18) + '...';
+      if (productName.length > 16) {
+        productName = productName.substring(0, 14) + '...';
       }
-      
-      doc.text(productName, 10, y);
-      doc.text(`${item.quantity}`, 58, y, { align: 'center' });
-      doc.text(`$${item.unitPrice.toFixed(2)}`, 68, y, { align: 'right' });
-      
-      // Subtotal en la siguiente línea (más pequeño)
+
+      // Fila completa: nombre a la izquierda, cantidad centrada, precio centrada
+      doc.text(productName, 10, y);                             // Nombre del producto
+      doc.text(`${item.quantity} uds`, 42, y, { align: 'center' }); // Cantidad debajo del header CANTIDAD
+      doc.text(`$${item.unitPrice.toFixed(2)}`, 68, y, { align: 'center' }); // Precio debajo del header PRECIO
+      y += 4;
+
+      // Subtotal solo si hay más de 1 unidad (texto pequeño gris)
       if (item.quantity > 1) {
-        y += 3;
         doc.setFontSize(6);
         doc.setTextColor(150, 150, 150);
         doc.text(`(${item.quantity} x $${item.unitPrice.toFixed(2)} = $${item.subtotal.toFixed(2)})`, 10, y);
-        doc.setFontSize(7);
         doc.setTextColor(50, 50, 50);
+        doc.setFontSize(7);
+        y += 3;
       }
-      
-      y += 4;
+
+      y += 1;
     });
 
     // Línea separadora

@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../sidebar/sidebar';
 import { RoleService } from '../../core/service/role-service/role-service';
 import { Router } from '@angular/router';
 import { CreateRoleRequest, PermissionModel, RoleModel, UpdateRoleRequest } from '../../core/models/role-model';
 import { PermissionService } from '../../core/service/permission-service/permission-service';
-import { permission } from 'process';
 import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
 import { AuthService } from '../../core/service/auth-service/auth-service';
 
@@ -16,11 +15,9 @@ import { AuthService } from '../../core/service/auth-service/auth-service';
   templateUrl: './roles.html',
   styleUrl: './roles.css',
 })
-export class Roles implements OnInit {
-  //Desplegar menú
+export class Roles {
   menuOpen = false;
 
-  //Declarar variables
   roles: RoleModel[] = [];
   roleName = '';
 
@@ -31,7 +28,6 @@ export class Roles implements OnInit {
 
   editingRoleId: number | null = null;
 
-  //Abrir y cerrar el menú
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
   }
@@ -73,7 +69,6 @@ export class Roles implements OnInit {
     });
   }
 
-  //Agrupar los permisos
   private groupPermissions(): void {
     this.groupedPermissions = {};
 
@@ -90,7 +85,6 @@ export class Roles implements OnInit {
     });
   }
 
-  //Separar las palabras de los permisos
   formatPermissionName(name: string): string{
     return name.toLowerCase().replaceAll('_', ' ').replace(/\b\w/g, letter => letter.toUpperCase())
   }

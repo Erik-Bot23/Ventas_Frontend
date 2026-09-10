@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,19 +7,18 @@ import { UserService } from '../../core/service/user-service/user-service';
 import { Sidebar } from '../sidebar/sidebar';
 import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
 import { AuthService } from '../../core/service/auth-service/auth-service';
-//Prueba para git
+
 @Component({
   selector: 'app-usuarios',
-  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar, HasPermissionDirectives],
+  imports: [CommonModule, FormsModule, Sidebar, HasPermissionDirectives],
   templateUrl: './usuarios.html',
   styleUrl: './usuarios.css',
 })
 
 export class Usuarios implements OnInit {
-  //Inicializar las variables
   menuOpen = false;
-  users: User[] = []; //Arreglo de usuarios
-  roles: UserRole[] = []; //Arreglo de roles
+  users: User[] = [];
+  roles: UserRole[] = [];
   loading = true;
   isSaving = false;
 
@@ -37,7 +35,6 @@ export class Usuarios implements OnInit {
     public auth: AuthService
   ){}
 
-  //Cargar usuarios y roles al entrar a la sección
   ngOnInit() {
     this.loadRoles();
     this.loadUsers();
@@ -47,7 +44,6 @@ export class Usuarios implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
-  //Cargar los roles desde la BD
   loadRoles(){
     this.userservice.getRoles().subscribe(data => {
       this.roles = data;
@@ -58,7 +54,6 @@ export class Usuarios implements OnInit {
     })
   }
 
-  //Cargar los usuarios desde la BD
   loadUsers(){
     this.userservice.getUsers().subscribe(data => {
       this.users = data;
@@ -66,14 +61,12 @@ export class Usuarios implements OnInit {
     });
   }
 
-  //Guardar usuarios en la BD
   save(){
     if(this.isSaving) return;
 
     this.isSaving = true;
 
     if(this.form.id){
-      //Editar
       this.userservice.updateUser(this.form.id, 
         {
           name: this.form.name,
@@ -90,7 +83,6 @@ export class Usuarios implements OnInit {
             }
           });
     } else {
-        //Crear
         this.userservice.createUser(
           {
             name: this.form.name,
@@ -111,7 +103,6 @@ export class Usuarios implements OnInit {
     }
   }
 
-  //Retear los campos
   resetForm(){
     this.form = {
       name: '',
@@ -122,7 +113,6 @@ export class Usuarios implements OnInit {
     this.isSaving = false;
   }
 
-  //Editar usuarios en la BD
   editUser(user: User){
     this.form = {
       id: user.id,
@@ -133,13 +123,12 @@ export class Usuarios implements OnInit {
     };
   }
 
-  //Se desactiva el usuario en la BD
   deactivateUser(id?: number){
     if(!id) return;
 
     if(confirm('¿Seguro que deseas dar de baja este usuario?')){
       this.userservice.deActiveUser(id).subscribe({
-        next: () => { //() =>
+        next: () => {
           const user = this.users.find(u => u.id === id);
           if(user){
             user.active = false;
@@ -150,7 +139,6 @@ export class Usuarios implements OnInit {
     }
   }
 
-  //Se vuelve a activar el usuario
   activateUser(id?: number){
     if (!id) return;
     
@@ -167,4 +155,3 @@ export class Usuarios implements OnInit {
     }
   }
 }
-

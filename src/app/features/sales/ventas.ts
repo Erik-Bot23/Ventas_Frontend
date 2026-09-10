@@ -10,10 +10,8 @@ import { Sidebar } from '../sidebar/sidebar';
   styleUrl: './ventas.css',
 })
 export class Ventas {
-  //Desplegar menú
   menuOpen = false;
 
-  //Abrir y cerrar el menú
   toggleMenu(){
     this.menuOpen = !this.menuOpen;
   }

@@ -37,14 +37,14 @@ export class ResetPassword {
     }
 
     if(this.password !== this.confirmPassword){
-      this.snack.open('Las contraseñas no coinciden', '', {duration:200});
+      this.snack.open('Las contraseñas no coinciden', '', {duration:2000});
       return;
     }
 
     this.auth.resetPassword(this.token, this.password).subscribe({
       next: () => {
         this.snack.open('Contraseña actualizada','',{duration:2000});
-        this,this.router.navigate(['/login']);
+        this.router.navigate(['']);
       },
       error: () => {
         this.snack.open('Token invalido o expirado', '', {duration:2000});

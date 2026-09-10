@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';;
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductShow } from '../../../core/interfaces/product/product';
 import { CobroItem } from '../../../core/interfaces/cobro/cobro';
@@ -10,8 +10,6 @@ import { CashFacade } from './cash-facade';
 import { PaymentMethod } from '../../../core/enums/paymentMethod';
 import { CardPaymentResponse } from '../../../core/interfaces/payment/payment';
 import { PaymentService } from '../../../core/service/payment-service/payment-service';
-import { error } from 'console';
-
 
 @Injectable({
   providedIn: 'root'
@@ -269,7 +267,6 @@ export class SaleFacade {
           //Pago aprobado
           this.handleCardSuccess(response.cardPaymentResponse);
         } else {
-          alert("Llegamos aquí 1");
           //Pago rechazado
           this.handleCardError('Pago rechazado');
         }
@@ -281,12 +278,10 @@ export class SaleFacade {
         //Verificar si es un error de pago rechazado
         if(err.status === 402 && err.error?.code === 'PAYMENT_REJECTED'){
           //Mostrar el mensaje específico del backend
-          alert("Llegamos aquí 2");
           const errorMessage = err.error?.message || 'Pago rechazado';
           this.handleCardError(errorMessage);
         } else if (err.status === 402) {
           // Si es 402 pero no tiene el código específico
-          alert("Llegamos aquí 3");
           const errorMessage = err.error?.message || 'Pago rechazado';
           this.handleCardError(errorMessage);
         } else {
@@ -329,7 +324,6 @@ export class SaleFacade {
         error: (err) => {
           if(err.status === 402 && err.error?.code === 'PAYMENT_REJECTED'){
             clearInterval(this.waitingInterval);
-            alert("Llegamos aquí 4");
             const errorMsg = err.error?.message || 'Pago rechazado';
             this.handleCardError(errorMsg);
           } else if(this.waitingAttempts >= maxAttempts){
@@ -344,32 +338,31 @@ export class SaleFacade {
 
   //Manejar éxito de tarjeta
   private handleCardSuccess(response: CardPaymentResponse){
+    const items = this.cobro.cart$.value;
+
     setTimeout(() => {
-       this.cardProcessing = false;
-    this.showWaitingModal = false;
+      this.cardProcessing = false;
+      this.showWaitingModal = false;
 
-    //Generar ticket
-    this.generateTicket({
-      saleId: response.saleId,
-      total: response.amount,
-      paymentMethod: this.selectPaymentMethod,
-      cashReceived: null,
-      changeAmount: null,
-      cardData: response //Pasar datos de la tarjeta
-    });
+      this.generateTicket({
+        saleId: response.saleId,
+        total: response.amount,
+        paymentMethod: this.selectedPaymentMethod,
+        cashReceived: null,
+        changeAmount: null,
+        cardData: response
+      }, items);
 
-    //Mostrar mensaje de éxito
-    alert(`Pago aprobado\n\nTransacción: ${response.transactionId}\nCódigo: 
-      ${response.authorizationCode}\nMonto: $${response.amount}`);
+      alert(`Pago aprobado\n\nTransacción: ${response.transactionId}\nCódigo: 
+        ${response.authorizationCode}\nMonto: $${response.amount}`);
 
-    //Limpiar carrito y cerrar modales
-    this.cobro.clear();
-    this.loadProducts();
-    this.closeModalCobro();
-    this.cardNumber = '';
-    this.cardPin = '';
-    this.cardPaymentResult = undefined;
-    },0)
+      this.cobro.clear();
+      this.loadProducts();
+      this.closeModalCobro();
+      this.cardNumber = '';
+      this.cardPin = '';
+      this.cardPaymentResult = undefined;
+    }, 0);
   }
 
   //Manejar error de tarjeta
@@ -385,11 +378,8 @@ export class SaleFacade {
   }
 
   //Generar ticket (refactorizado)
-  private generateTicket(response: any){
-    const items = this.cobro.cart$.value;
-    const paymentLabel = this.selectedPaymentMethod === PaymentMethod.CASH ? 'Efectivo' : 
-                         this.selectedPaymentMethod === PaymentMethod.DEBIT ? 'Tarjeta de débito' :
-                         'Tarjeta de crédito';
+  private generateTicket(response: any, savedItems?: CobroItem[]){
+    const items = savedItems ?? this.cobro.cart$.value;
 
     this.ticketService.generateTicket(
       response.saleId,
@@ -398,7 +388,7 @@ export class SaleFacade {
       response.changeAmount ?? 0,
       items,
       response.paymentMethod,
-      response.cardData //Pasar datos de tarjeta (Puede ser undefined)
+      response.cardData
     );
   }
 

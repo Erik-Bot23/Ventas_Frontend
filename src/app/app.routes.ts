@@ -1,7 +1,5 @@
-import { RouterModule, Routes } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { Routes } from '@angular/router';
 import { PermissionGuard } from './core/routes/guards/permission-guard';
-import { permission } from 'process';
 
 export const routes: Routes = [
     //Se definen las rutas de todas las paginas

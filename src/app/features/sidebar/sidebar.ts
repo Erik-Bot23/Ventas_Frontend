@@ -1,7 +1,6 @@
 import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/service/auth-service/auth-service'; 
-import { permission } from 'process';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -26,12 +25,10 @@ export class Sidebar {
     this.cd.detectChanges();
   }
 
-  //Obtener el nombre del usuario}
   get userName(): string {
     return this.auth.getUsername();
   }
 
-  //
   menuItems = [
     {
       label: 'Productos',
@@ -85,12 +82,10 @@ export class Sidebar {
     }
   ]
 
-  //Navegar entre rutas
   go(route: string){
     this.router.navigate([route]);
   }
 
-   //Navegación del menu desplegable
   perfil(){
     this.router.navigate(['/perfil']);
   }
