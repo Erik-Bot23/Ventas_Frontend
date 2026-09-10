@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NgForOf } from "../../../../node_modules/@angular/common/types/_common_module-chunk";
+// ANTES importaba un archivo interno de node_modules (_common_module-chunk)
+// que no es una API publica y rompia la compilacion de pruebas.
+import { NgForOf } from '@angular/common';
 import { SaleHistory } from '../../core/interfaces/sale/sale';
 
 @Component({

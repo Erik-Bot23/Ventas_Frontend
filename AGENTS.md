@@ -7,6 +7,7 @@
 - **Angular 21** (standalone, sin NgModules) · **TypeScript ~5.9** · **RxJS 7** · SSR habilitado (`app.config.server.ts`)
 - **Angular Material** (`@angular/cdk`, `@angular/material` 21)
 - **jsPDF + jspdf-autotable** (generación de tickets PDF)
+- **zone.js** (reactivado para change detection clásico, ver 2026-09-10)
 - **Vitest** (testing) · **jsdom** · Prettier
 - Build: Angular CLI 21 (`ng serve` puerto 4200, sin proxy)
 - Nombre del paquete: `demo-ira-car`
@@ -77,6 +78,34 @@ src/app/
 - **No hay guard de sesión activa**: el acceso se basa en presencia de token en localStorage.
 
 ## Registro de cambios / decisiones
+
+### 2026-09-10 — Fixes UI/UX + Change Detection + Animations
+
+#### 1. SidebarService (estado compartido del menú lateral)
+- **Nuevo servicio**: `src/app/core/service/sidebar-service/sidebar-service.ts` (`providedIn: 'root'`)
+- **Problema**: cada componente tenía su `menuOpen` local → no se sincronizaba al navegar.
+- **Solución**: singleton con `menuOpen` + suscripción a `router.events`.
+- **Detalle técnico**: usa `NavigationStart` (no `NavigationEnd`) para que el cierre del menú **empiece al hacer clic** en un item del menú, dando tiempo a que la animación de 800ms termine antes de que cargue el nuevo componente.
+- **Componentes actualizados** (10): `sidebar`, `cobro`, `productos`, `categorias`, `usuarios`, `roles`, `caja`, `ventas`, `clientes`, `reportes`, `facturas`. Todos inyectan `SidebarService` y bindean `sidebar.menuOpen`.
+
+#### 2. Reactivación de Zone.js (fix renderizado tablas + caja)
+- **Causa raíz**: Angular 21 usa **zoneless por defecto** (sin `zone.js`). En zoneless, los callbacks de `HttpClient.subscribe()` **no disparan change detection** → `this.products = data` no redibuja la tabla hasta un clic del usuario.
+- **Fix**: 
+  1. `npm install zone.js @angular/ssr@21.2.1`
+  2. `angular.json`: `"polyfills": ["zone.js"]`
+  3. `app.config.ts`: `provideZoneChangeDetection()` en providers
+- **Resultado**: `fetch`/`XMLHttpRequest` parcheados por zone.js → cada respuesta HTTP dispara CD automático → tablas y estado de caja aparecen **al instante**.
+
+#### 3. Animaciones suaves
+- **Sidebar**: `transition: width 800ms ease-in-out, padding 800ms ease-in-out` en `src/styles.css:48` (colapso/expand natural, no "robusto").
+- **Tablas CRUD**: clase `.fade-in` (`@keyframes fade-in-up 250ms ease-out`) aplicada en `productos`, `categorias`, `usuarios`, `roles` vía `<div *ngIf="!loading" class="table-container fade-in">`.
+- **Skeleton/shimmer** disponible en `src/styles.css:178-190` para futuro loading percibido.
+
+#### 4. Comentarios técnicos en código
+- Agregados comentarios explicativos en `SidebarService`, `sidebar.html`, `cobro.html`, y todos los 10 HTMLs de componentes (`productos`, `categorias`, `usuarios`, `roles`, `caja`, `ventas`, `clientes`, `reportes`, `facturas`) explicando:
+  - Origen de `sidebar.menuOpen` (servicio compartido)
+  - Funcionamiento de `[class.collapsed]` y transicion CSS
+  - Animacion `.fade-in` en tablas
 
 ### 2026-09-09 — Sincronización con backend
 - **Imágenes de productos**: el backend ahora devuelve la **URL completa** en `img` (`http://localhost:8081/api/uploads/<archivo>`). El frontend usa `[src]="p.img"` directo en `productos.html` → funciona sin cambios.

@@ -16,7 +16,7 @@ body {
 }
 
 .layout.collapsed .sidebar{
-  width: 70px;
+  width: 100px;
 }
 
 .layout.collapsed .text{
@@ -44,7 +44,8 @@ body {
   width: 220px;
   background: #020617;
   padding: 15px;
-  transition: all 0.3s ease;
+  /* Transición suave y natural al colapsar/expandir */
+  transition: width 800ms ease-in-out, padding 800ms ease-in-out;
   display: flex;
   flex-direction: column;
   box-shadow: 4px 0 15px rgba(0,0,0,0.3);
@@ -151,5 +152,44 @@ body {
 .nav::-webkit-scrollbar-thumb {
   background: #334155;
   border-radius: 10px;
+}
+
+/* ==========================
+   ANIMACIONES GLOBALES
+   ========================== */
+
+/* Fade-in suave para tablas y listas cuando cargan datos */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in-up 250ms ease-out forwards;
+}
+
+/* Variante para filas de tabla (stagger opcional vía delay inline) */
+.table-row-fade {
+  opacity: 0;
+  animation: fade-in-up 200ms ease-out forwards;
+}
+
+/* Skeleton loader opcional para percibir carga */
+.skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 

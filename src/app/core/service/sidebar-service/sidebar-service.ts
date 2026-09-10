@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 /**
@@ -38,17 +38,23 @@ export class SidebarService implements OnDestroy {
   menuOpen = false;
 
   constructor(private router: Router) {
-    /**
-     * Escuchar TODOS los eventos del router.
-     * pipe(filter(...)) filtra solo los eventos NavigationEnd, que se disparan
-     * DESPUES de que la navegacion termina y el componente destino ya esta listo.
-     *
-     * Ejemplo: si el usuario esta en /productos con el menu abierto y hace clic
-     * en "Inicio" (que va a /cobro), se disparara NavigationEnd con url = '/cobro'.
-     * El servicio detecta esto y pone menuOpen = false → el sidebar se contrae.
-     */
+/**
+    * Escuchar TODOS los eventos del router.
+    * pipe(filter(...)) filtra solo los eventos NavigationStart, que se disparan
+    * ANTES de que la navegacion inicie (cuando el usuario hace clic en un link del menu).
+    *
+    * CAMBIO: se usaba NavigationEnd (despues de cargar la ruta), pero la animacion
+    * del sidebar (800ms) se sentia rapida porque el nuevo componente aparecia antes
+    * de terminar el cierre. Con NavigationStart, el cierre COMIENZA inmediatamente
+    * al hacer clic, dando tiempo a que la transicion termine naturalmente.
+    *
+    * Ejemplo: si el usuario esta en /productos con el menu abierto y hace clic
+    * en "Inicio" (que va a /cobro), se disparara NavigationStart ANTES de navegar.
+    * El servicio detecta esto y pone menuOpen = false → el sidebar empieza a contraerse
+    * mientras la nueva ruta se esta cargando.
+    */
     this.routerSub = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+      filter(event => event instanceof NavigationStart)
     ).subscribe(() => {
       if (this.menuOpen) {
         this.menuOpen = false;

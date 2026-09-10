@@ -1,13 +1,21 @@
-<!--[class.collapsed]: -->
-<!-- sidebar.menuOpen viene del SidebarService (compartido con el Sidebar) -->
+<!-- 
+  COMPONENTE COBRO (POS) - usa layout con sidebar
+  sidebar.menuOpen viene del SidebarService (singleton compartido).
+  [class.collapsed]="!sidebar.menuOpen" alterna la clase .collapsed en .layout
+  que dispara la transicion CSS: width 800ms ease-in-out en .sidebar.
+-->
 <div class="layout" [class.collapsed]="!sidebar.menuOpen">
-    <!-- Cuando el usuario hace clic en "Menu", el Sidebar emite toggle con el nuevo estado -->
+    <!-- 
+      Sidebar emite @Output() toggle con el nuevo estado (true/false).
+      El padre actualiza sidebar.menuOpen del servicio compartido.
+      Asi el Sidebar y el padre SIEMPRE estan sincronizados.
+    -->
     <app-sidebar (toggle)="sidebar.menuOpen = $event"></app-sidebar>
 
-    <!--Contenido-->
+    <!--Contenido principal-->
     <main class="content">
        <div class="top-bar">
-            <!--Buscador-->
+            <!--Buscador de productos (barcode + nombre)-->
             <div class="search-bar">
                 <input
                     [(ngModel)]="sale.barcode"
@@ -18,6 +26,7 @@
                     [(ngModel)]="sale.search"
                     (input)="sale.onSearch()"
                     placeholder="Buscar por nombre, SKU o código de barras"
+                >
                 />
 
                 <div *ngIf="sale.searchResults.length" class="search-dropdown">

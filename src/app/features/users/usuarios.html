@@ -1,3 +1,9 @@
+<!-- 
+  USUARIOS - CRUD usuarios + roles
+  sidebar.menuOpen del SidebarService (singleton).
+  [class.collapsed]="!sidebar.menuOpen" → transicion 800ms ease-in-out.
+  <div *ngIf="!loading" class="table-container fade-in"> anima tabla 250ms.
+-->
 <div class="layout" [class.collapsed]="!sidebar.menuOpen">
   <app-sidebar (toggle)="sidebar.menuOpen = $event"></app-sidebar>
 
@@ -44,7 +50,7 @@
         Cargando usuarios...
       </div>
 
-      <div *ngIf="!loading" class="table-container">
+      <div *ngIf="!loading" class="table-container fade-in">
         <table class="product-table">
           <thead>
             <tr>

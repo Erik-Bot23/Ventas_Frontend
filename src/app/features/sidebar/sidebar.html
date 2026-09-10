@@ -1,5 +1,10 @@
-<!-- SIDEBAR reutilizado -->
-<!-- sidebar.menuOpen viene del SidebarService (servicio compartido) -->
+<!-- SIDEBAR reutilizado (componente standalone) -->
+<!-- 
+  sidebar.menuOpen viene del SidebarService (servicio compartido singleton).
+  El estado vive en el servicio, NO en este componente.
+  Al cambiar sidebar.menuOpen, el CSS del padre (.layout.collapsed .sidebar)
+  anima el ancho con transition: width 800ms ease-in-out.
+-->
 <aside class="sidebar" [class.collapsed]="!sidebar.menuOpen">
   <div class="user-box" (click)="perfil()">
     <img src="assets/images/avatar.png">
@@ -12,12 +17,16 @@
 
   <!--Navegación-->
   <nav class="nav">
-    <!--Esta es la página de cobro-->
+    <!--Esta es la página de cobro (inicio)-->
     <a (click)="inicio()">
       <span class="text">Inicio</span>
     </a>
 
     <ng-container *ngFor="let item of menuItems">
+      <!-- 
+        auth.hasPermission(item.permission) usa la directiva *hasPermission
+        que muestra/oculta el enlace segun los permisos del usuario logueado.
+      -->
       <a *ngIf="auth.hasPermission(item.permission)" (click)="go(item.route)">
         <span class="text">
           {{ item.label }}

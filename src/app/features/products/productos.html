@@ -1,5 +1,13 @@
-<!-- sidebar.menuOpen viene del SidebarService (servicio compartido) -->
+<!-- 
+  PRODUCTOS - CRUD productos con imagen
+  sidebar.menuOpen viene del SidebarService (singleton compartido).
+  [class.collapsed]="!sidebar.menuOpen" alterna .collapsed en .layout
+  → transicion CSS: width 800ms ease-in-out en .sidebar.
+  <div *ngIf="!loading" class="table-container fade-in">
+    aplica animacion fade-in-up 250ms al terminar carga HTTP.
+-->
 <div class="layout" [class.collapsed]="!sidebar.menuOpen">
+  <!-- Sidebar emite @Output() toggle → padre actualiza sidebar.menuOpen del servicio -->
   <app-sidebar (toggle)="sidebar.menuOpen = $event"></app-sidebar>
   <!-- CONTENIDO -->
   <main class="content">
@@ -88,7 +96,7 @@
       </div>
 
       <!--*ngIf: -->
-      <div *ngIf="!loading" class="table-container">
+      <div *ngIf="!loading" class="table-container fade-in">
         <table class="product-table">
           <thead>
             <tr>
