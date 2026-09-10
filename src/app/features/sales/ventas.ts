@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../sidebar/sidebar';
+// Servicio compartido del sidebar
+import { SidebarService } from '../../core/service/sidebar-service/sidebar-service';
 
 @Component({
   selector: 'app-ventas',
@@ -10,9 +12,5 @@ import { Sidebar } from '../sidebar/sidebar';
   styleUrl: './ventas.css',
 })
 export class Ventas {
-  menuOpen = false;
-
-  toggleMenu(){
-    this.menuOpen = !this.menuOpen;
-  }
+  constructor(public sidebar: SidebarService){}
 }

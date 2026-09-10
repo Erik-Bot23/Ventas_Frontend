@@ -1,3 +1,3 @@
-<div class="layout" [class.collapsed]="!menuOpen">
-    <app-sidebar (toggle)="menuOpen = $event"></app-sidebar>
+<div class="layout" [class.collapsed]="!sidebar.menuOpen">
+    <app-sidebar (toggle)="sidebar.menuOpen = $event"></app-sidebar>
 </div>

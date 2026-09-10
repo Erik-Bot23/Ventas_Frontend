@@ -6,6 +6,8 @@ import { CashFacade } from './facade/cash-facade';
 import { SaleFacade } from './facade/sale-facade';
 import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
 import { AuthService } from '../../core/service/auth-service/auth-service';
+// Importar el servicio compartido del sidebar
+import { SidebarService } from '../../core/service/sidebar-service/sidebar-service';
 
 
 @Component({
@@ -21,6 +23,8 @@ export class Cobro implements OnInit {
     public cash: CashFacade,
     public sale: SaleFacade,
     public auth: AuthService,
+    // Inyectar el servicio compartido del sidebar
+    public sidebar: SidebarService,
     private cdr: ChangeDetectorRef 
   ) {}
 

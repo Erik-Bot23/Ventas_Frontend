@@ -1,6 +1,8 @@
 <!--[class.collapsed]: -->
-<div class="layout" [class.collapsed]="!sale.menuOpen">
-    <app-sidebar (toggle)="sale.menuOpen = $event"></app-sidebar>
+<!-- sidebar.menuOpen viene del SidebarService (compartido con el Sidebar) -->
+<div class="layout" [class.collapsed]="!sidebar.menuOpen">
+    <!-- Cuando el usuario hace clic en "Menu", el Sidebar emite toggle con el nuevo estado -->
+    <app-sidebar (toggle)="sidebar.menuOpen = $event"></app-sidebar>
 
     <!--Contenido-->
     <main class="content">

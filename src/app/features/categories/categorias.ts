@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../sidebar/sidebar';
 import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
 import { AuthService } from '../../core/service/auth-service/auth-service';
+// Servicio compartido del sidebar
+import { SidebarService } from '../../core/service/sidebar-service/sidebar-service';
 
 @Component({
   selector: 'app-categorias',
@@ -18,12 +20,13 @@ import { AuthService } from '../../core/service/auth-service/auth-service';
 export class Categorias implements OnInit {
   categories: Category[] = [];
   categoryName = '';
-  menuOpen = false;
+  // ANTES: menuOpen = false aqui. AHORA: se elimino, se usa sidebar.menuOpen
 
   constructor(
     private categoryService: CategoryService,
     private router: Router,
-    public auth: AuthService
+    public auth: AuthService,
+    public sidebar: SidebarService
   ){}
 
   ngOnInit() {
@@ -36,9 +39,8 @@ export class Categorias implements OnInit {
     });
   }
 
-  toggleMenu(){
-    this.menuOpen = !this.menuOpen;
-  }
+  // ANTES: toggleMenu() controlaba menuOpen local.
+  // AHORA: el sidebar maneja el estado via servicio compartido
 
   saveCategory(){
     if(!this.categoryName.trim()) return;

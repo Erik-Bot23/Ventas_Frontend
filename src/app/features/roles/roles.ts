@@ -8,6 +8,8 @@ import { CreateRoleRequest, PermissionModel, RoleModel, UpdateRoleRequest } from
 import { PermissionService } from '../../core/service/permission-service/permission-service';
 import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
 import { AuthService } from '../../core/service/auth-service/auth-service';
+// Servicio compartido del sidebar
+import { SidebarService } from '../../core/service/sidebar-service/sidebar-service';
 
 @Component({
   selector: 'app-roles',
@@ -16,7 +18,7 @@ import { AuthService } from '../../core/service/auth-service/auth-service';
   styleUrl: './roles.css',
 })
 export class Roles {
-  menuOpen = false;
+  // ANTES: menuOpen = false aqui. AHORA: se usa sidebar.menuOpen del servicio
 
   roles: RoleModel[] = [];
   roleName = '';
@@ -28,9 +30,8 @@ export class Roles {
 
   editingRoleId: number | null = null;
 
-  toggleMenu(){
-    this.menuOpen = !this.menuOpen;
-  }
+  // ANTES: toggleMenu() controlaba menuOpen local.
+  // AHORA: el sidebar maneja el estado via servicio compartido
 
   togglePermission(permissionName: string): void{
     if(this.selectedPermissions.includes(permissionName)){
@@ -48,7 +49,9 @@ export class Roles {
     private roleService: RoleService,
     private permissionService: PermissionService,
     private router: Router,
-    public auth: AuthService
+    public auth: AuthService,
+    // Servicio compartido del sidebar
+    public sidebar: SidebarService
   ){}
 
   ngOnInit() {

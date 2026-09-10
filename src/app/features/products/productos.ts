@@ -8,6 +8,8 @@ import { CategoryService } from '../../core/service/category-service/category-se
 import { Sidebar } from '../sidebar/sidebar';
 import { AuthService } from '../../core/service/auth-service/auth-service';
 import { HasPermissionDirectives } from '../../core/routes/directives/has-permission-directives';
+// Servicio compartido del sidebar (reemplaza menuOpen local)
+import { SidebarService } from '../../core/service/sidebar-service/sidebar-service';
 
 @Component({
   selector: 'app-productos',
@@ -17,7 +19,8 @@ import { HasPermissionDirectives } from '../../core/routes/directives/has-permis
 })
 
 export class Productos implements OnInit {
-  menuOpen = false;
+  // ANTES: menuOpen = false aqui (estado local)
+  // AHORA: se usa sidebar.menuOpen del servicio compartido
   products: ProductForm[] = [];
   categories: Category[] = [];
   selectedFile: File | null = null;
@@ -41,7 +44,9 @@ export class Productos implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private router: Router,
-    public auth: AuthService
+    public auth: AuthService,
+    // Inyectar servicio compartido del sidebar
+    public sidebar: SidebarService
   ){}
 
   ngOnInit() {
@@ -52,9 +57,9 @@ export class Productos implements OnInit {
     }
   }
 
-  toggleMenu(){
-    this.menuOpen = !this.menuOpen;
-  }
+  // ANTES: toggleMenu() controlaba menuOpen local.
+  // AHORA: el sidebar emite el evento toggle y el componente actualiza sidebar.menuOpen
+  // desde el template: (toggle)="sidebar.menuOpen = $event"
 
   //Se cargan los productos desde la BD
   loadProducts(){

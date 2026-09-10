@@ -1,5 +1,6 @@
 <!-- SIDEBAR reutilizado -->
-<aside class="sidebar" [class.collapsed]="!menuOpen">
+<!-- sidebar.menuOpen viene del SidebarService (servicio compartido) -->
+<aside class="sidebar" [class.collapsed]="!sidebar.menuOpen">
   <div class="user-box" (click)="perfil()">
     <img src="assets/images/avatar.png">
     <span class="text">{{ userName }}</span>
